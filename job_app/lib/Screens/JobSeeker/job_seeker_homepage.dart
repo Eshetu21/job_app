@@ -6,14 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/get_job_seeker.dart';
 import 'package:job_app/Screens/Profiles/profiles.dart';
 
-class JobSeeker extends StatefulWidget {
-  const JobSeeker({super.key});
+class JobSeekerHomepage extends StatefulWidget {
+  const JobSeekerHomepage({super.key});
 
   @override
-  State<JobSeeker> createState() => _JobSeekerState();
+  State<JobSeekerHomepage> createState() => _JobSeekerHomepageState();
 }
 
-class _JobSeekerState extends State<JobSeeker> {
+class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
   final JobSeekerController _jobSeekerController =
       Get.put(JobSeekerController());
 
@@ -37,14 +37,7 @@ class _JobSeekerState extends State<JobSeeker> {
                     SizedBox(width: 15),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Profiles()));
-                          },
-                          child: Icon(Icons.account_circle_outlined)),
+                      child: Icon(Icons.account_circle_outlined),
                     )
                   ],
                 ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/user_auth.dart';
+import 'package:job_app/Screens/JobSeeker/job_seeker_create.dart';
 
 class AddAccount extends StatefulWidget {
   const AddAccount({super.key});
@@ -123,6 +124,30 @@ class _AddAccountState extends State<AddAccount> {
                         }),
                   ),
                   "company"),
+              SizedBox(height: 120),
+              GestureDetector(
+                onTap: () {
+                  if(selected=='jobseeker')
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>JobSeekerCreate()));
+                },
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 60),
+                    width: 266,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color(0xFF130160).withOpacity(0.7),
+                    ),
+                    child: Center(
+                      child: Text("Continue",
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         )));

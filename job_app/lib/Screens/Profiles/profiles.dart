@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/user_auth.dart';
-import 'package:job_app/Screens/JobSeeker/job_seeker.dart';
 import 'package:job_app/Controllers/get_profile.dart';
+import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
 
 class Profiles extends StatefulWidget {
   const Profiles({super.key});
@@ -90,7 +90,7 @@ class _ProfilesState extends State<Profiles> {
                                       setState(() {
                                         selectedProfile = value.toString();
                                       });
-                                      Get.offAll(JobSeeker());
+                                      
                                     }),
                               ),
                               "jobseeker"),
@@ -248,6 +248,30 @@ class _ProfilesState extends State<Profiles> {
                               ),
                             ),
                           ),
+                          Spacer(),
+              GestureDetector(
+                onTap: () {
+                  if(selectedProfile=='jobseeker')
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>(JobSeekerHomepage())));
+                },
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 40),
+                    width: 266,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color(0xFF130160).withOpacity(0.7),
+                    ),
+                    child: Center(
+                      child: Text("Continue",
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    ),
+                  ),
+                ),
+              )
                       ],
                     ));
         }),

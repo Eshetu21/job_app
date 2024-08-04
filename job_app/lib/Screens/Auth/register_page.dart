@@ -15,7 +15,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool _passVisible = false;
-  bool _passConfVisible = false;
+  //bool _passConfVisible = false;
   bool _registrationSuccess = false;
 
   List<String> _cities = [];

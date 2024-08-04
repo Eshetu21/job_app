@@ -1,0 +1,148 @@
+{
+    "categories": [
+      {
+        "category": "Web Development",
+        "subcategories": [
+          "Frontend Development",
+          "Backend Development",
+          "Full Stack Development",
+          "Web Design"
+        ]
+      },
+      {
+        "category": "Mobile Development",
+        "subcategories": [
+          "iOS Development",
+          "Android Development",
+          "Cross-Platform Development"
+        ]
+      },
+      {
+        "category": "Graphic Design",
+        "subcategories": [
+          "Logo Design",
+          "UI/UX Design",
+          "Illustration",
+          "Print Design"
+        ]
+      },
+      {
+        "category": "Writing & Translation",
+        "subcategories": [
+          "Content Writing",
+          "Copywriting",
+          "Translation",
+          "Editing & Proofreading"
+        ]
+      },
+      {
+        "category": "Digital Marketing",
+        "subcategories": [
+          "SEO",
+          "Social Media Marketing",
+          "Content Marketing",
+          "Email Marketing"
+        ]
+      },
+      {
+        "category": "Administrative Support",
+        "subcategories": [
+          "Data Entry",
+          "Virtual Assistant",
+          "Customer Support",
+          "Transcription"
+        ]
+      },
+      {
+        "category": "Sales & Marketing",
+        "subcategories": [
+          "Sales Strategy",
+          "Lead Generation",
+          "Market Research",
+          "Telemarketing"
+        ]
+      },
+      {
+        "category": "Accounting & Finance",
+        "subcategories": [
+          "Bookkeeping",
+          "Financial Analysis",
+          "Accounting",
+          "Tax Preparation"
+        ]
+      },
+      {
+        "category": "Engineering & Architecture",
+        "subcategories": [
+          "Civil Engineering",
+          "Mechanical Engineering",
+          "Electrical Engineering",
+          "Architectural Design"
+        ]
+      },
+      {
+        "category": "Legal Services",
+        "subcategories": [
+          "Contract Law",
+          "Corporate Law",
+          "Family Law",
+          "Intellectual Property"
+        ]
+      },
+      {
+        "category": "Healthcare & Medical",
+        "subcategories": [
+          "Medical Writing",
+          "Telemedicine",
+          "Healthcare Consulting",
+          "Medical Billing"
+        ]
+      },
+      {
+        "category": "Education & Training",
+        "subcategories": [
+          "Tutoring",
+          "Curriculum Development",
+          "Educational Consulting",
+          "Instructional Design"
+        ]
+      },
+      {
+        "category": "Arts & Entertainment",
+        "subcategories": [
+          "Music Production",
+          "Video Editing",
+          "Photography",
+          "Voice Over"
+        ]
+      },
+      {
+        "category": "Construction & Maintenance",
+        "subcategories": [
+          "General Contracting",
+          "Plumbing",
+          "Electrical Work",
+          "HVAC"
+        ]
+      },
+      {
+        "category": "Transport & Logistics",
+        "subcategories": [
+          "Delivery Services",
+          "Freight Forwarding",
+          "Supply Chain Management",
+          "Vehicle Maintenance"
+        ]
+      },
+      {
+        "category": "Hospitality & Tourism",
+        "subcategories": [
+          "Event Planning",
+          "Travel Consulting",
+          "Hotel Management",
+          "Culinary Services"
+        ]
+      }
+    ]
+  }
+  
