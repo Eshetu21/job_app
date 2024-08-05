@@ -19,7 +19,7 @@ Route::get("profile", [UserController::class, "getuserprofile"])->middleware("au
 Route::post('register', [UserController::class, "register"]);
 Route::post('login', [UserController::class, "login"]);
 Route::put('update', [UserController::class, "update"])->middleware("auth:sanctum");
-Route::delete('delete/{user}', [UserController::class, "delete"])->middleware("auth:sanctum");
+Route::delete('delete', [UserController::class, "delete"])->middleware("auth:sanctum");
 
 //JobSeeker
 Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"])->middleware("auth:sanctum");

@@ -22,9 +22,11 @@ class UpdateJobSeekerRequest extends FormRequest
     public function rules(): array
     {
         return [
-           'cv'=>'nullable|string',
-           'phone_number'=>'nullable|string',
-           'about_me'=>'nullable|string'
+            'category' => 'nullable|string',
+            'sub_category' => 'nullable|string',
+            'cv' => 'nullable|string',
+            'phone_number' => 'nullable|string',
+            'about_me' => 'nullable|string'
         ];
     }
 }
