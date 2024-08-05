@@ -11,7 +11,7 @@ class StoreEductionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreEductionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "school_name"=>"nullable|string",
+            "field"=>"nullable|string",
+            "education_level"=>"nullable|string",
+            "edu_start_date"=>"nullable|date",
+            "edu_end_date"=>"nullable|date",
+            "description"=>"nullable|text"
         ];
     }
 }
