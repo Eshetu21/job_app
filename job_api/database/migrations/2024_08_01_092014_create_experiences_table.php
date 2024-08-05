@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('job_seeker_id');
             $table->foreign('job_seeker_id')->references('id')->on('job_seekers')->onDelete('cascade');
-            $table->string('exp_position_title');
-            $table->string('exp_company_name');
-            $table->string('exp_job_type');
-            $table->date('exp_start_date');
+            $table->string('exp_position_title')->nullable();
+            $table->string('exp_company_name')->nullable();
+            $table->string('exp_job_type')->nullable();
+            $table->date('exp_start_date')->nullable();
             $table->date('exp_end_date')->nullable();
             $table->text('exp_description')->nullable();
             $table->timestamps();
