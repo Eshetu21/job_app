@@ -7,7 +7,6 @@ use App\Http\Requests\UserRequest\RegisterRequest;
 use App\Http\Requests\UserRequest\UpdateRequest;
 use App\Models\User;
 use Dotenv\Exception\ValidationException as ExceptionValidationException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -23,7 +22,7 @@ class UserController extends Controller
         $profiles = [
             'jobseeker' => $user->jobseeker ? $user->jobseeker->load('user') : null,
             'privateclient' => $user->privateclient ? $user->privateclient->load('user') : null,
-            'company' => $user->company,
+            'company' => $user->company ? $user->company->load('user') : null,
         ];
 
         return response()->json(['profiles' => $profiles], 200);
@@ -38,6 +37,7 @@ class UserController extends Controller
                 "lastname" => $validatedData["lastname"],
                 "email" => $validatedData["email"],
                 "address" => $validatedData["address"],
+                "password_confirmation"=>$validatedData["password_confirmation"],
                 "password" => Hash::make($validatedData["password"])
             ]);
             $token = $user->createToken("job_portal")->plainTextToken;
@@ -94,9 +94,8 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(User $user)
     {
-        $user=$request->user();
         $user->delete();
         return response()->json([
             "message" => "No content"
