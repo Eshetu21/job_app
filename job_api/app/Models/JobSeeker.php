@@ -11,6 +11,8 @@ class JobSeeker extends Model
 
     protected $fillable = [
         'user_id',
+        'category',
+        'sub_category',
         'cv',
         'phone_number',
         'about_me'
@@ -29,11 +31,12 @@ class JobSeeker extends Model
     {
         return $this->hasMany(Experience::class);
     }
-    public function languages(){
+    public function languages()
+    {
         return $this->hasMany(Language::class);
     }
-    public function skills(){
+    public function skills()
+    {
         return $this->hasMany(Skill::class);
     }
-    
 }
