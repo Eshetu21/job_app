@@ -1,5 +1,57 @@
-### DEfine BaseURL
+### Define BaseURL
 
-@base_url = {{BASE_URL}}
+@base_url = http://127.0.0.1:8000/api
+
+### Register
+POST {{base_url}}/register
+Content-Type: application/json
+Accept: application/json
+
+{
+    "firstname": "rbele",
+    "lastname": "rmekonnen",
+    "email": "bele@gmail.com",
+    "password": "1234567890",
+    "address": "addis ababa"
+}
+
+### Login
+POST {{base_url}}/login
+Content-Type: application/json
+Accept: application/json
+
+{
+   
+    "email": "abel@gmail.com",
+    "password": "1234567890"
+
+}
+
+### Update User
+PUT {{base_url}}/update
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer 8|Q99s4yH694JI7cETZF5cTji6rdBqNbVpXX7gaZQa93a31564
+
+{
+   
+   "firstname": "abel",
+    "lastname": "kassa",
+    "email": "abel@gmail.com",
+    "password": "1234567890",
+    "address": "addis ababa"
+
+}
+
+
+
+### Delete user
+DELETE  {{base_url}}/delete
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer 11|5Vj12tpH8ziROItkEUVX13zNmKUkIPAOn3o38RA042910031
+
+
+
 
 
