@@ -8,9 +8,9 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "firstname": "rbele",
-    "lastname": "rmekonnen",
-    "email": "bele@gmail.com",
+    "firstname": "able",
+    "lastname": "mekonnen",
+    "email": "abel@gmail.com",
     "password": "1234567890",
     "address": "addis ababa"
 }
