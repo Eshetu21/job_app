@@ -27,7 +27,6 @@ class UpdateRequest extends FormRequest
             'email' => 'nullable|string|email|unique:users,email,' . $this->user()->id,
             'age' => 'nullable|string',
             'gender' => 'nullable|string',
-            'profile_pic' => 'nullable|string',
             'about_me' => 'nullable|string',
             'password' => 'nullable|string'
         ];

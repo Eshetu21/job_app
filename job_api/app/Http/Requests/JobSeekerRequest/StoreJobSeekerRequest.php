@@ -24,6 +24,7 @@ class StoreJobSeekerRequest extends FormRequest
         return [
             "category" => "nullable|string",
             "sub_category" => "nullable|string",
+            "profile_pic" => "nullable|string",
             "cv" => "nullable|file|mimes:pdf,doc,docx,txt|max:2048",
             "phone_number" => "nullable|string",
             "about_me" => "nullable|string"

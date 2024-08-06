@@ -15,8 +15,11 @@ class PrivateClientController extends Controller
                 "message" => "PrivateClient already exists"
             ], 400);
         }
-
+        $validatedData = $request->validate(
+            ["profile_pic" => "nullable|string"]
+        );
         $privateclient = PrivateClient::create([
+            'profile_pic' => $validatedData["profile_pic"],
             'user_id' => $user->id
         ]);
         return response()->json([

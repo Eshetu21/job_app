@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string("category")->nullable();
             $table->string("sub_category")->nullable();
+            $table->string('profile_pic')->nullable();
             $table->string('cv')->nullable();
             $table->string('phone_number')->nullable();
             $table->text('about_me')->nullable();

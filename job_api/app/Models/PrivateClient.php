@@ -10,7 +10,8 @@ class PrivateClient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id'
+        'user_id',
+        'profile_pic',
     ];
 
     public function user()

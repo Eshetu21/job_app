@@ -44,5 +44,10 @@ class JobSeekerController extends GetxController {
 }
 
 class AddJobseeker extends GetxController {
-  
+  Future addjobseeker({
+    required String category,
+    required String sub_category,
+    String? cv,
+    String? about_me,
+  }) async {}
 }

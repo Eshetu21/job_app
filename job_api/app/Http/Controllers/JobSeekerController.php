@@ -30,6 +30,7 @@ class JobSeekerController extends Controller
             $jobseeker = JobSeeker::create([
                 "user_id" => $user->id,
                 "cv" => $validatedData["cv"] ?? null,
+                "profile_pic" => $validatedData['profile_pic'] ?? null,
                 "category" => $validatedData["category"] ?? null,
                 "sub_category" => $validatedData["sub_category"] ?? null,
                 "phone_number" => $validatedData["phone_number"] ?? null,
@@ -86,6 +87,7 @@ class JobSeekerController extends Controller
             $jobseeker->update([
                 "category" => $validatedData['category'],
                 "sub_category" => $validatedData['sub_category'],
+                "profile_pic" => $validatedData['profile_pic'],
                 "cv" => $validatedData['cv'],
                 "phone_number" => $validatedData['phone_number'],
                 "about_me" => $validatedData['about_me'],
