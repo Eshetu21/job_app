@@ -130,7 +130,7 @@ class UserAuthenticationController extends GetxController {
     _profileController.profiles.clear();
     token.value = '';
     userId.value = '';
-    Get.offAll(LoginPage());
+    Get.offAll(() => LoginPage());
   }
 
   RxString getUserId() {

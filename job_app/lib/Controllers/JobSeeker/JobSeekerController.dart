@@ -64,22 +64,28 @@ class JobSeekerController extends GetxController {
       String? profilePic,
       String? phoneNumber}) async {
     try {
-      var data = jsonEncode({
+      var data = {
         "category": category,
         "sub_category": subCategory,
-        "profile_pic": profilePic,
-        "cv": cv,
-        "phone_number": phoneNumber,
-        "about_me": aboutMe
-      });
+        "profile_pic": profilePic ?? "",
+        "cv": cv ?? "",
+        "phone_number": phoneNumber ?? "",
+        "about_me": aboutMe ?? ""
+      };
+      var encodedData = data.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
       final response = await http.put(Uri.parse("${url}updatejobseeker/$id"),
           headers: {
             "Accept": "application/json",
-            "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/x-www-form-urlencoded",
           },
-          body: data);
+          body:encodedData);
       if (response.statusCode == 200) {
         print("Successfully updated jobseeker profile");
+        print(encodedData);
       }
     } catch ($e) {
       print("Failed");

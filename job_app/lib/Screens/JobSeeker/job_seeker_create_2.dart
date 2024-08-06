@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class JobSeekerCreateSecond extends StatefulWidget {
@@ -11,7 +13,8 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(child: Text("second page"),),
+      backgroundColor: Color(0xFFE5E5E5),
+      body: SafeArea(child: Text("second page")),
     );
   }
 }
