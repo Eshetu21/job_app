@@ -16,8 +16,16 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
   final JobSeekerController _jobSeekerController =
       Get.put(JobSeekerController());
 
+      @override
+  void initState() {
+    super.initState();
+    _jobSeekerController.getJobSeeker();
+    _jobSeekerController.fetchJobSeeker();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(_jobSeekerController.jobseeker);
     return Scaffold(
         backgroundColor: Color(0xFFE5E5E5),
         body: SafeArea(

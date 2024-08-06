@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class UserAuthenticationController extends GetxController {
   final logError = {}.obs;
 
   final token = ''.obs;
+  final userId = ''.obs;
   final box = GetStorage();
 
   void clearRegErrorMsg() {
@@ -103,11 +105,13 @@ class UserAuthenticationController extends GetxController {
       if (response.statusCode == 200) {
         token.value = json.decode(response.body)["token"];
         box.write("token", token.value);
+        userId.value = json.decode(response.body)["message"]["id"].toString();
         logError.clear();
         await _profileController.fetchProfiles();
         navigateBasedOnProfile();
         print(token);
         print('Login successful');
+        print(userId);
       } else if (response.statusCode == 401) {
         logError.clear();
         logError["general"] = "Invalid credentials";
@@ -125,6 +129,11 @@ class UserAuthenticationController extends GetxController {
     box.remove('token');
     _profileController.profiles.clear();
     token.value = '';
+    userId.value = '';
     Get.offAll(LoginPage());
+  }
+
+  RxString getUserId() {
+    return userId;
   }
 }

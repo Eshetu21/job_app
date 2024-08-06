@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:job_app/Controllers/JobSeeker/JobSeekerController.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_create.dart';
 
@@ -15,6 +16,7 @@ class AddAccount extends StatefulWidget {
 
 final UserAuthenticationController _userAuthenticationController =
     Get.put(UserAuthenticationController());
+final JobSeekerController _jobSeekerController = Get.put(JobSeekerController());
 String selected = '';
 
 class _AddAccountState extends State<AddAccount> {
@@ -126,9 +128,11 @@ class _AddAccountState extends State<AddAccount> {
                   "company"),
               SizedBox(height: 120),
               GestureDetector(
-                onTap: () {
-                  if(selected=='jobseeker')
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>JobSeekerCreate()));
+                onTap: () async {
+                  if (selected == 'jobseeker')
+                  await _jobSeekerController.createjobseeker();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => JobSeekerCreate()));
                 },
                 child: Center(
                   child: Container(

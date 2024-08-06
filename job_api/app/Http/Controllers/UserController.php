@@ -64,7 +64,7 @@ class UserController extends Controller
 
         $token = $user->createToken("job_portal")->plainTextToken;
         return response()->json([
-            "message" => "Welcome " . $user->firstname,
+            "message" => $user,
             "token" => $token
         ], 200);
     }

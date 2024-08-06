@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\JobSeekerRequest\StoreJobSeekerRequest;
 use App\Http\Requests\JobSeekerRequest\UpdateJobSeekerRequest;
 use App\Models\JobSeeker;
 use Illuminate\Http\Request;
@@ -11,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class JobSeekerController extends Controller
 {
-    public function createjobseeker(StoreJobSeekerRequest $request)
+    public function createjobseeker(Request $request)
     {
         $user = $request->user();
         if ($user->JobSeeker) {
@@ -19,22 +18,10 @@ class JobSeekerController extends Controller
                 "message" => "JobSeeker already exists"
             ], 400);
         }
-        $validatedData = $request->validated();
-        if ($request->hasFile("cv")) {
-            $cv = $request->file("cv");
-            $cvName = time() . '.' . $cv->getClientOriginalExtension();
-            $cvPath = $cv->storeAs('CVs', $cvName, 'public');
-            $validatedData['cv'] = $cvPath;
-        }
+
         try {
             $jobseeker = JobSeeker::create([
                 "user_id" => $user->id,
-                "cv" => $validatedData["cv"] ?? null,
-                "profile_pic" => $validatedData['profile_pic'] ?? null,
-                "category" => $validatedData["category"] ?? null,
-                "sub_category" => $validatedData["sub_category"] ?? null,
-                "phone_number" => $validatedData["phone_number"] ?? null,
-                "about_me" => $validatedData["about_me"] ?? null
             ]);
 
             return response()->json([
@@ -84,14 +71,7 @@ class JobSeekerController extends Controller
         }
         try {
 
-            $jobseeker->update([
-                "category" => $validatedData['category'],
-                "sub_category" => $validatedData['sub_category'],
-                "profile_pic" => $validatedData['profile_pic'],
-                "cv" => $validatedData['cv'],
-                "phone_number" => $validatedData['phone_number'],
-                "about_me" => $validatedData['about_me'],
-            ]);
+            $jobseeker->update($validatedData);
             $jobseeker->refresh();
 
             return response()->json([

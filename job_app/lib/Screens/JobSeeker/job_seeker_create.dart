@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, prefer_const_constructors, curly_braces_in_flow_control_structures
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:job_app/Controllers/JobSeeker/JobSeekerController.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_create_2.dart';
 
 class JobSeekerCreate extends StatefulWidget {
@@ -15,6 +16,9 @@ class JobSeekerCreate extends StatefulWidget {
 }
 
 class _JobSeekerCreateState extends State<JobSeekerCreate> {
+  final JobSeekerController _jobSeekerController =
+      Get.put(JobSeekerController());
+
   List<dynamic> categories = [];
   List<dynamic> subcategories = [];
   String? selectedCategory;
@@ -113,10 +117,17 @@ class _JobSeekerCreateState extends State<JobSeekerCreate> {
               ),
               SizedBox(height: 160),
               GestureDetector(
-                onTap: () {
-                  if (selectedCategory != null && selectedSubcategory != null)
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => JobSeekerCreateSecond()));
+                onTap: () async {
+                  var jobSeekerData = await _jobSeekerController.getJobSeeker();
+                  int jobSeekerId = jobSeekerData["jobseeker"]["id"];
+                  await _jobSeekerController.updatejobseeker(
+                      id: jobSeekerId,
+                      category: selectedCategory!,
+                      subCategory: selectedSubcategory!);
+                  print(selectedCategory);
+                  print(selectedSubcategory);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => JobSeekerCreateSecond()));
                 },
                 child: Center(
                   child: Container(

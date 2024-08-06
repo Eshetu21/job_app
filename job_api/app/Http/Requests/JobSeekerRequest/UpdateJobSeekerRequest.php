@@ -22,8 +22,8 @@ class UpdateJobSeekerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category' => 'nullable|string',
-            'sub_category' => 'nullable|string',
+            'category' => 'required|string',
+            'sub_category' => 'required|string',
             "profile_pic" => "nullable|string",
             'cv' => 'nullable|string',
             'phone_number' => 'nullable|string',
