@@ -18,8 +18,9 @@ class PrivateClientController extends Controller
         $validatedData = $request->validate(
             ["profile_pic" => "nullable|string"]
         );
+        $profile_pic = $validatedData["profile_pic"] ?? null;
         $privateclient = PrivateClient::create([
-            'profile_pic' => $validatedData["profile_pic"],
+            'profile_pic' => $profile_pic,
             'user_id' => $user->id
         ]);
         return response()->json([
