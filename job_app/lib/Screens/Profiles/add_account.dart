@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/user_auth.dart';
+import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_create.dart';
 
 class AddAccount extends StatefulWidget {

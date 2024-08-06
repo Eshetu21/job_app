@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/user_auth.dart';
+import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Widgets/cities.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -67,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
       hasError = true;
       _userAuthenticationController.regError["address"] = "*address required";
     }
-    if (_confirmPasswordController.text.trim().isEmpty) {
+    /* if (_confirmPasswordController.text.trim().isEmpty) {
       hasError = true;
       _userAuthenticationController.regError["confirm_password"] =
           "*confirm password";
@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _userAuthenticationController.regError["match_password"] =
           "*password doesn't match";
       hasError = true;
-    }
+    } */
     if (!hasError) {
       bool registrationSuccess = await _userAuthenticationController.register(
           firstname: _firstnameController.text.trim(),
@@ -224,7 +224,21 @@ class _RegisterPageState extends State<RegisterPage> {
                       Obx(() {
                         String? errorText =
                             _userAuthenticationController.regError["address"];
-                        return DropdownButtonFormField<String>(
+                        return TextFormField(
+                          controller: _addressController,
+                          decoration: InputDecoration(
+                              hintText: errorText == null ? "Address" : errorText,
+                              hintStyle: TextStyle(
+                                  color: errorText == null
+                                      ? Color(0xFF0D0140)
+                                      : Colors.red,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
+                                  fontSize: errorText == null ? 16 : 12),
+                              contentPadding: EdgeInsets.all(16),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(18))),
+                        );
+                        /*  return DropdownButtonFormField<String>(
                           value: _cities.contains(selectedcity)
                               ? selectedcity
                               : null,
@@ -256,7 +270,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(18))),
                           dropdownColor: Color(0xFFE5E5E5),
-                        );
+                        ); */
                       }),
                       SizedBox(height: 8),
                       Obx(() {

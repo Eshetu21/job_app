@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:job_app/Controllers/get_profile.dart';
+import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Screens/Profiles/add_account.dart';
 import 'package:job_app/Screens/Profiles/profiles.dart';
 

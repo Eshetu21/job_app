@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/get_job_seeker.dart';
-import 'package:job_app/Screens/Profiles/profiles.dart';
+import 'package:job_app/Controllers/JobSeeker/JobSeekerController.dart';
 
 class JobSeekerHomepage extends StatefulWidget {
   const JobSeekerHomepage({super.key});

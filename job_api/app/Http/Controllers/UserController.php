@@ -37,7 +37,6 @@ class UserController extends Controller
                 "lastname" => $validatedData["lastname"],
                 "email" => $validatedData["email"],
                 "address" => $validatedData["address"],
-                "password_confirmation"=>$validatedData["password_confirmation"],
                 "password" => Hash::make($validatedData["password"])
             ]);
             $token = $user->createToken("job_portal")->plainTextToken;

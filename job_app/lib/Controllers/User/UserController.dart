@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:job_app/Constants/constants.dart';
-import 'package:job_app/Controllers/get_profile.dart';
+import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Screens/Auth/login_page.dart';
 import 'package:job_app/Widgets/navigateprofile.dart';
 
@@ -119,11 +119,12 @@ class UserAuthenticationController extends GetxController {
       print(e.toString());
     }
   }
-  void logout(){
-    logLoading.value=false;
+
+  void logout() {
+    logLoading.value = false;
     box.remove('token');
     _profileController.profiles.clear();
-    token.value='';
+    token.value = '';
     Get.offAll(LoginPage());
   }
 }

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/user_auth.dart';
+import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Screens/Auth/forgot_password.dart';
 import 'package:job_app/Screens/Auth/register_page.dart';
 

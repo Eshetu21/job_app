@@ -26,7 +26,7 @@ class GetJobSeeker {
 class JobSeekerController extends GetxController {
   RxMap<String, dynamic> jobseeker = <String, dynamic>{}.obs;
   final GetJobSeeker _getJobSeeker = Get.put(GetJobSeeker());
-  
+
   @override
   void onInit() {
     super.onInit();
@@ -41,4 +41,8 @@ class JobSeekerController extends GetxController {
       print("Failed to fetch job seeker");
     }
   }
+}
+
+class AddJobseeker extends GetxController {
+  
 }
