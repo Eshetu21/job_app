@@ -120,14 +120,13 @@ class _JobSeekerCreateState extends State<JobSeekerCreate> {
                 onTap: () async {
                   var jobSeekerData = await _jobSeekerController.getJobSeeker();
                   int jobSeekerId = jobSeekerData["jobseeker"]["id"];
+                  print(jobSeekerId);
                   await _jobSeekerController.updatejobseeker(
                       id: jobSeekerId,
                       category: selectedCategory!,
                       subCategory: selectedSubcategory!);
-                  print(selectedCategory);
-                  print(selectedSubcategory);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => JobSeekerCreateSecond()));
+                 /*  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => JobSeekerCreateSecond())); */
                 },
                 child: Center(
                   child: Container(

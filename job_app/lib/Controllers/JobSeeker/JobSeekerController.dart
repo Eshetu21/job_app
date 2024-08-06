@@ -13,6 +13,7 @@ class JobSeekerController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    createjobseeker();
     getJobSeeker();
   }
 
@@ -54,10 +55,6 @@ class JobSeekerController extends GetxController {
     }
   }
 
-  /* int getJobSeekerId() {
-    return jobseeker["id"];
-  } */
-
   Future updatejobseeker(
       {required int id,
       required String category,
@@ -85,6 +82,7 @@ class JobSeekerController extends GetxController {
         print("Successfully updated jobseeker profile");
       }
     } catch ($e) {
+      print("Failed");
       print($e.toString());
     }
   }

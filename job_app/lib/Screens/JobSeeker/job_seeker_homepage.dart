@@ -16,7 +16,7 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
   final JobSeekerController _jobSeekerController =
       Get.put(JobSeekerController());
 
-      @override
+  @override
   void initState() {
     super.initState();
     _jobSeekerController.getJobSeeker();
@@ -50,12 +50,32 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                 ),
                 Obx(() {
                   if (_jobSeekerController.jobseeker.isEmpty) {
-                    return CircularProgressIndicator();
+                    return FutureBuilder(
+                        future: _jobSeekerController.getJobSeeker(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text("Error ${snapshot.error}");
+                          } else if (snapshot.hasData) {
+                            var jobseekerData =
+                                snapshot.data as Map<String, dynamic>;
+                            _jobSeekerController.jobseeker.value =
+                                jobseekerData;
+                            String firstname =
+                                jobseekerData["jobseeker"]["user"]["firstname"];
+                            return Text(firstname,);
+                          } else {
+                            return Text("No data found");
+                          }
+                        });
                   } else {
-                    return Text(
-                      _jobSeekerController.jobseeker["user"]["firstname"],
-                      style: GoogleFonts.poppins(fontSize: 20),
-                    );
+                    var jobSeekerData = _jobSeekerController.jobseeker.value;
+                    String firstname =
+                        jobSeekerData["jobseeker"]["user"]["firstname"];
+                    return Text(firstname,
+                        style: GoogleFonts.poppins(fontSize: 20));
                   }
                 }),
               ],
