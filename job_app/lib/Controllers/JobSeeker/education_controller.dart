@@ -16,6 +16,17 @@ class EducationController extends GetxController {
     jobseekerId = box.read("jobseekerId");
   }
 
+ Future<void> createeducation() async {
+    final response = await http.post(
+      Uri.parse("${url}addeducation"),
+      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+    );
+    if (response.statusCode == 201) {
+      print("sucessfully created education");
+    } else {
+      print("failed to created");
+    }
+  }
   Future<Map<String, dynamic>> showeducation({int? jobseekerId}) async {
     var response = await http.get(Uri.parse("${url}showeducation"), headers: {
       "Accept": "application/json",
@@ -28,31 +39,44 @@ class EducationController extends GetxController {
       throw Exception("Failed to get jobseeker data");
     }
   }
-  
-  Future addeducation(
-      {required String institution,
-      required String field,
-      required String eduLevel,
-      required String eduStart,
+
+  Future updateeducation(
+      {required int jobseekerid,
+      required int educationid,
+      String? institution,
+      String? field,
+      String? eduLevel,
+      String? eduStart,
       String? eduEnd,
       String? eduDescription}) async {
-    var educationData = {
-      "school_name": institution,
-      "field": field,
-      "education_level": eduLevel,
-      "edu_start_date": eduStart,
-      "edu_end_date": eduEnd,
-      "education_description": eduDescription
-    };
-    var response = await http.post(Uri.parse("${url}addeducation"),
-        headers: {
-          "Accept": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: educationData);
-    if (response.statusCode == 201) {
-      print("sucessfully uploaded educations");
-      print(response.body);
+    try {
+      var data = {
+        "school_name": institution ?? "",
+        "field": field ?? "",
+        "education_level": eduLevel ?? "",
+        "edu_start_date": eduStart ?? "",
+        "edu_end_date": eduEnd ?? "",
+        "description": eduDescription ?? ""
+      };
+      var encodedData = data.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+      final response = await http.put(
+          Uri.parse("${url}updateeducation/$jobseekerid/$educationid"),
+          headers: {
+            "Accept": "application/json",
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: encodedData);
+      if (response.statusCode == 200) {
+        print("Education updated");
+        print(encodedData);
+      }
+    } catch ($e) {
+      print("Failed");
+      print($e.toString());
     }
   }
 }

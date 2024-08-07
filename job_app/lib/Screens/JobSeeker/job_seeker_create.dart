@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/JobSeekerController.dart';
+import 'package:job_app/Controllers/JobSeeker/education_controller.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_create_2.dart';
 
 class JobSeekerCreate extends StatefulWidget {
@@ -18,6 +19,8 @@ class JobSeekerCreate extends StatefulWidget {
 class _JobSeekerCreateState extends State<JobSeekerCreate> {
   final JobSeekerController _jobSeekerController =
       Get.put(JobSeekerController());
+  final EducationController _educationController =
+      Get.put(EducationController());
 
   List<dynamic> categories = [];
   List<dynamic> subcategories = [];
@@ -126,8 +129,9 @@ class _JobSeekerCreateState extends State<JobSeekerCreate> {
                     category: selectedCategory!,
                     subCategory: selectedSubcategory!,
                   );
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => JobSeekerCreateSecond())); 
+                  _educationController.createeducation();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => JobSeekerCreateSecond()));
                 },
                 child: Center(
                   child: Container(

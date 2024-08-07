@@ -16,6 +16,12 @@ class JobSeekerCreateSecond extends StatefulWidget {
 class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
   final EducationController _educationController =
       Get.put(EducationController());
+  final TextEditingController _institutionController = TextEditingController();
+  final TextEditingController _levelofeducation = TextEditingController();
+  final TextEditingController _field = TextEditingController();
+  final TextEditingController _startDate = TextEditingController();
+  final TextEditingController _edndate = TextEditingController();
+  final TextEditingController _description = TextEditingController();
   var educationDetails = {};
   final box = GetStorage();
 
@@ -55,29 +61,35 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 10),
-                _buildTextField("Institution name"),
+                _buildTextField("Institution name", _institutionController),
                 SizedBox(height: 10),
-                _buildTextField("Level of education"),
+                _buildTextField("Level of education", _levelofeducation),
                 SizedBox(height: 10),
-                _buildTextField("Field of study"),
+                _buildTextField("Field of study", _field),
                 SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
-                      child: _buildTextField("Start Date"),
+                      child: _buildTextField("Start Date", _startDate),
                     ),
                     SizedBox(width: 20),
                     Expanded(
-                      child: _buildTextField("End Date"),
+                      child: _buildTextField("End Date", _edndate),
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
-                _buildTextField("Description"),
+                _buildTextField("Description", _description),
                 SizedBox(height: 40),
                 Center(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      final jobseekerid = box.read("jobseekerId");
+                      var responseData = await _educationController
+                          .showeducation(jobseekerId: jobseekerid);
+                      
+                     
+                    },
                     child: Container(
                       margin: EdgeInsets.only(bottom: 20),
                       width: 266,
@@ -123,7 +135,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
     );
   }
 
-  Widget _buildTextField(String label) {
+  Widget _buildTextField(String label, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -140,6 +152,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
               borderRadius: BorderRadius.circular(20),
               color: Colors.white.withOpacity(0.5)),
           child: TextField(
+            controller: controller,
             decoration: InputDecoration(
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(10),
