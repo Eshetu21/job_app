@@ -16,17 +16,45 @@ class EducationController extends GetxController {
     jobseekerId = box.read("jobseekerId");
   }
 
- Future<void> createeducation() async {
-    final response = await http.post(
-      Uri.parse("${url}addeducation"),
-      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-    );
-    if (response.statusCode == 201) {
-      print("sucessfully created education");
-    } else {
-      print("failed to created");
+  Future<void> createeducation(
+      {required int jobseekerid,
+     required String institution,
+      required String field,
+      required String eduLevel,
+      required String eduStart,
+      required String eduEnd,
+       required String eduDescription}) async {
+  try {
+      var data = {
+        "school_name": institution ?? "",
+        "field": field ?? "",
+        "education_level": eduLevel ?? "",
+        "edu_start_date": eduStart ?? "",
+        "edu_end_date": eduEnd ?? "",
+        "description": eduDescription ?? ""
+      };
+      var encodedData = data.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+      final response = await http.post(
+          Uri.parse("${url}addeducation/$jobseekerid"),
+          headers: {
+            "Accept": "application/json",
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: encodedData);
+      if (response.statusCode == 200) {
+        print("Education created");
+        print(encodedData);
+      }
+    } catch ($e) {
+      print("Failed");
+      print($e.toString());
     }
   }
+
   Future<Map<String, dynamic>> showeducation({int? jobseekerId}) async {
     var response = await http.get(Uri.parse("${url}showeducation"), headers: {
       "Accept": "application/json",

@@ -129,7 +129,6 @@ class _JobSeekerCreateState extends State<JobSeekerCreate> {
                     category: selectedCategory!,
                     subCategory: selectedSubcategory!,
                   );
-                  _educationController.createeducation();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => JobSeekerCreateSecond()));
                 },

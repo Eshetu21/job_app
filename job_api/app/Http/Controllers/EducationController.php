@@ -31,19 +31,18 @@ class EducationController extends Controller
             "education" => $education
         ], 200);
     }
-    public function addeducation(StoreEductionRequest $request)
+    public function addeducation(StoreEductionRequest $request, $jobseekerId)
     {
         $user = Auth::user();
-        $jobseeker = JobSeeker::where("user_id", $user->id)->first();
+
         try {
             $validatedData = $request->validated();
-            $validatedData["job_seeker_id"] = $jobseeker->id;
+            $validatedData["job_seeker_id"] = $jobseekerId;
             $education = Education::create($validatedData);
 
             return response()->json(
                 [
                     "message" => "Education added sucessfully",
-                    "jobseeker" => $jobseeker,
                     "education" => $education
 
                 ],

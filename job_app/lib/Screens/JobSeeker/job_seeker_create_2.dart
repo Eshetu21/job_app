@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/education_controller.dart';
+import 'package:job_app/Widgets/dateformat.dart';
 
 class JobSeekerCreateSecond extends StatefulWidget {
   const JobSeekerCreateSecond({super.key});
@@ -24,6 +27,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
   final TextEditingController _description = TextEditingController();
   var educationDetails = {};
   final box = GetStorage();
+  DateTime? selectedDate;
 
   @override
   void initState() {
@@ -70,11 +74,11 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                 Row(
                   children: [
                     Expanded(
-                      child: _buildTextField("Start Date", _startDate),
+                      child: _buildDateField("Start Date", _startDate),
                     ),
                     SizedBox(width: 20),
                     Expanded(
-                      child: _buildTextField("End Date", _edndate),
+                      child: _buildDateField("End Date", _edndate),
                     ),
                   ],
                 ),
@@ -84,11 +88,18 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                 Center(
                   child: GestureDetector(
                     onTap: () async {
-                      final jobseekerid = box.read("jobseekerId");
-                      var responseData = await _educationController
-                          .showeducation(jobseekerId: jobseekerid);
-                      
-                     
+                      int jobseeker = box.read("jobseekerId");
+                      print(jobseeker);
+                      print(_institutionController.text);
+                      print(_startDate.text);
+                      await _educationController.createeducation(
+                          jobseekerid: jobseeker,
+                          institution: _institutionController.text.trim(),
+                          field: _field.text.trim(),
+                          eduLevel: _levelofeducation.text.trim(),
+                          eduStart: _startDate.text.trim(),
+                          eduEnd: _edndate.text.trim(),
+                          eduDescription: _description.text.trim());
                     },
                     child: Container(
                       margin: EdgeInsets.only(bottom: 20),
@@ -159,6 +170,45 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                 hintText: "",
                 hintStyle:
                     TextStyle(fontFamily: GoogleFonts.poppins().fontFamily)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDateField(String label, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: Color(0xFF150B3D),
+            fontSize: 14,
+          ),
+        ),
+        SizedBox(height: 10),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white.withOpacity(0.5),
+          ),
+          child: TextField(
+            
+            controller: controller,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(10),
+              DateTextInputFormatter(),
+            ],
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.all(10),
+              hintText: "DD/MM/YY",
+              hintStyle: TextStyle(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
+            ),
           ),
         ),
       ],
