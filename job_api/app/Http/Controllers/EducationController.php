@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 class EducationController extends Controller
 {
 
-    public function showeducation(Request $request, $id)
+    public function showeducation(Request $request)
     {
         $user = $request->user();
         $jobseeker = $user->jobseeker;
@@ -21,7 +21,7 @@ class EducationController extends Controller
                 "message" => "Jobseeker not found"
             ]);
         }
-        $education = $jobseeker->educations()->where("id", $id)->first();
+        $education = $jobseeker->educations;
         if (!$education) {
             return response()->json([
                 "message" => "Education not found"
@@ -29,7 +29,7 @@ class EducationController extends Controller
         }
         return response()->json([
             "education" => $education
-        ]);
+        ], 200);
     }
     public function addeducation(StoreEductionRequest $request)
     {
@@ -59,16 +59,16 @@ class EducationController extends Controller
         }
     }
 
-    public function updateeducation(StoreEductionRequest $request, $id)
+    public function updateeducation(StoreEductionRequest $request, $jobseekerId, $educationId)
     {
         $user = $request->user();
-        $jobseeker = $user->jobseeker;
+        $jobseeker = JobSeeker::where('id', $jobseekerId)->where('user_id', $user->id)->first();
         if (!$jobseeker) {
             return response()->json([
                 "message" => "jobseeker not found"
             ]);
         }
-        $education = $jobseeker->educations()->where("id", $id)->first();
+        $education = $jobseeker->educations()->where("id", $educationId)->first();
         if (!$education) {
             return response()->json([
                 "message" => "education not found"
@@ -79,7 +79,8 @@ class EducationController extends Controller
             $education->update($validatedData);
             return response()->json([
                 "message" => "sucessfully updated",
-                "education" => $education
+                "education" => $education,
+                "Jobseeker" => $jobseeker
             ]);
         } catch (ValidationException $e) {
             return response()->json([

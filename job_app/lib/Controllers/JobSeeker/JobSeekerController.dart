@@ -10,6 +10,7 @@ class JobSeekerController extends GetxController {
   RxMap<String, dynamic> jobseeker = <String, dynamic>{}.obs;
   final box = GetStorage();
   late final String? token;
+  late int? jobseekerId;
   @override
   void onInit() {
     super.onInit();
@@ -40,6 +41,8 @@ class JobSeekerController extends GetxController {
     );
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
+      jobseekerId = responseData["jobseeker"]["id"];
+      box.write("jobseekerId", jobseekerId);
       return responseData;
     } else {
       throw Exception("Failed to get jobseeker data");
@@ -82,7 +85,7 @@ class JobSeekerController extends GetxController {
             "Authorization": "Bearer $token",
             "Content-Type": "application/x-www-form-urlencoded",
           },
-          body:encodedData);
+          body: encodedData);
       if (response.statusCode == 200) {
         print("Successfully updated jobseeker profile");
         print(encodedData);

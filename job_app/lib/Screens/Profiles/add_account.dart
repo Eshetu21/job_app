@@ -129,10 +129,11 @@ class _AddAccountState extends State<AddAccount> {
               SizedBox(height: 120),
               GestureDetector(
                 onTap: () async {
-                  if (selected == 'jobseeker')
-                  await _jobSeekerController.createjobseeker();
+                  if (selected == 'jobseeker') {
+                    await _jobSeekerController.createjobseeker();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => JobSeekerCreate()));
+                  }
                 },
                 child: Center(
                   child: Container(

@@ -37,6 +37,6 @@ Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])-
 
 //Education
 Route::post('addeducation', [EducationController::class, 'addeducation'])->middleware("auth:sanctum");;
-Route::post('showeducation/{id}', [EducationController::class, 'showeducation'])->middleware("auth:sanctum");;
-Route::post('updateeducation/{id}', [EducationController::class, 'updateeducation'])->middleware("auth:sanctum");
+Route::get('showeducation', [EducationController::class, 'showeducation'])->middleware("auth:sanctum");;
+Route::put('updateeducation/{jobseekerid}/{educationid}', [EducationController::class, 'updateeducation'])->middleware("auth:sanctum");
 Route::post('deleteeducation/{id}', [EducationController::class, 'deleteeducation'])->middleware("auth:sanctum");

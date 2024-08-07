@@ -65,7 +65,9 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                 jobseekerData;
                             String firstname =
                                 jobseekerData["jobseeker"]["user"]["firstname"];
-                            return Text(firstname,);
+                            return Text(
+                              firstname,
+                            );
                           } else {
                             return Text("No data found");
                           }
