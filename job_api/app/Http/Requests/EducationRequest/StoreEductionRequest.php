@@ -25,8 +25,8 @@ class StoreEductionRequest extends FormRequest
             "school_name"=>"nullable|string",
             "field"=>"nullable|string",
             "education_level"=>"nullable|string",
-            "edu_start_date"=>"nullable|date",
-            "edu_end_date"=>"nullable|date",
+            "edu_start_date"=>"nullable|string",
+            "edu_end_date"=>"nullable|string",
             "description"=>"nullable|string"
         ];
     }

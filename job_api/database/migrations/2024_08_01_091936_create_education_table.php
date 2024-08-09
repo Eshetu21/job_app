@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('school_name')->nullable();
             $table->string('field')->nullable();
             $table->string('education_level')->nullable();
-            $table->date('edu_start_date')->nullable();
-            $table->date('edu_end_date')->nullable();
+            $table->string('edu_start_date')->nullable();
+            $table->string('edu_end_date')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

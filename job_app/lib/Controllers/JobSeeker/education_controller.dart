@@ -18,34 +18,34 @@ class EducationController extends GetxController {
 
   Future<void> createeducation(
       {required int jobseekerid,
-     required String institution,
+      required String institution,
       required String field,
       required String eduLevel,
       required String eduStart,
       required String eduEnd,
-       required String eduDescription}) async {
-  try {
+      required String eduDescription}) async {
+    try {
       var data = {
-        "school_name": institution ?? "",
-        "field": field ?? "",
-        "education_level": eduLevel ?? "",
-        "edu_start_date": eduStart ?? "",
-        "edu_end_date": eduEnd ?? "",
-        "description": eduDescription ?? ""
+        "school_name": institution,
+        "field": field ,
+        "education_level": eduLevel,
+        "edu_start_date": eduStart,
+        "edu_end_date": eduEnd,
+        "description": eduDescription
       };
       var encodedData = data.entries
           .map((e) =>
               '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
           .join('&');
-      final response = await http.post(
-          Uri.parse("${url}addeducation/$jobseekerid"),
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: encodedData);
-      if (response.statusCode == 200) {
+      final response =
+          await http.post(Uri.parse("${url}addeducation/$jobseekerid"),
+              headers: {
+                "Accept": "application/json",
+                "Authorization": "Bearer $token",
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: encodedData);
+      if (response.statusCode == 201) {
         print("Education created");
         print(encodedData);
       }
@@ -64,7 +64,9 @@ class EducationController extends GetxController {
       var responseData = jsonDecode(response.body);
       return responseData;
     } else {
-      throw Exception("Failed to get jobseeker data");
+      print("Failed to get jobseeker data");
+      return {};
+      
     }
   }
 

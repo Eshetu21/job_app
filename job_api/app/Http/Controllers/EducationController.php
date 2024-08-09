@@ -38,9 +38,8 @@ class EducationController extends Controller
         try {
             $validatedData = $request->validated();
             $validatedData["job_seeker_id"] = $jobseekerId;
-            $education = Education::create($validatedData);
-
-            return response()->json(
+            $education = Education::firstOrCreate($validatedData);
+                return response()->json(
                 [
                     "message" => "Education added sucessfully",
                     "education" => $education
