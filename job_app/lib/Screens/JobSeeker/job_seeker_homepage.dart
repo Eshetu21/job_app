@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, avoid_unnecessary_containers, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, avoid_unnecessary_containers, sized_box_for_whitespace, invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -232,7 +232,7 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                           }
                         });
                   } else {
-                    var jobSeekerData = _jobSeekerController.jobseeker.value;
+                    var jobSeekerData = _jobSeekerController.jobseeker;
                     String firstname =
                         jobSeekerData["jobseeker"]["user"]["firstname"];
                     return Text(firstname,

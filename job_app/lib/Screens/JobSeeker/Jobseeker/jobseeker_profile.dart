@@ -33,7 +33,7 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                 children: [
                   Icon(Icons.account_circle_outlined,
                       size: 60, color: Color(0xFFFF9228)),
-                      SizedBox(height: 12),
+                  SizedBox(height: 12),
                   _profileController.isloading.value
                       ? Text("loading...")
                       : Text(
@@ -43,10 +43,11 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                               _profileController.profiles["jobseeker"]["user"]
                                   ["lastname"],
                           style: GoogleFonts.poppins(color: Colors.white)),
-                          SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.location_on_outlined,size: 20, color: Colors.white),
+                      Icon(Icons.location_on_outlined,
+                          size: 20, color: Colors.white),
                       _profileController.profiles["jobseeker"]["user"]
                                   ["address"] !=
                               null
@@ -55,13 +56,14 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                   ["address"],
                               style: GoogleFonts.poppins(color: Colors.white),
                             )
-                          : Text("Null",style: GoogleFonts.poppins(color: Colors.white)),
+                          : Text("Null",
+                              style: GoogleFonts.poppins(color: Colors.white)),
                     ],
                   ),
                   SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.email_outlined,size: 20, color: Colors.white),
+                      Icon(Icons.email_outlined, size: 20, color: Colors.white),
                       _profileController.profiles["jobseeker"]["user"]
                                   ["email"] !=
                               null
@@ -70,7 +72,22 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                   ["email"],
                               style: GoogleFonts.poppins(color: Colors.white),
                             )
-                          : Text("Null",style: GoogleFonts.poppins(color: Colors.white)),
+                          : Text("Null",
+                              style: GoogleFonts.poppins(color: Colors.white)),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text("Skills", style: GoogleFonts.poppins()),
+                      Spacer(),
+                      Text("Edit",style: GoogleFonts.poppins(color: Color(0xFFFF9228)))
                     ],
                   )
                 ],
