@@ -90,7 +90,6 @@ class _ProfilesState extends State<Profiles> {
                                       setState(() {
                                         selectedProfile = value.toString();
                                       });
-                                      
                                     }),
                               ),
                               "jobseeker"),
@@ -165,7 +164,7 @@ class _ProfilesState extends State<Profiles> {
                                                       color: Color(0xFFFF9228)
                                                           .withOpacity(0.4)),
                                                   title: Text("Job Seeker"),
-                                                  subtitle: Text("Add acount"),
+                                                  subtitle: Text("Add account"),
                                                   trailing: Radio(
                                                       value: 'jobseeker',
                                                       groupValue:
@@ -191,7 +190,7 @@ class _ProfilesState extends State<Profiles> {
                                                   title: Text("Private Client"),
                                                   subtitle: Text("Add account"),
                                                   trailing: Radio(
-                                                      value: 'company',
+                                                      value: 'private',
                                                       groupValue:
                                                           selectedProfile,
                                                       onChanged: (value) {
@@ -248,30 +247,31 @@ class _ProfilesState extends State<Profiles> {
                               ),
                             ),
                           ),
-                          Spacer(),
-              GestureDetector(
-                onTap: () {
-                  if(selectedProfile=='jobseeker')
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>(JobSeekerHomepage())));
-                },
-                child: Center(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 40),
-                    width: 266,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Color(0xFF130160).withOpacity(0.7),
-                    ),
-                    child: Center(
-                      child: Text("Continue",
-                          style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ),
-                  ),
-                ),
-              )
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            if (selectedProfile == 'jobseeker') {
+                              Get.off(JobSeekerHomepage());
+                            }
+                          },
+                          child: Center(
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 40),
+                              width: 266,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Color(0xFF130160).withOpacity(0.7),
+                              ),
+                              child: Center(
+                                child: Text("Continue",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white)),
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ));
         }),
