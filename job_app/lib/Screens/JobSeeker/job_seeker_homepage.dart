@@ -7,6 +7,7 @@ import 'package:job_app/Controllers/JobSeeker/JobSeekerController.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/applications_page.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/explore_page.dart';
+import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
 import 'package:job_app/Screens/Profiles/profiles.dart';
 
 class JobSeekerHomepage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
         backgroundColor: Color(0xFFE5E5E5),
         body: SafeArea(
           child: Container(
-            margin: EdgeInsets.only(top:20,right: 20,left: 20),
+            margin: EdgeInsets.only(top: 20, right: 20, left: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -61,11 +62,13 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                       StateSetter setState) {
                                     return Container(
                                       width: double.infinity,
-                                      height: MediaQuery.of(context).size.height *
-                                          0.4,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
                                       child: Column(
                                         children: [
-                                          if (_profileController.isloading.value)
+                                          if (_profileController
+                                              .isloading.value)
                                             Center(
                                                 child:
                                                     CircularProgressIndicator())
@@ -89,8 +92,9 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                       onTap: () {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    Profiles()));
+                                                                builder:
+                                                                    (context) =>
+                                                                        Profiles()));
                                                       },
                                                       child: Container(
                                                         margin:
@@ -101,13 +105,15 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                                 .symmetric(
                                                                     horizontal:
                                                                         80,
-                                                                    vertical: 10),
+                                                                    vertical:
+                                                                        10),
                                                             decoration: BoxDecoration(
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(
                                                                             20),
-                                                                color: Colors.grey
+                                                                color: Colors
+                                                                    .grey
                                                                     .withOpacity(
                                                                         0.2)),
                                                             child: Text(
@@ -125,8 +131,8 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                   ],
                                                 ),
                                               ),
-                                            if (_profileController
-                                                    .profiles["privateclient"] !=
+                                            if (_profileController.profiles[
+                                                    "privateclient"] !=
                                                 null)
                                               _profileContainer(
                                                 ListTile(
@@ -138,13 +144,14 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                   ),
                                                   title: Text(
                                                     _profileController.profiles[
-                                                                'privateclient'][
-                                                            'user']['firstname'] +
+                                                                    'privateclient']
+                                                                ['user']
+                                                            ['firstname'] +
                                                         " " +
                                                         _profileController
                                                                     .profiles[
-                                                                'jobseeker']
-                                                            ['user']['lastname'],
+                                                                'jobseeker'][
+                                                            'user']['lastname'],
                                                   ),
                                                   subtitle:
                                                       Text("Private Client"),
@@ -213,7 +220,8 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                           } else if (snapshot.hasData) {
                             var jobseekerData =
                                 snapshot.data as Map<String, dynamic>;
-                            _jobSeekerController.jobseeker.value = jobseekerData;
+                            _jobSeekerController.jobseeker.value =
+                                jobseekerData;
                             String firstname =
                                 jobseekerData["jobseeker"]["user"]["firstname"];
                             return Text(
@@ -251,16 +259,24 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                         currentindex = index;
                       });
                     },
-                    children: [ExplorePage(), ApplicationPage(), Profiles()],
+                    children: [
+                      ExplorePage(),
+                      ApplicationPage(),
+                    ],
                   ),
                 ),
                 BottomNavigationBar(
                   currentIndex: currentindex,
                   onTap: (index) {
-                    setState(() {
-                      currentindex = index;
-                      _pageController.jumpToPage(index);
-                    });
+                    if (index == 2) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => JobseekerProfile()));
+                    } else {
+                      setState(() {
+                        currentindex = index;
+                        _pageController.jumpToPage(index);
+                      });
+                    }
                   },
                   items: [
                     BottomNavigationBarItem(
