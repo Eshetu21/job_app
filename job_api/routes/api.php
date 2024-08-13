@@ -21,7 +21,7 @@ Route::post('/admin/register', [AdminController::class, 'register']);
 //Profiles
 Route::get("profile", [UserController::class, "getuserprofile"])->middleware("auth:sanctum");
 
-// User
+// User +
 Route::post('register', [UserController::class, "register"]);
 Route::post('login', [UserController::class, "login"]);
 Route::put('update', [UserController::class, "update"])->middleware("auth:sanctum");
@@ -42,7 +42,7 @@ Route::post('createcompany', [CompanyController::class, 'createcompany'])->middl
 Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])->middleware("auth:sanctum");
 
 
-//Job
+
 
 Route::get('fetchjobs',[JobController::class, 'fetchjobs']);
 

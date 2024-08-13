@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest\RegisterRequest;
 use App\Http\Requests\UserRequest\UpdateRequest;
 use App\Models\User;
 use Dotenv\Exception\ValidationException as ExceptionValidationException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -74,6 +75,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         $validatedData = $request->validated();
+       
         try {
             $user->update([
                 "firstname" => $validatedData["firstname"] ?? $user->firstname,
@@ -83,7 +85,7 @@ class UserController extends Controller
                 "gender" => $validatedData["gender"] ?? $user->gender,
                 "profile_pic" => $validatedData["profile_pic"] ?? $user->profile_pic,
                 "about_me" => $validatedData["about_me"] ?? $user->about_me,
-                "password" => $validatedData["password"] ?? $user->password
+              
             ]);
         } catch (ExceptionValidationException $e) {
         }
@@ -93,9 +95,9 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function delete(User $user)
+    public function delete(Request $request)
     {
-        $user->delete();
+        $request->user()->delete();
         return response()->json([
             "message" => "No content"
         ]);

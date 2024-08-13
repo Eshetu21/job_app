@@ -1,7 +1,9 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -20,8 +22,8 @@ return new class extends Migration
             $table->string('job_title');
             $table->string('job_location');
             $table->double('job_salary')->nullable();
-            $table->date('job_start_date');
-            $table->date('job_end_date');
+
+            $table->date('deadline');
             $table->text('job_description');
             $table->timestamps();
         });

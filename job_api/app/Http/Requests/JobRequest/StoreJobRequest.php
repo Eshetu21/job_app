@@ -25,8 +25,8 @@ class StoreJobRequest extends FormRequest
             "job_title"=>"required|string",
             "job_location"=>"required|string",
             "job_salary"=>"required|string",
-            "job_start_date"=>"required|date",
-            "job_end_date"=>"required|date",
+         
+            "deadline"=>"required|date",
             "job_description"=>"required|text"
         ];
     }
