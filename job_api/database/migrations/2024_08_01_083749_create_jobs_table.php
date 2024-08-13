@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->string('job_title');
             $table->string('job_location');
-            $table->double('job_salary');
+            $table->double('job_salary')->nullable();
             $table->date('job_start_date');
             $table->date('job_end_date');
             $table->text('job_description');

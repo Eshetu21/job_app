@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
+use App\Models\Company;
+use App\Models\Job;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Process;
@@ -84,5 +88,33 @@ class AdminController extends Controller
             "success" => true,
             "token" => $token
         ], 200);
+
+    }
+
+    public function fetchJobs(Request $request){
+        
+            $sortBy = $request->query('sortby');
+            $sortOrder = $request->query('sortOrder', 'asc');
+            $per_page = $request->query('per_page');
+            $interval = $request->query('interval');
+
+            $query = Job::query();
+
+            if($sortBy) {
+                $query->orderBy($sortBy, $sortOrder);
+
+            }
+            $curre = Carbon::now();
+            
+            if($interval) {
+                $query->where('createdAt','<=', $curre- $interval*8640000);
+            }
+          
+
+            if($per_page) {
+             $jobs =   $query->paginate($per_page);
+            }
+            $count = $jobs->count;
+          return  response()->json(["success"=>true, "jobs"=>$jobs, "count"=>$count]);
     }
 }

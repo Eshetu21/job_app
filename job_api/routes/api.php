@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\PrivateClientController;
 use App\Http\Controllers\SkillController;
@@ -40,6 +41,12 @@ Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatej
 //Company
 Route::post('createcompany', [CompanyController::class, 'createcompany'])->middleware("auth:sanctum");
 Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])->middleware("auth:sanctum");
+
+
+//Job
+
+Route::get('fetchjobs',[JobController::class, 'fetchjobs']);
+
 
 //Education
 Route::post('addeducation/{id}', [EducationController::class, 'addeducation'])->middleware("auth:sanctum");;
