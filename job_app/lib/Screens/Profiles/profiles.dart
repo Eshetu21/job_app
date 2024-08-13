@@ -23,7 +23,6 @@ class _ProfilesState extends State<Profiles> {
   Widget build(BuildContext context) {
     print(_profileController.profiles);
     return Scaffold(
-      backgroundColor: Color(0xFFE5E5E5),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(18.0),

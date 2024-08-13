@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('job_seekers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string("category")->nullable();
             $table->string("sub_category")->nullable();
             $table->string('profile_pic')->nullable();

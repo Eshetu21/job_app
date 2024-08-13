@@ -7,6 +7,7 @@ use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\PrivateClientController;
+use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,9 +40,10 @@ Route::get('fetchjobs',[JobController::class, 'fetchjobs']);
 Route::post('addeducation/{id}', [EducationController::class, 'addeducation'])->middleware("auth:sanctum");;
 Route::get('showeducation', [EducationController::class, 'showeducation'])->middleware("auth:sanctum");;
 Route::put('updateeducation/{jobseekerid}/{educationid}', [EducationController::class, 'updateeducation'])->middleware("auth:sanctum");
-Route::post('deleteeducation/{id}', [EducationController::class, 'deleteeducation'])->middleware("auth:sanctum");
+Route::delete('deleteeducation/{id}', [EducationController::class, 'deleteeducation'])->middleware("auth:sanctum");
 
 //Experience
+<<<<<<< HEAD
 Route::post('addexperience/{id}', [ExperienceController::class, 'addexperience'])->middleware("auth:sanctum");;
 Route::get('showexperience', [ExperienceController::class, 'showexperience'])->middleware("auth:sanctum");;
 Route::put('updateeducation/{jobseekerid}/{educationid}', [EducationController::class, 'updateeducation'])->middleware("auth:sanctum");
@@ -59,3 +61,12 @@ Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatej
 //Company +
 Route::post('createcompany', [CompanyController::class, 'createcompany'])->middleware("auth:sanctum");
 Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])->middleware("auth:sanctum");
+=======
+Route::post('addexperience/{id}', [ExperienceController::class, 'addexperience'])->middleware("auth:sanctum");
+Route::get('showexperience', [ExperienceController::class, 'showexperience'])->middleware("auth:sanctum");
+
+
+//Skills
+Route::get('showskill',[SkillController::class,'showskill'])->middleware("auth:sanctum");
+Route::post('controlskill/{jobseekerid}',[SkillController::class,'controlskill'])->middleware("auth:sanctum");
+>>>>>>> 99b3e12e178744369d4b9e8610ac9a3b1e8677bf

@@ -11,7 +11,7 @@ class Skill extends Model
 
     protected $fillable = [
         'job_seeker_id',
-        'skill'
+        'skills'
     ];
 
     public function jobseeker()

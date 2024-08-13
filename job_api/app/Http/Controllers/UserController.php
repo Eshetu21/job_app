@@ -97,7 +97,12 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
+<<<<<<< HEAD
         $request->user()->delete();
+=======
+        $user = $request->user();
+        $user->delete();
+>>>>>>> 99b3e12e178744369d4b9e8610ac9a3b1e8677bf
         return response()->json([
             "message" => "No content"
         ]);

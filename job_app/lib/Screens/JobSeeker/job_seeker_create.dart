@@ -52,7 +52,6 @@ class _JobSeekerCreateState extends State<JobSeekerCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE5E5E5),
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.all(40),

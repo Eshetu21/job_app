@@ -10,7 +10,6 @@ class GetStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFE5E5E5),
         body: SafeArea(
           child: Container(
             height: MediaQuery.of(context).size.height,

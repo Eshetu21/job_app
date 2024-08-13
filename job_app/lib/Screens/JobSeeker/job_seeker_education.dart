@@ -31,7 +31,6 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE5E5E5),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(

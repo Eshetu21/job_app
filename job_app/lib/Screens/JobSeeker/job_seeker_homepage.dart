@@ -34,7 +34,6 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFE5E5E5),
         body: SafeArea(
           child: Container(
             margin: EdgeInsets.only(top: 20, right: 20, left: 20),
@@ -292,7 +291,6 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                       label: 'Profile',
                     ),
                   ],
-                  backgroundColor: Color(0xFFE5E5E5),
                   selectedItemColor: Colors.orange,
                   unselectedItemColor: Colors.black,
                   showUnselectedLabels: true,

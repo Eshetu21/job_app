@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
+import 'package:job_app/Screens/JobSeeker/job_seeker_skill.dart';
 
 class JobseekerProfile extends StatefulWidget {
   const JobseekerProfile({super.key});
@@ -14,86 +15,122 @@ class JobseekerProfile extends StatefulWidget {
 
 class _JobseekerProfileState extends State<JobseekerProfile> {
   final ProfileController _profileController = Get.put(ProfileController());
+ @override
+  void initState() {
+    super.initState();
+    _profileController.fetchProfiles();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFE5E5E5),
         body: SafeArea(
-            child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(18),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/profile_bg.png"),
-                      fit: BoxFit.cover)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.account_circle_outlined,
-                      size: 60, color: Color(0xFFFF9228)),
-                  SizedBox(height: 12),
-                  _profileController.isloading.value
-                      ? Text("loading...")
-                      : Text(
-                          _profileController.profiles["jobseeker"]["user"]
-                                  ["firstname"] +
-                              " " +
-                              _profileController.profiles["jobseeker"]["user"]
-                                  ["lastname"],
-                          style: GoogleFonts.poppins(color: Colors.white)),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(Icons.location_on_outlined,
-                          size: 20, color: Colors.white),
-                      _profileController.profiles["jobseeker"]["user"]
-                                  ["address"] !=
-                              null
-                          ? Text(
-                              _profileController.profiles["jobseeker"]["user"]
-                                  ["address"],
-                              style: GoogleFonts.poppins(color: Colors.white),
-                            )
-                          : Text("Null",
-                              style: GoogleFonts.poppins(color: Colors.white)),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(Icons.email_outlined, size: 20, color: Colors.white),
-                      _profileController.profiles["jobseeker"]["user"]
-                                  ["email"] !=
-                              null
-                          ? Text(
-                              _profileController.profiles["jobseeker"]["user"]
-                                  ["email"],
-                              style: GoogleFonts.poppins(color: Colors.white),
-                            )
-                          : Text("Null",
-                              style: GoogleFonts.poppins(color: Colors.white)),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text("Skills", style: GoogleFonts.poppins()),
-                      Spacer(),
-                      Text("Edit",style: GoogleFonts.poppins(color: Color(0xFFFF9228)))
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
-        )));
+            child: FutureBuilder(
+                future: _profileController.fetchProfiles(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if(snapshot.hasError){
+                    return Center(child: Text("Error"));
+                  }
+                  if (_profileController.profiles.isEmpty) {
+                    return Center(
+                      child: Text("No profile data found",
+                          style: GoogleFonts.poppins()),
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(18),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/profile_bg.png"),
+                                  fit: BoxFit.cover)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(Icons.account_circle_outlined,
+                                  size: 60, color: Color(0xFFFF9228)),
+                              SizedBox(height: 12),
+                              _profileController.isloading.value
+                                  ? Text("loading...")
+                                  : Text(
+                                      _profileController.profiles["jobseeker"]
+                                              ["user"]["firstname"] +
+                                          " " +
+                                          _profileController
+                                                  .profiles["jobseeker"]["user"]
+                                              ["lastname"],
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.white)),
+                              SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Icon(Icons.location_on_outlined,
+                                      size: 20, color: Colors.white),
+                                  _profileController.profiles["jobseeker"]
+                                              ["user"]["address"] !=
+                                          null
+                                      ? Text(
+                                          _profileController
+                                                  .profiles["jobseeker"]["user"]
+                                              ["address"],
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.white),
+                                        )
+                                      : Text("Null",
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.white)),
+                                ],
+                              ),
+                              SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Icon(Icons.email_outlined,
+                                      size: 20, color: Colors.white),
+                                  _profileController.profiles["jobseeker"]
+                                              ["user"]["email"] !=
+                                          null
+                                      ? Text(
+                                          _profileController
+                                                  .profiles["jobseeker"]["user"]
+                                              ["email"],
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.white),
+                                        )
+                                      : Text("Null",
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.white)),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text("Skills", style: GoogleFonts.poppins()),
+                                  Spacer(),
+                                  GestureDetector(
+                                    onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>JobSeekerSkill()));},
+                                    child: Text("Edit",
+                                        style: GoogleFonts.poppins(
+                                            color: Color(0xFFFF9228))),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                })));
   }
 }
