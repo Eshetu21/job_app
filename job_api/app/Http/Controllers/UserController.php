@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest\RegisterRequest;
 use App\Http\Requests\UserRequest\UpdateRequest;
 use App\Models\User;
 use Dotenv\Exception\ValidationException as ExceptionValidationException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -93,8 +94,9 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function delete(User $user)
+    public function delete(Request $request)
     {
+        $user = $request->user();
         $user->delete();
         return response()->json([
             "message" => "No content"

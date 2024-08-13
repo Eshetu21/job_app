@@ -37,6 +37,7 @@ class ProfileController extends GetxController {
 
   Future<void> fetchProfiles() async {
     try {
+      Future.delayed(Duration(seconds: 2));
       var profileData = await _getProfile.getProfile();
       profiles.value = profileData;
       isloading.value = false;

@@ -23,7 +23,6 @@ class _AddAccountState extends State<AddAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFE5E5E5),
         body: SafeArea(
             child: Container(
           margin: EdgeInsets.only(top: 30, left: 25, right: 25),

@@ -6,6 +6,7 @@ use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\PrivateClientController;
+use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,10 +45,13 @@ Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])-
 Route::post('addeducation/{id}', [EducationController::class, 'addeducation'])->middleware("auth:sanctum");;
 Route::get('showeducation', [EducationController::class, 'showeducation'])->middleware("auth:sanctum");;
 Route::put('updateeducation/{jobseekerid}/{educationid}', [EducationController::class, 'updateeducation'])->middleware("auth:sanctum");
-Route::post('deleteeducation/{id}', [EducationController::class, 'deleteeducation'])->middleware("auth:sanctum");
+Route::delete('deleteeducation/{id}', [EducationController::class, 'deleteeducation'])->middleware("auth:sanctum");
 
 //Experience
-Route::post('addexperience/{id}', [ExperienceController::class, 'addexperience'])->middleware("auth:sanctum");;
-Route::get('showexperience', [ExperienceController::class, 'showexperience'])->middleware("auth:sanctum");;
-Route::put('updateeducation/{jobseekerid}/{educationid}', [EducationController::class, 'updateeducation'])->middleware("auth:sanctum");
-Route::post('deleteeducation/{id}', [EducationController::class, 'deleteeducation'])->middleware("auth:sanctum");
+Route::post('addexperience/{id}', [ExperienceController::class, 'addexperience'])->middleware("auth:sanctum");
+Route::get('showexperience', [ExperienceController::class, 'showexperience'])->middleware("auth:sanctum");
+
+
+//Skills
+Route::get('showskill',[SkillController::class,'showskill'])->middleware("auth:sanctum");
+Route::post('controlskill/{jobseekerid}',[SkillController::class,'controlskill'])->middleware("auth:sanctum");

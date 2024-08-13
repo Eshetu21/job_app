@@ -102,6 +102,7 @@ class UserAuthenticationController extends GetxController {
             "Content-Type": "application/json",
           },
           body: data);
+          print(response);
       if (response.statusCode == 200) {
         token.value = json.decode(response.body)["token"];
         box.write("token", token.value);
