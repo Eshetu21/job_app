@@ -44,8 +44,8 @@ class CompanyController extends Controller
             'job_title' => 'required|string|max:255',
             'job_location' => 'required|string|max:255',
             'job_salary' => 'nullable|numeric',
-            'job_start_date' => 'required|date',
-            'job_end_date' => 'required|date|after_or_equal:job_start_date',
+          
+            'deadline' => 'required|date',
             'job_description' => 'required|string',
         ]);
         $validatedData['company_id'] = $user->company->id;

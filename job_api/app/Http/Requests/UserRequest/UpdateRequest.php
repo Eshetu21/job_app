@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
             'age' => 'nullable|string',
             'gender' => 'nullable|string',
             'about_me' => 'nullable|string',
-            'password' => 'nullable|string'
+           
         ];
     }
 }

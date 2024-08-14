@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PrivateClient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PrivateClientController extends Controller
@@ -31,6 +32,7 @@ class PrivateClientController extends Controller
 
     public function privatecreatejob(Request $request)
     {
+
         $user = $request->user();
         if (!$user->privateclient) {
             return response()->json([
@@ -41,11 +43,10 @@ class PrivateClientController extends Controller
             'job_title' => 'required|string|max:255',
             'job_location' => 'required|string|max:255',
             'job_salary' => 'nullable|numeric',
-            'job_start_date' => 'required|date',
-            'job_end_date' => 'required|date|after_or_equal:job_start_date',
+            'deadline' => 'required|date|',
             'job_description' => 'required|string',
         ]);
-        $validatedData['private_client_id'] = $user->privateclient->id;
+       
         $job = $user->privateclient->jobs()->create(
             $validatedData
         );

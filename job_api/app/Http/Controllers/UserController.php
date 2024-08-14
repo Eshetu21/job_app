@@ -75,6 +75,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         $validatedData = $request->validated();
+       
         try {
             $user->update([
                 "firstname" => $validatedData["firstname"] ?? $user->firstname,
@@ -84,7 +85,7 @@ class UserController extends Controller
                 "gender" => $validatedData["gender"] ?? $user->gender,
                 "profile_pic" => $validatedData["profile_pic"] ?? $user->profile_pic,
                 "about_me" => $validatedData["about_me"] ?? $user->about_me,
-                "password" => $validatedData["password"] ?? $user->password
+              
             ]);
         } catch (ExceptionValidationException $e) {
         }
@@ -96,8 +97,12 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
+
+        $request->user()->delete();
+
         $user = $request->user();
         $user->delete();
+
         return response()->json([
             "message" => "No content"
         ]);
