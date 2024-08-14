@@ -10,15 +10,17 @@ use App\Http\Controllers\PrivateClientController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use Laravel\Sanctum\Sanctum;
 
 // user +
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// admin
 Route::post('/admin/login', [AdminController::class, 'login']);
 Route::post('/admin/register', [AdminController::class, 'register']);
+Route::get('/admin/statistic', [AdminController::class, 'statistic'])->middleware("auth:sanctum");
 
 //Profiles +
 Route::get("profile", [UserController::class, "getuserprofile"])->middleware("auth:sanctum");
@@ -42,6 +44,8 @@ Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatej
 //Company +
 Route::post('createcompany', [CompanyController::class, 'createcompany'])->middleware("auth:sanctum");
 Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])->middleware("auth:sanctum");
+
+
 
 
 
