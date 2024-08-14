@@ -11,6 +11,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+// user +
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -18,7 +20,7 @@ Route::get('/user', function (Request $request) {
 Route::post('/admin/login', [AdminController::class, 'login']);
 Route::post('/admin/register', [AdminController::class, 'register']);
 
-//Profiles
+//Profiles +
 Route::get("profile", [UserController::class, "getuserprofile"])->middleware("auth:sanctum");
 
 // User +
@@ -37,15 +39,17 @@ Route::delete('deletejobseeker/{id}', [JobSeekerController::class, "deletejobsee
 Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");
 Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatejob"])->middleware("auth:sanctum");
 
-//Company
+//Company +
 Route::post('createcompany', [CompanyController::class, 'createcompany'])->middleware("auth:sanctum");
 Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])->middleware("auth:sanctum");
 
 
 
-
+// job +
 Route::get('fetchjobs',[JobController::class, 'fetchjobs']);
-Route::delete('deletejob/{job}',[JobController::class, 'deletejob']);
+Route::get('fetchjob/{id}',[JobController::class, 'fetchjob']);
+Route::delete('deletejob/{type}/{id}',[JobController::class, 'deletejob'])->middleware("auth:sanctum");
+Route::put('editjob/{type}/{id}',[JobController::class, 'editjob'])->middleware("auth:sanctum");
 
 
 
