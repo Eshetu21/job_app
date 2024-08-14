@@ -23,19 +23,19 @@ class JobController extends Controller
             $fields = $request->input('fields', '*');
     
           
-            $perPage = $request->input('per_page', 10);
+           // $perPage = $request->input('per_page', 10);
     
             
             $jobs = Job::select(explode(',', $fields))
-                        ->orderBy($sortBy, $sortOrder)
-                        ->paginate($perPage);
-                        $jobsArray = $jobs->toArray();
+                        ->orderBy($sortBy, $sortOrder)->get();
+                        // ->paginate($perPage);
+                        // $jobsArray = $jobs->toArray();
 
                        
-                        unset($jobsArray['links']);
+                        // unset($jobsArray['links']);
     
            
-            return response()->json(["success" => true, "jobs" => $jobsArray], 200);
+            return response()->json(["success" => true, "jobs" => $jobs], 200);
         } catch (Exception $e) {
             return response()->json(["success" => false, "message" => $e->getMessage()]);
         }
@@ -47,6 +47,6 @@ class JobController extends Controller
 
     }
 
-    //
+    
     
 }
