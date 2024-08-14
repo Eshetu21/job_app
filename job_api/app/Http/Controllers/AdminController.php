@@ -99,6 +99,7 @@ class AdminController extends Controller
             $companies = Company::all();
             $privateClients = PrivateClient::all();
             $users  = User::all();
+            $jobseekers = JobSeeker::all();
     
     
     
@@ -144,7 +145,14 @@ class AdminController extends Controller
                 Carbon::now()->startOfMonth()->toDateTimeString(),
                 Carbon::now()->endOfMonth()->toDateTimeString()
             ]);
-            $jobseekers = JobSeeker::all();
+            $thisweekjobseekers = $jobseekers->whereBetween('created_at', [
+                Carbon::now()->startOfWeek()->toDateTimeString(),
+                Carbon::now()->endOfWeek()->toDateTimeString()
+            ]);
+            $thismonthjobseekers = $jobseekers->whereBetween('created_at', [
+                Carbon::now()->startOfMonth()->toDateTimeString(),
+                Carbon::now()->endOfMonth()->toDateTimeString()
+            ]);
     
             return response()->json(["success" => true, "counts" => [
                 "jobs" => [
@@ -205,8 +213,26 @@ class AdminController extends Controller
                         'privateClients' => $privateClients
                     ]
                 ],
+                "jobseekers" => [
+                    "thisweek" => [
+                        "count" => $thisweekjobseekers->count(),
+                        'jobseekers' => $thisweekjobseekers
+                    ],
+                    "thismonth" => [
+                        "count" => $thismonthjobseekers->count(),
+                        'jobseekers' => $thismonthjobseekers
+                    ],
+                    "alltime" => [
+                        "count" => $jobseekers->count(),
+                        'jobseekers' => $jobseekers
+                    ]
+                ],
             ]]);
         }
        
     }
+
+    
+
+
 }
