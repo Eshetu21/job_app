@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_skill.dart';
@@ -15,13 +16,25 @@ class JobseekerProfile extends StatefulWidget {
 
 class _JobseekerProfileState extends State<JobseekerProfile> {
   final ProfileController _profileController = Get.put(ProfileController());
- @override
+  final box = GetStorage();
+  late RxList<String> selectedSkills;
+
+  @override
   void initState() {
     super.initState();
-    _profileController.fetchProfiles();
+
+    List<dynamic>? storedList = box.read<List<dynamic>>("selectedList");
+    if (storedList != null) {
+      selectedSkills = RxList<String>(storedList.cast<String>());
+    } else {
+      selectedSkills = RxList<String>();
+    }
+   _profileController.fetchProfiles();
   }
+
   @override
   Widget build(BuildContext context) {
+    print(box.read("selectedList"));
     return Scaffold(
         body: SafeArea(
             child: FutureBuilder(
@@ -30,7 +43,7 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   }
-                  if(snapshot.hasError){
+                  if (snapshot.hasError) {
                     return Center(child: Text("Error"));
                   }
                   if (_profileController.profiles.isEmpty) {
@@ -42,18 +55,31 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                     return Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.all(18),
+                          margin: EdgeInsets.all(20),
                           width: double.infinity,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/profile_bg.png"),
-                                  fit: BoxFit.cover)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(Icons.account_circle_outlined,
-                                  size: 60, color: Color(0xFFFF9228)),
+                              CircleAvatar(
+                                  radius: 45,
+                                  backgroundColor: Colors.grey.withOpacity(0.2),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                            _profileController
+                                                    .profiles["jobseeker"]
+                                                ["user"]["firstname"][0],
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 45)),
+                                        Text(
+                                            _profileController
+                                                    .profiles["jobseeker"]
+                                                ["user"]["lastname"][0],
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 45)),
+                                      ])),
                               SizedBox(height: 12),
                               _profileController.isloading.value
                                   ? Text("loading...")
@@ -64,13 +90,11 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                           _profileController
                                                   .profiles["jobseeker"]["user"]
                                               ["lastname"],
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.white)),
+                                      style: GoogleFonts.poppins()),
                               SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Icon(Icons.location_on_outlined,
-                                      size: 20, color: Colors.white),
+                                  Icon(Icons.location_on_outlined, size: 20),
                                   _profileController.profiles["jobseeker"]
                                               ["user"]["address"] !=
                                           null
@@ -78,19 +102,16 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                           _profileController
                                                   .profiles["jobseeker"]["user"]
                                               ["address"],
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.white),
+                                          style: GoogleFonts.poppins(),
                                         )
                                       : Text("Null",
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.white)),
+                                          style: GoogleFonts.poppins()),
                                 ],
                               ),
                               SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Icon(Icons.email_outlined,
-                                      size: 20, color: Colors.white),
+                                  Icon(Icons.email_outlined, size: 20),
                                   _profileController.profiles["jobseeker"]
                                               ["user"]["email"] !=
                                           null
@@ -98,33 +119,57 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                           _profileController
                                                   .profiles["jobseeker"]["user"]
                                               ["email"],
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.white),
+                                          style: GoogleFonts.poppins(),
                                         )
                                       : Text("Null",
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.white)),
+                                          style: GoogleFonts.poppins()),
                                 ],
                               )
                             ],
                           ),
                         ),
+                        Divider(),
                         Container(
-                          margin: EdgeInsets.all(20),
+                          margin: EdgeInsets.all(12),
                           child: Column(
                             children: [
                               Row(
                                 children: [
-                                  Text("Skills", style: GoogleFonts.poppins()),
+                                  Text("Skills",
+                                      style: GoogleFonts.poppins(fontSize: 18)),
                                   Spacer(),
                                   GestureDetector(
-                                    onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>JobSeekerSkill()));},
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JobSeekerSkill()));
+                                    },
                                     child: Text("Edit",
                                         style: GoogleFonts.poppins(
                                             color: Color(0xFFFF9228))),
                                   )
                                 ],
-                              )
+                              ),
+                              SizedBox(height: 5),
+                              Obx(() {
+                                return Wrap(
+                                    spacing: 8,
+                                    children: selectedSkills.value.map((skill) {
+                                      return Chip(
+                                        backgroundColor:
+                                            Color(0xFFFF9228).withOpacity(0.7),
+                                        labelPadding:
+                                            EdgeInsets.symmetric(horizontal: 0),
+                                        label: Text(skill,
+                                            style: GoogleFonts.poppins(
+                                                color: Colors.white,
+                                                fontSize: 12)),
+                                        deleteIcon: Icon(Icons.close, size: 16),
+                                      );
+                                    }).toList());
+                              }),
+                              Divider()
                             ],
                           ),
                         ),
