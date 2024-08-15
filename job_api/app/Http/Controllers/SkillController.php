@@ -27,7 +27,7 @@ class SkillController extends Controller
         ], 200);
     }
 
-    public function controlskill(StoreSkillRequest $request, $jobseekerId)
+    public function updateskill(StoreSkillRequest $request, $jobseekerId)
     {
         $user = Auth::user();
         $validatedData = $request->validated();

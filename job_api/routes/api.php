@@ -7,6 +7,7 @@ use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\PrivateClientController;
+use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -68,3 +69,7 @@ Route::post('addexperience/{id}', [ExperienceController::class, 'addexperience']
 Route::get('showexperience', [ExperienceController::class, 'showexperience'])->middleware("auth:sanctum");;
 Route::put('updateeducation/{jobseekerid}/{educationid}', [EducationController::class, 'updateeducation'])->middleware("auth:sanctum");
 Route::post('deleteeducation/{id}', [EducationController::class, 'deleteeducation'])->middleware("auth:sanctum");
+
+//Skill
+Route::get("showskill",[SkillController::class,"showskill"])->middleware("auth:sanctum");
+Route::post("updateskill/{id}",[SkillController::class,"updateskill"])->middleware("auth:sanctum");

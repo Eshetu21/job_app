@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/skill_controller.dart';
+import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
 
 class JobSeekerSkill extends StatefulWidget {
   const JobSeekerSkill({super.key});
@@ -177,6 +178,8 @@ class _SkillState extends State<JobSeekerSkill> {
                     onPressed: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: ((context)=>JobseekerProfile())));
                       _skillController.updatedSucsessfully.value = false;
                     },
                     child: Text(

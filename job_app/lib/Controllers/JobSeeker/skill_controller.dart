@@ -34,7 +34,7 @@ class SkillController extends GetxController {
 
   Future<void> addskills(
       {required int id, required List<String> skills}) async {
-    final response = await http.post(Uri.parse('${url}controlskill/$id'),
+    final response = await http.post(Uri.parse('${url}updateskill/$id'),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",
@@ -45,6 +45,7 @@ class SkillController extends GetxController {
       updatedSucsessfully.value = true;
       print("sucessfully updated");
     } else {
+      print(response.statusCode);
       print("Failed to update skill");
     }
   }

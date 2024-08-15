@@ -6,10 +6,11 @@ import 'package:job_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
 
 class EducationController extends GetxController {
-  RxMap<String, dynamic> education = <String, dynamic>{}.obs;
+  RxList<dynamic> educationDetails =[].obs;
   final box = GetStorage();
   late final String? token;
   late final int jobseekerId;
+
 
   EducationController() {
     token = box.read("token");
@@ -27,7 +28,7 @@ class EducationController extends GetxController {
     try {
       var data = {
         "school_name": institution,
-        "field": field ,
+        "field": field,
         "education_level": eduLevel,
         "edu_start_date": eduStart,
         "edu_end_date": eduEnd,
@@ -55,18 +56,19 @@ class EducationController extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>> showeducation({int? jobseekerId}) async {
+  Future<List<dynamic>> showeducation() async {
     var response = await http.get(Uri.parse("${url}showeducation"), headers: {
       "Accept": "application/json",
       "Authorization": "Bearer $token"
     });
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
-      return responseData;
+      print("api $responseData");
+     educationDetails.value = responseData["education"];
+     return educationDetails;
     } else {
-      print("Failed to get jobseeker data");
-      return {};
-      
+      print("Failed to get education data");
+      return [];
     }
   }
 
