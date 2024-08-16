@@ -41,11 +41,14 @@ Route::delete('deletejobseeker/{id}', [JobSeekerController::class, "deletejobsee
 //PrivateClient +
 Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");
 Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatejob"])->middleware("auth:sanctum");
+Route::put('privatecreateupdate', [PrivateClientController::class, "update"])->middleware("auth:sanctum");
+Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"])->middleware("auth:sanctum");
 
 //Company +
 Route::post('createcompany', [CompanyController::class, 'createcompany'])->middleware("auth:sanctum");
 Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])->middleware("auth:sanctum");
-
+Route::put('companyupdate', [CompanyController::class, "update"])->middleware("auth:sanctum");
+Route::delete('companydelete', [CompanyController::class, "delete"])->middleware("auth:sanctum");
 
 
 
