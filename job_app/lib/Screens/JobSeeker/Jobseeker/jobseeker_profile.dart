@@ -2,11 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/Edit%20Jobseeker/edit_education.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/Edit%20Jobseeker/job_seeker_skill.dart';
+import 'package:job_app/Widgets/JobSeeker/fetch_education.dart';
+import 'package:job_app/Widgets/JobSeeker/fetch_skill.dart';
 
 class JobseekerProfile extends StatefulWidget {
   const JobseekerProfile({super.key});
@@ -17,26 +16,14 @@ class JobseekerProfile extends StatefulWidget {
 
 class _JobseekerProfileState extends State<JobseekerProfile> {
   final ProfileController _profileController = Get.put(ProfileController());
-  var refreshkey = GlobalKey<RefreshIndicatorState>();
-  final box = GetStorage();
-  late RxList<String> selectedSkills;
-
   @override
   void initState() {
     super.initState();
-
-    List<dynamic>? storedList = box.read<List<dynamic>>("selectedList");
-    if (storedList != null) {
-      selectedSkills = RxList<String>(storedList.cast<String>());
-    } else {
-      selectedSkills = RxList<String>();
-    }
     _profileController.fetchProfiles();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(box.read("selectedList"));
     return Scaffold(
         body: SafeArea(
             child: FutureBuilder(
@@ -55,11 +42,10 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                     );
                   } else {
                     return SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: [
                           Container(
-                            margin: EdgeInsets.all(20),
+                            margin: EdgeInsets.all(16),
                             width: double.infinity,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +71,7 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                               style: GoogleFonts.poppins(
                                                   fontSize: 45)),
                                         ])),
-                                SizedBox(height: 12),
+                                SizedBox(height: 8),
                                 _profileController.isloading.value
                                     ? Text("loading...")
                                     : Text(
@@ -99,7 +85,7 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                 SizedBox(height: 8),
                                 Row(
                                   children: [
-                                    Icon(Icons.location_on_outlined, size: 20),
+                                    Icon(Icons.location_on_outlined, size: 18),
                                     _profileController.profiles["jobseeker"]
                                                 ["user"]["address"] !=
                                             null
@@ -129,70 +115,13 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                         : Text("Null",
                                             style: GoogleFonts.poppins()),
                                   ],
-                                )
-                              ],
-                            ),
-                          ),
-                          Divider(),
-                          Container(
-                            margin: EdgeInsets.all(12),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text("Skills",
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 18)),
-                                    Spacer(),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    JobSeekerSkill()));
-                                      },
-                                      child: Text("Edit",
-                                          style: GoogleFonts.poppins(
-                                              color: Color(0xFFFF9228))),
-                                    )
-                                  ],
                                 ),
-                                SizedBox(height: 5),
-                                Wrap(
-                                    spacing: 8,
-                                    children: selectedSkills.value.map((skill) {
-                                      return Chip(
-                                        backgroundColor:
-                                            Color(0xFFFF9228).withOpacity(0.7),
-                                        labelPadding:
-                                            EdgeInsets.symmetric(horizontal: 0),
-                                        label: Text(skill,
-                                            style: GoogleFonts.poppins(
-                                                color: Colors.white,
-                                                fontSize: 12)),
-                                        deleteIcon: Icon(Icons.close, size: 16),
-                                      );
-                                    }).toList()),
-                                Divider(),
-                                Row(
-                                  children: [
-                                    Text("Education",
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 18)),
-                                    Spacer(),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EditEducation()));
-                                      },
-                                      child: Text("Edit",
-                                          style: GoogleFonts.poppins(
-                                              color: Color(0xFFFF9228))),
-                                    )
-                                  ],
-                                ),
+                                SizedBox(height: MediaQuery.of(context).size.height*0.02),
+                                Divider(thickness: 2),
+                                FetchSkill(),
+                                Divider(thickness: 2),
+                                FetchEducation(),
+                                Divider(thickness: 2)
                               ],
                             ),
                           ),
