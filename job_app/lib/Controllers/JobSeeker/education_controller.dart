@@ -6,11 +6,10 @@ import 'package:job_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
 
 class EducationController extends GetxController {
-  RxList<dynamic> educationDetails =[].obs;
+  RxList<dynamic> educationDetails = [].obs;
   final box = GetStorage();
   late final String? token;
   late final int jobseekerId;
-
 
   EducationController() {
     token = box.read("token");
@@ -64,8 +63,8 @@ class EducationController extends GetxController {
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
       print("api $responseData");
-     educationDetails.value = responseData["education"];
-     return educationDetails;
+      educationDetails.value = responseData["education"];
+      return educationDetails;
     } else {
       print("Failed to get education data");
       return [];

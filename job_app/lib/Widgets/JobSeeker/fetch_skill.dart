@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/JobSeeker/education_controller.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/Edit%20Jobseeker/job_seeker_skill.dart';
 
 class FetchSkill extends StatefulWidget {

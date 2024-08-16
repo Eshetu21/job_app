@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_pic.dart';
+import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class JobSeekerExperience extends StatefulWidget {
   const JobSeekerExperience({super.key});
@@ -12,6 +13,11 @@ class JobSeekerExperience extends StatefulWidget {
 }
 
 class _JobSeekerExperienceState extends State<JobSeekerExperience> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _companyController = TextEditingController();
+  final TextEditingController _startController = TextEditingController();
+  final TextEditingController _endController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,150 +38,31 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "Job Title",
-                  style: GoogleFonts.poppins(
-                    color: Color(0xFF150B3D),
-                    fontSize: 14,
-                  ),
-                ),
+                    "Highlight your professional journey by detailing your work experience, including the positions you've held and the skills you've gained.",style: GoogleFonts.poppins()),
+                SizedBox(height: 20),
+                buildTextFormField("Job Title", _titleController),
                 SizedBox(height: 10),
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white.withOpacity(0.8)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(10),
-                        hintText: "",
-                        hintStyle: TextStyle(
-                            fontFamily: GoogleFonts.poppins().fontFamily)),
-                    maxLines: null,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  "Company",
-                  style: GoogleFonts.poppins(
-                    color: Color(0xFF150B3D),
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white.withOpacity(0.8)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(10),
-                        hintText: "",
-                        hintStyle: TextStyle(
-                            fontFamily: GoogleFonts.poppins().fontFamily)),
-                    maxLines: null,
-                  ),
-                ),
+                buildTextFormField("Comapny", _companyController),
                 SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Start Date",
-                            style: GoogleFonts.poppins(
-                              color: Color(0xFF150B3D),
-                              fontSize: 14,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(0.8)),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(10),
-                                  hintText: "DD/MM/YY",
-                                  hintStyle: TextStyle(
-                                      fontFamily:
-                                          GoogleFonts.poppins().fontFamily)),
-                              maxLines: null,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: buildDateField("Start Date", _startController),
                     ),
                     SizedBox(width: 20),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "End Date",
-                            style: GoogleFonts.poppins(
-                              color: Color(0xFF150B3D),
-                              fontSize: 14,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white.withOpacity(0.8)),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(10),
-                                  hintText: "DD/MM/YY",
-                                  hintStyle: TextStyle(
-                                      fontFamily:
-                                          GoogleFonts.poppins().fontFamily)),
-                              maxLines: null,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: buildDateField("End Date", _endController),
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
-                Text(
-                  "Description",
-                  style: GoogleFonts.poppins(
-                    color: Color(0xFF150B3D),
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white.withOpacity(0.8)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(10),
-                        hintText: "",
-                        hintStyle: TextStyle(
-                            fontFamily: GoogleFonts.poppins().fontFamily)),
-                    maxLines: null,
-                  ),
-                ),
+                buildTextFormField("Description", _descriptionController),
                 SizedBox(height: 20),
                 Center(
                   child: GestureDetector(
                     onTap: () {},
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 20),
+                      margin: EdgeInsets.only(top: 40, bottom: 20),
                       width: 266,
                       height: 50,
                       decoration: BoxDecoration(

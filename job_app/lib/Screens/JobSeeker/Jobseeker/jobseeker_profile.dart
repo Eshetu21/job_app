@@ -16,6 +16,7 @@ class JobseekerProfile extends StatefulWidget {
 
 class _JobseekerProfileState extends State<JobseekerProfile> {
   final ProfileController _profileController = Get.put(ProfileController());
+
   @override
   void initState() {
     super.initState();
@@ -116,7 +117,9 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                             style: GoogleFonts.poppins()),
                                   ],
                                 ),
-                                SizedBox(height: MediaQuery.of(context).size.height*0.02),
+                                SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.02),
                                 Divider(thickness: 2),
                                 FetchSkill(),
                                 Divider(thickness: 2),

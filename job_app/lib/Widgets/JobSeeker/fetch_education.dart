@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/education_controller.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/Edit%20Jobseeker/edit_education.dart';
+import 'package:job_app/Screens/JobSeeker/job_seeker_education.dart';
 
 class FetchEducation extends StatefulWidget {
   const FetchEducation({super.key});
@@ -43,7 +43,7 @@ class _FetchEducationState extends State<FetchEducation> {
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => EditEducation()));
+                            builder: (context) => JobSeekerCreateSecond()));
                       },
                       child: Text("Edit",
                           style: GoogleFonts.poppins(color: Color(0xFFFF9228))),

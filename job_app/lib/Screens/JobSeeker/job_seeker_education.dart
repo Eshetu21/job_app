@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/education_controller.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_experience.dart';
-import 'package:job_app/Widgets/dateformat.dart';
+import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class JobSeekerCreateSecond extends StatefulWidget {
   const JobSeekerCreateSecond({super.key});
@@ -34,7 +33,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
-            margin: EdgeInsets.only(right: 25, left: 25, bottom: 25, top: 60),
+            margin: EdgeInsets.only(right: 25, left: 25, bottom: 25, top: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -46,25 +45,28 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 10),
-                _buildTextField("Institution name", _institutionController),
+                Text(
+                    "Showcase your academic background, including the institution you attended and the degrees you earned."),
+                SizedBox(height: 20),
+                buildTextFormField("Institution name", _institutionController),
                 SizedBox(height: 10),
-                _buildTextField("Level of education", _levelofeducation),
+                buildTextFormField("Level of education", _levelofeducation),
                 SizedBox(height: 10),
-                _buildTextField("Field of study", _field),
+                buildTextFormField("Field of study", _field),
                 SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
-                      child: _buildDateField("Start Date", _startDate),
+                      child: buildDateField("Start Date", _startDate),
                     ),
                     SizedBox(width: 20),
                     Expanded(
-                      child: _buildDateField("End Date", _edndate),
+                      child: buildDateField("End Date", _edndate),
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
-                _buildTextField("Description", _description),
+                buildTextFormField("Description", _description),
                 SizedBox(height: 40),
                 Center(
                   child: GestureDetector(
@@ -83,7 +85,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                           eduDescription: _description.text.trim());
                     },
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 20),
+                      margin: EdgeInsets.only(top: 30, bottom: 20),
                       width: 266,
                       height: 50,
                       decoration: BoxDecoration(
@@ -102,7 +104,8 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>JobSeekerExperience()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => JobSeekerExperience()));
                     },
                     child: Container(
                       margin: EdgeInsets.only(bottom: 80),
@@ -126,74 +129,6 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            color: Color(0xFF150B3D),
-            fontSize: 14,
-          ),
-        ),
-        SizedBox(height: 10),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white.withOpacity(0.5)),
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(10),
-                hintText: "",
-                hintStyle:
-                    TextStyle(fontFamily: GoogleFonts.poppins().fontFamily)),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDateField(String label, TextEditingController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            color: Color(0xFF150B3D),
-            fontSize: 14,
-          ),
-        ),
-        SizedBox(height: 10),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white.withOpacity(0.5),
-          ),
-          child: TextField(
-            controller: controller,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(10),
-              DateTextInputFormatter(),
-            ],
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(10),
-              hintText: "DD/MM/YY",
-              hintStyle: TextStyle(
-                fontFamily: GoogleFonts.poppins().fontFamily,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -30,7 +30,8 @@ class _JobSeekerPictureState extends State<JobSeekerPicture> {
                 color: Colors.grey,
               ),
             ),
-            Text("Please make sure your photo \n clearly shows your face.",
+            Text(
+                "Upload a profile picture to create a strong first impression and make your profile stand out to potential employers.",
                 style: GoogleFonts.poppins()),
             SizedBox(height: 180),
             GestureDetector(
