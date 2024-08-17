@@ -6,7 +6,8 @@ import 'package:job_app/Screens/JobSeeker/job_seeker_pic.dart';
 import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class JobSeekerExperience extends StatefulWidget {
-  const JobSeekerExperience({super.key});
+  final bool isediting;
+  const JobSeekerExperience({super.key, this.isediting = false});
 
   @override
   State<JobSeekerExperience> createState() => _JobSeekerExperienceState();
@@ -38,7 +39,8 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                    "Highlight your professional journey by detailing your work experience, including the positions you've held and the skills you've gained.",style: GoogleFonts.poppins()),
+                    "Highlight your professional journey by detailing your work experience, including the positions you've held and the skills you've gained.",
+                    style: GoogleFonts.poppins()),
                 SizedBox(height: 20),
                 buildTextFormField("Job Title", _titleController),
                 SizedBox(height: 10),
@@ -78,29 +80,30 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                     ),
                   ),
                 ),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => JobSeekerPicture()));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 80),
-                      width: 266,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color(0xFF130160).withOpacity(0.7),
-                      ),
-                      child: Center(
-                        child: Text("NOT NOW",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
+                if (!widget.isediting)
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => JobSeekerPicture()));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 80),
+                        width: 266,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Color(0xFF130160).withOpacity(0.7),
+                        ),
+                        child: Center(
+                          child: Text("NOT NOW",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                        ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

@@ -23,7 +23,6 @@ class _SkillState extends State<JobSeekerSkill> {
   List<dynamic> fetchedSkills = <dynamic>[];
   List<String> selectedSkills = [];
   String? selectedSkill;
-  final box = GetStorage();
 
   @override
   void initState() {
@@ -131,7 +130,6 @@ class _SkillState extends State<JobSeekerSkill> {
                     int jobseekerId = box.read("jobseekerId");
                     _skillController.addskills(
                         id: jobseekerId, skills: selectedSkills);
-                        box.write("selectedList",selectedSkills);
                     print(jsonEncode(selectedSkills));
                   },
                   child: Container(
@@ -179,7 +177,8 @@ class _SkillState extends State<JobSeekerSkill> {
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: ((context)=>JobseekerProfile())));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: ((context) => JobseekerProfile())));
                       _skillController.updatedSucsessfully.value = false;
                     },
                     child: Text(

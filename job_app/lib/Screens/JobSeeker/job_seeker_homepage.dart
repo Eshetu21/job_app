@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/JobSeeker/JobSeekerController.dart';
+import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/applications_page.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/explore_page.dart';

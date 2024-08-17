@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 class EducationController extends GetxController {
   RxList<dynamic> educationDetails = [].obs;
+   late final RxBool updatedSucsessfully = false.obs;
   final box = GetStorage();
   late final String? token;
   late final int jobseekerId;
@@ -102,6 +103,7 @@ class EducationController extends GetxController {
           },
           body: encodedData);
       if (response.statusCode == 200) {
+        updatedSucsessfully.value = true;
         print("Education updated");
         print(encodedData);
       }

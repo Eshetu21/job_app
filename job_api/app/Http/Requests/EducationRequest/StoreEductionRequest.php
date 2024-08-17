@@ -22,12 +22,12 @@ class StoreEductionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "school_name"=>"required|string",
-            "field"=>"required|string",
-            "education_level"=>"required|string",
-            "edu_start_date"=>"required|string",
-            "edu_end_date"=>"required|string",
-            "description"=>"required|string"
+            "school_name"=>"nullable|string",
+            "field"=>"nullable|string",
+            "education_level"=>"nullable|string",
+            "edu_start_date"=>"nullable|string",
+            "edu_end_date"=>"nullable|string",
+            "description"=>"nullable|string"
         ];
     }
 }

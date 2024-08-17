@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/education_controller.dart';
+import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_experience.dart';
 import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class JobSeekerCreateSecond extends StatefulWidget {
-  const JobSeekerCreateSecond({super.key});
+  final bool isediting;
+  const JobSeekerCreateSecond({super.key, this.isediting = false});
 
   @override
   State<JobSeekerCreateSecond> createState() => _JobSeekerCreateSecondState();
@@ -72,11 +74,14 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                   child: GestureDetector(
                     onTap: () async {
                       int jobseeker = box.read("jobseekerId");
-                      print(jobseeker);
-                      print(_institutionController.text);
-                      print(_startDate.text);
-                      await _educationController.createeducation(
+                      List<int> educationIds = _educationController
+                          .educationDetails
+                          .map<int>((education) {
+                        return education["id"];
+                      }).toList();
+                      await _educationController.updateeducation(
                           jobseekerid: jobseeker,
+                          educationid: educationIds[0],
                           institution: _institutionController.text.trim(),
                           field: _field.text.trim(),
                           eduLevel: _levelofeducation.text.trim(),
@@ -101,34 +106,70 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                     ),
                   ),
                 ),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => JobSeekerExperience()));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 80),
-                      width: 266,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color(0xFF130160).withOpacity(0.7),
-                      ),
-                      child: Center(
-                        child: Text("NOT NOW",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
+                if (widget.isediting)
+                  Obx(() {
+                    if (_educationController.updatedSucsessfully.value ==
+                        true) {
+                      Future.delayed(Duration.zero, () {
+                        sucessfullyUpdated(context);
+                      });
+                    }
+                    return SizedBox.shrink();
+                  }),
+                if (!widget.isediting)
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => JobSeekerExperience()));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 80),
+                        width: 266,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Color(0xFF130160).withOpacity(0.7),
+                        ),
+                        child: Center(
+                          child: Text("NOT NOW",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                        ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void sucessfullyUpdated(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Success", style: GoogleFonts.poppins()),
+              content: Text("Education updated sucessfully",
+                  style: GoogleFonts.poppins()),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: ((context) => JobseekerProfile())));
+                      _educationController.updatedSucsessfully.value = false;
+                    },
+                    child: Text(
+                      "Ok",
+                      style: GoogleFonts.poppins(),
+                    ))
+              ],
+            ));
   }
 }

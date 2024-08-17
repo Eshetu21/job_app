@@ -2,9 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/Edit%20Jobseeker/job_seeker_skill.dart';
+import 'package:job_app/Controllers/JobSeeker/skill_controller.dart';
 
 class FetchSkill extends StatefulWidget {
   const FetchSkill({super.key});
@@ -14,53 +13,45 @@ class FetchSkill extends StatefulWidget {
 }
 
 class _FetchSkillState extends State<FetchSkill> {
-  final box = GetStorage();
-  late RxList<String> selectedSkills;
+  final SkillController _skillController = Get.put(SkillController());
+    List<String> selectedSkills = [];
   @override
   void initState() {
     super.initState();
-    List<dynamic>? storedList = box.read<List<dynamic>>("selectedList");
-    if (storedList != null) {
-      selectedSkills = RxList<String>(storedList.cast<String>());
-    } else {
-      selectedSkills = RxList<String>();
-    }
+   fetchSkills();
+  }
+    Future<void> fetchSkills() async {
+    await _skillController.showskills();
+    setState(() {
+      var fetchedSkills = _skillController.skills;
+      if (fetchedSkills.isNotEmpty) {
+        var selectedString = fetchedSkills.toString();
+        var selectedSub =
+            selectedString.substring(3, selectedString.length - 3);
+        List<String> skillList =
+            selectedSub.split('","').map((skill) => skill.trim()).toList();
+        selectedSkills.addAll(skillList);
+      }
+      print("selectedSkills $selectedSkills");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text("Skills", style: GoogleFonts.poppins(fontSize: 18)),
-            Spacer(),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => JobSeekerSkill()));
-              },
-              child: Text("Edit",
-                  style: GoogleFonts.poppins(color: Color(0xFFFF9228))),
-            )
-          ],
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Wrap(
-              spacing: 8,
-              children: selectedSkills.value.map((skill) {
-                return Chip(
-                  backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
-                  labelPadding: EdgeInsets.symmetric(horizontal: 0),
-                  label: Text(skill,
-                      style: GoogleFonts.poppins(
-                          color: Colors.white, fontSize: 12)),
-                  deleteIcon: Icon(Icons.close, size: 16),
-                );
-              }).toList()),
-        ),
-      ],
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: Wrap(
+          spacing: 8,
+          children: selectedSkills.map((skill) {
+            return Chip(
+              backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
+              labelPadding: EdgeInsets.symmetric(horizontal: 0),
+              label: Text(skill,
+                  style:
+                      GoogleFonts.poppins(color: Colors.white, fontSize: 12)),
+              deleteIcon: Icon(Icons.close, size: 16),
+            );
+          }).toList()),
     );
   }
 }
