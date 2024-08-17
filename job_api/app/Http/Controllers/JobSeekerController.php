@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\JobSeekerRequest\UpdateJobSeekerRequest;
 use App\Models\JobSeeker;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
@@ -85,14 +86,31 @@ class JobSeekerController extends Controller
             ], 422);
         }
     }
-    public function deletejobseeker($id)
+  
+    public function delete(Request $request)
     {
-        $jobseeker = JobSeeker::find($id);
-        $jobseeker->delete();
 
-        return response()->json(
-            ["message" => "no content"],
-            200
-        );
+        $user =   $request->user();
+        if (!$user->jobseeker) {
+            return response()->json([
+                "success" => false,
+                "message" => "jobseeker not registerd"
+            ], 400);
+        }
+
+        try {
+            $user->jobseeker->delete();
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
+        }
+        return response()->json([
+            "success" => true,
+            "message" => "Job Seeker Deleted successfully",
+
+        ], 200);
     }
 }

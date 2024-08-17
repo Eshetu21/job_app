@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\PrivateClient;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PrivateClientController extends Controller
 {
@@ -46,7 +48,7 @@ class PrivateClientController extends Controller
             'deadline' => 'required|date|',
             'job_description' => 'required|string',
         ]);
-       
+
         $job = $user->privateclient->jobs()->create(
             $validatedData
         );
@@ -56,5 +58,60 @@ class PrivateClientController extends Controller
             "job" => $job,
             "creater" => $user->privateclient
         ], 201);
+    }
+
+    public function update(Request $request)
+    {
+        $user = $request->user();
+        if (!$user->privateclient) {
+            return response()->json([
+                "success" => false,
+                "message" => "privateclient not registerd"
+            ], 400);
+            try {
+                $user->privateclient->update([
+
+
+                    "profile_pic" => $request->profile_pic ?? $user->profile_pic,
+                ]);
+            } catch (Exception $e) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $e->getMessage(),
+
+                ], 400);
+            }
+            return response()->json([
+                "message" => "Data updated successfully",
+                "privateclient" => $user->privateclient
+            ], 200);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+
+        $user =   $request->user();
+        if (!$user->privateclient) {
+            return response()->json([
+                "success" => false,
+                "message" => "privateclient not registerd"
+            ], 400);
+        }
+
+        try {
+            $user->privateclient->delete();
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
+        }
+        return response()->json([
+            "success" => true,
+            "message" => "Private Client Deleted successfully",
+
+        ], 200);
     }
 }

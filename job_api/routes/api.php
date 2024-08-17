@@ -22,6 +22,10 @@ Route::get('/user', function (Request $request) {
 Route::post('/admin/login', [AdminController::class, 'login']);
 Route::post('/admin/register', [AdminController::class, 'register']);
 Route::get('/admin/statistic', [AdminController::class, 'statistic'])->middleware("auth:sanctum");
+Route::delete('/admin/deletecompany/{companyp}', [AdminController::class, 'deletecompanyA'])->middleware("auth:sanctum");
+Route::delete('/admin/deleteprivateclient/{privateclientp}', [AdminController::class, 'deletePrivateClientA'])->middleware("auth:sanctum");
+Route::delete('/admin/deleteuser/{userp}', [AdminController::class, 'deleteuserA'])->middleware("auth:sanctum");
+Route::delete('/admin/deletejobseeker/{userp}', [AdminController::class, 'deleteJobSeekerA'])->middleware("auth:sanctum");
 
 //Profiles +
 Route::get("profile", [UserController::class, "getuserprofile"])->middleware("auth:sanctum");
@@ -36,16 +40,19 @@ Route::delete('delete', [UserController::class, "delete"])->middleware("auth:san
 Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"])->middleware("auth:sanctum");
 Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"])->middleware("auth:sanctum");
 Route::put('updatejobseeker/{id}', [JobSeekerController::class, "updatejobseeker"])->middleware("auth:sanctum");
-Route::delete('deletejobseeker/{id}', [JobSeekerController::class, "deletejobseeker"])->middleware("auth:sanctum");
+Route::delete('deletejobseeker', [JobSeekerController::class, "delete"])->middleware("auth:sanctum");
 
 //PrivateClient +
 Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");
 Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatejob"])->middleware("auth:sanctum");
+Route::put('privatecreateupdate', [PrivateClientController::class, "update"])->middleware("auth:sanctum");
+Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"])->middleware("auth:sanctum");
 
 //Company +
 Route::post('createcompany', [CompanyController::class, 'createcompany'])->middleware("auth:sanctum");
 Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])->middleware("auth:sanctum");
-
+Route::put('companyupdate', [CompanyController::class, "update"])->middleware("auth:sanctum");
+Route::delete('companydelete', [CompanyController::class, "delete"])->middleware("auth:sanctum");
 
 
 

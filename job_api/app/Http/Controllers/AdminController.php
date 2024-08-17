@@ -11,11 +11,13 @@ use App\Models\JobSeeker;
 use App\Models\PrivateClient;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Validator;
+
 class AdminController extends Controller
 {
     public function login(Request $request)
@@ -86,61 +88,60 @@ class AdminController extends Controller
     {
 
         $user = $request->user();
-        
+
         $admins = Admin::all();
-        if(!$admins->contains($user)) {
+        if (!$admins->contains($user)) {
             return response()->json([
                 "error" => "You are not admin"
             ], 401);
-        }
-        else {
+        } else {
 
             $jobs = Job::all();
             $companies = Company::all();
             $privateClients = PrivateClient::all();
             $users  = User::all();
             $jobseekers = JobSeeker::all();
-    
-    
-    
+
+
+
             $thisweekcompanies = $companies->whereBetween('created_at', [
                 Carbon::now()->startOfWeek()->toDateTimeString(),
                 Carbon::now()->endOfWeek()->toDateTimeString()
             ]);
-    
+
             $thismonthcompanies = $companies->whereBetween('created_at', [
                 Carbon::now()->startOfMonth()->toDateTimeString(),
                 Carbon::now()->endOfMonth()->toDateTimeString()
             ]);
-    
-    
+
+
             $thisweekprivateClients = $privateClients->whereBetween('created_at', [
                 Carbon::now()->startOfWeek()->toDateTimeString(),
                 Carbon::now()->endOfWeek()->toDateTimeString()
             ]);
-    
+
             $thismonthprivateClients = $privateClients->whereBetween('created_at', [
                 Carbon::now()->startOfMonth()->toDateTimeString(),
                 Carbon::now()->endOfMonth()->toDateTimeString()
             ]);
-    
-    
+
+
             $thisweekjobs = $jobs->whereBetween('created_at', [
                 Carbon::now()->startOfWeek()->toDateTimeString(),
                 Carbon::now()->endOfWeek()->toDateTimeString()
             ]);
-    
+
             $thismonthjobs = $jobs->whereBetween('created_at', [
                 Carbon::now()->startOfMonth()->toDateTimeString(),
                 Carbon::now()->endOfMonth()->toDateTimeString()
             ]);
-    
-    
+
+
             $thisweekusers = $users->whereBetween('created_at', [
                 Carbon::now()->startOfWeek()->toDateTimeString(),
                 Carbon::now()->endOfWeek()->toDateTimeString()
             ]);
-    
+
             $thismonthusers = $users->whereBetween('created_at', [
                 Carbon::now()->startOfMonth()->toDateTimeString(),
                 Carbon::now()->endOfMonth()->toDateTimeString()
@@ -153,7 +154,7 @@ class AdminController extends Controller
                 Carbon::now()->startOfMonth()->toDateTimeString(),
                 Carbon::now()->endOfMonth()->toDateTimeString()
             ]);
-    
+
             return response()->json(["success" => true, "counts" => [
                 "jobs" => [
                     "thisweek" => [
@@ -183,7 +184,7 @@ class AdminController extends Controller
                         'users' => $users
                     ]
                 ],
-    
+
                 "companies" => [
                     "thisweek" => [
                         "count" => $thisweekcompanies->count(),
@@ -198,7 +199,7 @@ class AdminController extends Controller
                         'companies' => $companies
                     ]
                 ],
-    
+
                 "privateClients" => [
                     "thisweek" => [
                         "count" => $thisweekprivateClients->count(),
@@ -229,10 +230,140 @@ class AdminController extends Controller
                 ],
             ]]);
         }
-       
     }
 
-    
+    public function deletePrivateClientA(Request $request,  $privateclientp)
+    {
+        $privateclient = PrivateClient::find($privateclientp);
+        if (!$privateclient) {
+            return response()->json([
+                "success" => false,
+                "message" => "No private client exist with this id",
+            ], 401);
+        }
+        $userA = $request->user();
+
+        $admins = Admin::all();
+        if (!$admins->contains($userA)) {
+            return response()->json([
+                "success" => false,
+                "message" => "You are not admin",
+            ], 401);
+        } else {
 
 
+
+            try {
+                $privateclient->delete();
+            } catch (Exception $e) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $e->getMessage(),
+
+                ], 400);
+            }
+            return response()->json([
+                "success" => true,
+                "message" => "Private Client Deleted successfully",
+
+            ], 200);
+        }
+    }
+    public function deleteCompanyA(Request $request,  $companyp)
+    {
+        $company = Company::find($companyp);
+        if (!$company) {
+            return response()->json([
+                "success" => false,
+                "message" => "No company exist with this id",
+
+            ], 401);
+        }
+
+        $userA = $request->user();
+
+        $admins = Admin::all();
+        if (!$admins->contains($userA)) {
+            return response()->json([
+                "success" => false,
+                "message" => "You are not admin",
+
+            ], 401);
+        } else {
+
+
+            try {
+                $company->delete();
+            } catch (Exception $e) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $e->getMessage(),
+
+                ], 400);
+            }
+            return response()->json([
+                "success" => true,
+                "message" => "Company Deleted successfully",
+
+            ], 200);
+        }
+    }
+
+    public function deleteUserA(Request $request,  $userp)
+    {
+        $user = User::find($userp);
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "No user exist with this id",
+            ], 401);
+        }
+        $userA = $request->user();
+
+        $admins = Admin::all();
+        if (!$admins->contains($userA)) {
+            return response()->json([
+                "success" => false,
+                "message" => "You are not admin",
+            ], 401);
+        } else {
+
+            $user->delete();
+
+            return response()->json([
+                "success" => true,
+                "message" => "User Deleted successfully",
+
+            ], 200);
+        }
+    }
+
+    public function deleteJobSeekerA(Request $request,  $jsp)
+    {
+        $jobseeker = JobSeeker::find($jsp);
+        if (!$jobseeker) {
+            return response()->json([
+                "success" => false,
+                "message" => "No jobseeker exist with this id",
+            ], 401);
+        }
+        $userA = $request->user();
+
+        $admins = Admin::all();
+        if (!$admins->contains($userA)) {
+            return response()->json([
+                "success" => false,
+                "message" => "You are not admin",
+            ], 401);
+        } else {
+
+            $jobseeker->delete();
+
+            return response()->json([
+                "success" => true,
+                "message" => "Jobseeker Deleted successfully",
+
+            ], 200);
+        }
+    }
 }
