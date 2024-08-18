@@ -40,4 +40,8 @@ class JobSeeker extends Model
     {
         return $this->hasMany(Skill::class);
     }
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

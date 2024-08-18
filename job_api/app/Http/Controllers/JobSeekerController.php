@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\JobSeekerRequest\UpdateJobSeekerRequest;
+use App\Models\Application;
+use App\Models\Job;
 use App\Models\JobSeeker;
 use Exception;
 use Illuminate\Http\Request;
@@ -112,5 +114,44 @@ class JobSeekerController extends Controller
             "message" => "Job Seeker Deleted successfully",
 
         ], 200);
+    }
+    public function applyJob(Request $request, $jobid){
+       try{
+        $user = $request->user();
+        if (!$user->jobseeker) {
+            return response()->json([
+                "success" => false,
+                "message" => "jobseeker not registerd"
+            ], 400);
+        }
+        $job = Job::find($jobid);
+        if ($job) {
+            return response()->json([
+                "success" => false,
+                "message" => "No Job exist with this id",
+
+            ], 401);
+        }
+        else {
+                $application = Application::create(['job_id'=>$jobid,
+        'user_id'=>$user->id,
+        'cover_letter'=>$request->cover_letter]);
+        }
+        if($application){
+            return response()->json([
+                "success" => true,
+                "message" => "Job Applied successfully",
+    
+            ], 200);
+        }
+       }
+       catch(Exception $e){
+        return response()->json([
+            "success" => false,
+            "message" => $e->getMessage(),
+
+        ], 400);
+       }
+        
     }
 }

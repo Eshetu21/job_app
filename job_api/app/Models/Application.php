@@ -18,5 +18,8 @@ class Application extends Model
     public function job(){
         return $this->belongsTo(Job::class);
     }
+    public function jobseeker(){
+        return $this->belongsTo(JobSeeker::class);
+    }
     
 }

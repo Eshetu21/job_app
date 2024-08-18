@@ -9,6 +9,7 @@ use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\PrivateClientController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
+use App\Models\JobSeeker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Sanctum;
@@ -25,7 +26,7 @@ Route::get('/admin/statistic', [AdminController::class, 'statistic'])->middlewar
 Route::delete('/admin/deletecompany/{companyp}', [AdminController::class, 'deletecompanyA'])->middleware("auth:sanctum");
 Route::delete('/admin/deleteprivateclient/{privateclientp}', [AdminController::class, 'deletePrivateClientA'])->middleware("auth:sanctum");
 Route::delete('/admin/deleteuser/{userp}', [AdminController::class, 'deleteuserA'])->middleware("auth:sanctum");
-Route::delete('/admin/deletejobseeker/{userp}', [AdminController::class, 'deleteJobSeekerA'])->middleware("auth:sanctum");
+Route::delete('/admin/deletejobseeker/{userp}', [AdminController::class, 'dseleteJobSeekerA'])->middleware("auth:sanctum");
 
 //Profiles +
 Route::get("profile", [UserController::class, "getuserprofile"])->middleware("auth:sanctum");
@@ -41,6 +42,7 @@ Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"])-
 Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"])->middleware("auth:sanctum");
 Route::put('updatejobseeker/{id}', [JobSeekerController::class, "updatejobseeker"])->middleware("auth:sanctum");
 Route::delete('deletejobseeker', [JobSeekerController::class, "delete"])->middleware("auth:sanctum");
+Route::post('applyjob/{jobid}', [JobSeekerController::class, "applyJob"])->middleware("auth:sanctum");
 
 //PrivateClient +
 Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");
