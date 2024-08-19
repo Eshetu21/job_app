@@ -45,6 +45,7 @@ class EducationController extends GetxController {
               },
               body: encodedData);
       if (response.statusCode == 201) {
+        updatedSucsessfully.value=true;
         print("Education created");
         print(encodedData);
       }

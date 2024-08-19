@@ -53,26 +53,41 @@ class _FetchSkillState extends State<FetchSkill> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => JobSeekerSkill()));
               },
-              child: Text("Edit",
+              child: Text(_skillController.skills.isEmpty ? "Add" : "Edit",
                   style: GoogleFonts.poppins(color: Color(0xFFFF9228))),
             )
           ],
         ),
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Wrap(
-              spacing: 8,
-              children: selectedSkills.map((skill) {
-                return Chip(
-                  backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
-                  labelPadding: EdgeInsets.symmetric(horizontal: 0),
-                  label: Text(skill,
-                      style: GoogleFonts.poppins(
-                          color: Colors.white, fontSize: 12)),
-                  deleteIcon: Icon(Icons.close, size: 16),
-                );
-              }).toList()),
-        ),
+        _skillController.skills.isEmpty
+            ? Center(
+                child: Container(
+                height: 100,
+                child: Column(
+                  children: [
+                    Icon(Icons.settings,
+                        color: Color(0xFFFF9228).withOpacity(0.5), size: 50),
+                    Text(
+                      "No skills",
+                      style: GoogleFonts.poppins(color: Colors.grey),
+                    )
+                  ],
+                ),
+              ))
+            : Container(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                    spacing: 8,
+                    children: selectedSkills.map((skill) {
+                      return Chip(
+                        backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
+                        labelPadding: EdgeInsets.symmetric(horizontal: 0),
+                        label: Text(skill,
+                            style: GoogleFonts.poppins(
+                                color: Colors.white, fontSize: 12)),
+                        deleteIcon: Icon(Icons.close, size: 16),
+                      );
+                    }).toList()),
+              ),
       ],
     );
   }

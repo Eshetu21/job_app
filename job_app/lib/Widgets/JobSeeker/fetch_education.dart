@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,6 +24,7 @@ class _FetchEducationState extends State<FetchEducation> {
 
   @override
   Widget build(BuildContext context) {
+    print(_educationController.educationDetails);
     return FutureBuilder(
         future: _educationController.showeducation(),
         builder: (context, snapshot) {
@@ -31,20 +32,36 @@ class _FetchEducationState extends State<FetchEducation> {
             return Center(child: CircularProgressIndicator());
           }
           if (_educationController.educationDetails.isEmpty) {
-            return Center(
-                child: Text("No Education", style: GoogleFonts.poppins()));
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    Text("Education", style: GoogleFonts.poppins(fontSize: 18)),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        navigateToEditEducation(true, null, null);
+                      },
+                      child: Text("Add",
+                          style: GoogleFonts.poppins(color: Color(0xFFFF9228))),
+                    ),
+                  ],
+                ),
+                Center(child: Container(
+                  height: 100,
+                  child: Column(children: [
+                    Icon(Icons.settings,color: Color(0xFFFF9228).withOpacity(0.5),size: 50),
+                    Text("No education",style: GoogleFonts.poppins(color: Colors.grey),)
+                  ],),
+                ))
+              ],
+            );
           } else {
             return ListView.separated(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   var education = _educationController.educationDetails[index];
-                  bool noEducationProvided = education["school_name"] == null &&
-                      education["field"] == null &&
-                      education["education_level"] == null &&
-                      education["edu_start_date"] == null &&
-                      education["edu_end_date"] == null &&
-                      education["description"] == null;
                   return Column(
                     children: [
                       Row(
@@ -78,46 +95,42 @@ class _FetchEducationState extends State<FetchEducation> {
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.all(8.0),
                         margin: EdgeInsets.symmetric(vertical: 5.0),
-                        child: noEducationProvided
-                            ? Center(
-                                child: Text("No education",
-                                    style: GoogleFonts.poppins()))
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    education["school_name"] ?? "Not Provided",
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Field: ${education["field"] ?? "Not Provided"}",
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Level: ${education["education_level"] ?? "Not Provided"}",
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Start Date: ${education["edu_start_date"] ?? "Not Provided"}",
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                      "End Date: ${education["edu_end_date"] ?? "Not Provided"}",
-                                      style: GoogleFonts.poppins()),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Description: ${education["description"] ?? "Not Provided"}",
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              education["school_name"] ?? "Not Provided",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Field: ${education["field"] ?? "Not Provided"}",
+                              style: GoogleFonts.poppins(),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Level: ${education["education_level"] ?? "Not Provided"}",
+                              style: GoogleFonts.poppins(),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Start Date: ${education["edu_start_date"] ?? "Not Provided"}",
+                              style: GoogleFonts.poppins(),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                                "End Date: ${education["edu_end_date"] ?? "Not Provided"}",
+                                style: GoogleFonts.poppins()),
+                            SizedBox(height: 4),
+                            Text(
+                              "Description: ${education["description"] ?? "Not Provided"}",
+                              style: GoogleFonts.poppins(),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   );

@@ -31,7 +31,37 @@ class _FetchExperienceState extends State<FetchExperience> {
             return Center(child: CircularProgressIndicator());
           }
           if (_experienceController.experienceDetails.isEmpty) {
-            return Center(child: Text("No experience"));
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    Text("Experience", style: GoogleFonts.poppins(fontSize: 18)),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        navigateToEditExperience(true, null, null);
+                      },
+                      child: Text("Add",
+                          style: GoogleFonts.poppins(color: Color(0xFFFF9228))),
+                    ),
+                  ],
+                ),
+                Center(
+                    child: Container(
+                  height: 100,
+                  child: Column(
+                    children: [
+                      Icon(Icons.settings,
+                          color: Color(0xFFFF9228).withOpacity(0.5), size: 50),
+                      Text(
+                        "No experiecne",
+                        style: GoogleFonts.poppins(color: Colors.grey),
+                      )
+                    ],
+                  ),
+                ))
+              ],
+            );
           } else {
             return ListView.separated(
                 shrinkWrap: true,
@@ -39,13 +69,6 @@ class _FetchExperienceState extends State<FetchExperience> {
                 itemBuilder: (context, index) {
                   var experience =
                       _experienceController.experienceDetails[index];
-                  bool noEducationProvided =
-                      experience["exp_position_title"] == null &&
-                          experience["exp_company_name"] == null &&
-                          experience["exp_job_type"] == null &&
-                          experience["exp_start_date"] == null &&
-                          experience["exp_end_date"] == null &&
-                          experience["exp_description"] == null;
                   return Column(
                     children: [
                       Row(
@@ -53,21 +76,22 @@ class _FetchExperienceState extends State<FetchExperience> {
                           Text("Experience",
                               style: GoogleFonts.poppins(fontSize: 18)),
                           Spacer(),
-                           if (_experienceController.experienceDetails.length ==
-                                1)
-                              GestureDetector(
-                                onTap: () {
-                                  navigateToEditExperience(true, null, null);
-                                },
-                                child: Text("Add",
-                                    style: GoogleFonts.poppins(
-                                        color: Color(0xFFFF9228))),
-                              ),
-                              SizedBox(width: 20),
+                          if (_experienceController.experienceDetails.length ==
+                              1)
+                            GestureDetector(
+                              onTap: () {
+                                navigateToEditExperience(true, null, null);
+                              },
+                              child: Text("Add",
+                                  style: GoogleFonts.poppins(
+                                      color: Color(0xFFFF9228))),
+                            ),
+                          SizedBox(width: 20),
                           GestureDetector(
                             onTap: () {
                               int experienceId = experience["id"];
-                              navigateToEditExperience(true, experienceId, experience);
+                              navigateToEditExperience(
+                                  true, experienceId, experience);
                             },
                             child: Text("Edit",
                                 style: GoogleFonts.poppins(
@@ -79,47 +103,43 @@ class _FetchExperienceState extends State<FetchExperience> {
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.all(8.0),
                         margin: EdgeInsets.symmetric(vertical: 5.0),
-                        child: noEducationProvided
-                            ? Center(
-                                child: Text("No experience",
-                                    style: GoogleFonts.poppins()))
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    experience["exp_position_title"] ??
-                                        "Not Provided",
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Company: ${experience["exp_company_name"] ?? "Not Provided"}",
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Job Type: ${experience["exp_job_type"] ?? "Not Provided"}",
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Start Date: ${experience["exp_start_date"] ?? "Not Provided"}",
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                      "End Date: ${experience["exp_end_date"] ?? "Not Provided"}",
-                                      style: GoogleFonts.poppins()),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Description: ${experience["exp_description"] ?? "Not Provided"}",
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              experience["exp_position_title"] ??
+                                  "Not Provided",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Company: ${experience["exp_company_name"] ?? "Not Provided"}",
+                              style: GoogleFonts.poppins(),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Job Type: ${experience["exp_job_type"] ?? "Not Provided"}",
+                              style: GoogleFonts.poppins(),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Start Date: ${experience["exp_start_date"] ?? "Not Provided"}",
+                              style: GoogleFonts.poppins(),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                                "End Date: ${experience["exp_end_date"] ?? "Not Provided"}",
+                                style: GoogleFonts.poppins()),
+                            SizedBox(height: 4),
+                            Text(
+                              "Description: ${experience["exp_description"] ?? "Not Provided"}",
+                              style: GoogleFonts.poppins(),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   );
@@ -133,7 +153,7 @@ class _FetchExperienceState extends State<FetchExperience> {
   }
 
   void navigateToEditExperience(
-      bool isediting, int? expId, Map<String, dynamic> ?exp) {
+      bool isediting, int? expId, Map<String, dynamic>? exp) {
     Navigator.push(
         context,
         MaterialPageRoute(
