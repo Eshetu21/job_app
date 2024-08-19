@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 
+
 class JobSeekerController extends Controller
 {
     public function createjobseeker(Request $request)
@@ -118,6 +119,20 @@ class JobSeekerController extends Controller
     public function applyJob(Request $request, $jobid){
        try{
         $user = $request->user();
+      $request->validate([
+
+            "cover_letter"=> 'required|mimes:,png,jpg,jpeg'
+
+        ]);
+       
+        if($request->has('cover_letter')){
+            $cover_letter = $request->file('cover_letter');
+            $extention = $cover_letter->getClientOriginalExtension();
+            $originalfilename = $cover_letter->getClientOriginalName();
+            $filename = time().$originalfilename.".".$extention;
+            $cover_letter->move(public_path('uploads'),$filename);
+        }
+
         if (!$user->jobseeker) {
             return response()->json([
                 "success" => false,
@@ -125,21 +140,31 @@ class JobSeekerController extends Controller
             ], 400);
         }
         $job = Job::find($jobid);
-        if ($job) {
+        if (!$job) {
             return response()->json([
                 "success" => false,
                 "message" => "No Job exist with this id",
 
             ], 401);
         }
-        else {
+        $application =Application::where(["$jobid"=>$jobid,"user_id"=>$user->id]);
+        if($application){
+            return response()->json([
+                "success" => false,
+                "message" => "You already applied to this Job",
+
+            ], 401);
+        } 
+        
+        
                 $application = Application::create(['job_id'=>$jobid,
         'user_id'=>$user->id,
-        'cover_letter'=>$request->cover_letter]);
-        }
+        'cover_letter'=>$filename]);
+        
         if($application){
             return response()->json([
                 "success" => true,
+                "image" =>$filename,
                 "message" => "Job Applied successfully",
     
             ], 200);
