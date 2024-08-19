@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/job_seeker_skill.dart';
-import 'package:job_app/Screens/JobSeeker/job_seeker_education.dart';
-import 'package:job_app/Screens/JobSeeker/job_seeker_experience.dart';
 import 'package:job_app/Widgets/JobSeeker/fetch_education.dart';
+import 'package:job_app/Widgets/JobSeeker/fetch_experience.dart';
 import 'package:job_app/Widgets/JobSeeker/fetch_skill.dart';
 
 class JobseekerProfile extends StatefulWidget {
@@ -124,69 +122,11 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                     height: MediaQuery.of(context).size.height *
                                         0.02),
                                 Divider(thickness: 2),
-                                Row(
-                                  children: [
-                                    Text("Skills",
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 18)),
-                                    Spacer(),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    JobSeekerSkill()));
-                                      },
-                                      child: Text("Edit",
-                                          style: GoogleFonts.poppins(
-                                              color: Color(0xFFFF9228))),
-                                    )
-                                  ],
-                                ),
                                 FetchSkill(),
                                 Divider(thickness: 2),
-                                Row(
-                                  children: [
-                                    Text("Education",
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 18)),
-                                    Spacer(),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    JobSeekerCreateSecond(
-                                                        isediting: true)));
-                                      },
-                                      child: Text("Edit",
-                                          style: GoogleFonts.poppins(
-                                              color: Color(0xFFFF9228))),
-                                    )
-                                  ],
-                                ),
                                 FetchEducation(),
                                 Divider(thickness: 2),
-                                Row(
-                                  children: [
-                                    Text("Experience",
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 18)),
-                                    Spacer(),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    JobSeekerExperience(
-                                                        isediting: true)));
-                                      },
-                                      child: Text("Edit",
-                                          style: GoogleFonts.poppins(
-                                              color: Color(0xFFFF9228))),
-                                    )
-                                  ],
-                                ),
+                                FetchExperience(),
                                 Divider(thickness: 2),
                                 Row(
                                   children: [

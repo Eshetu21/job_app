@@ -43,7 +43,6 @@ class _SkillState extends State<JobSeekerSkill> {
             selectedSub.split('","').map((skill) => skill.trim()).toList();
         selectedSkills.addAll(skillList);
       }
-      print("selectedSkills $selectedSkills");
     });
   }
 

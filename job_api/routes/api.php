@@ -76,7 +76,7 @@ Route::post('deleteeducation/{id}', [EducationController::class, 'deleteeducatio
 //Experience
 Route::post('addexperience/{id}', [ExperienceController::class, 'addexperience'])->middleware("auth:sanctum");;
 Route::get('showexperience', [ExperienceController::class, 'showexperience'])->middleware("auth:sanctum");;
-Route::put('updateeducation/{jobseekerid}/{educationid}', [EducationController::class, 'updateeducation'])->middleware("auth:sanctum");
+Route::put('updateexperience/{jobseekerid}/{experienceid}', [ExperienceController::class, 'updateexperience'])->middleware("auth:sanctum");
 Route::post('deleteeducation/{id}', [EducationController::class, 'deleteeducation'])->middleware("auth:sanctum");
 
 //Skill

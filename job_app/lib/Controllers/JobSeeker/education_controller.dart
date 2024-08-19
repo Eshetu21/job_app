@@ -7,14 +7,12 @@ import 'package:http/http.dart' as http;
 
 class EducationController extends GetxController {
   RxList<dynamic> educationDetails = [].obs;
-   late final RxBool updatedSucsessfully = false.obs;
+  late final RxBool updatedSucsessfully = false.obs;
   final box = GetStorage();
   late final String? token;
-  late final int jobseekerId;
 
   EducationController() {
     token = box.read("token");
-    jobseekerId = box.read("jobseekerId");
   }
 
   Future<void> createeducation(
@@ -63,7 +61,6 @@ class EducationController extends GetxController {
     });
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
-      print("api $responseData");
       educationDetails.value = responseData["education"];
       return educationDetails;
     } else {
@@ -74,7 +71,7 @@ class EducationController extends GetxController {
 
   Future updateeducation(
       {required int jobseekerid,
-      required int educationid,
+      required int? educationid,
       String? institution,
       String? field,
       String? eduLevel,
@@ -105,7 +102,6 @@ class EducationController extends GetxController {
       if (response.statusCode == 200) {
         updatedSucsessfully.value = true;
         print("Education updated");
-        print(encodedData);
       }
     } catch ($e) {
       print("Failed");

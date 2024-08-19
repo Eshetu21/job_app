@@ -22,12 +22,12 @@ class StoreExperienceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'position_title'=>'nullable|string',
-            'exp_company_name'=>'nullable|string',
-            'exp_job_type'=>'nullable|string',
-            'exp_start_date'=>'nullable|string',
-            'exp_end_date'=>'nullable|string',
-            'exp_description'=>'nullable|string'
+            'exp_position_title'=>'required|string',
+            'exp_company_name'=>'required|string',
+            'exp_job_type'=>'required|string',
+            'exp_start_date'=>'required|string',
+            'exp_end_date'=>'required|string',
+            'exp_description'=>'required|string'
         ];
     }
 }
