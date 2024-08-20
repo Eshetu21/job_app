@@ -104,6 +104,6 @@ class EducationController extends Controller
         $education->delete();
         return response()->json([
             "message" => "deleted sucessfully"
-        ]);
+        ],200);
     }
 }

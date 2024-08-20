@@ -1,46 +1,45 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/JobSeeker/education_controller.dart';
-import 'package:job_app/Screens/JobSeeker/job_seeker_education.dart';
+import 'package:job_app/Controllers/JobSeeker/experience_controller.dart';
+import 'package:job_app/Screens/JobSeeker/job_seeker_experience.dart';
 
-class FetchEducation extends StatefulWidget {
-  const FetchEducation({super.key});
+class FetchExperience extends StatefulWidget {
+  const FetchExperience({super.key});
 
   @override
-  State<FetchEducation> createState() => _FetchEducationState();
+  State<FetchExperience> createState() => _FetchExperienceState();
 }
 
-class _FetchEducationState extends State<FetchEducation> {
-  final EducationController _educationController =
-      Get.put(EducationController());
+class _FetchExperienceState extends State<FetchExperience> {
+  final ExperienceController _experienceController =
+      Get.put(ExperienceController());
   @override
   void initState() {
+    _experienceController.showexperience();
     super.initState();
-    _educationController.showeducation();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_educationController.educationDetails);
     return FutureBuilder(
-        future: _educationController.showeducation(),
+        future: _experienceController.showexperience(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
-          if (_educationController.educationDetails.isEmpty) {
+          if (_experienceController.experienceDetails.isEmpty) {
             return Column(
               children: [
                 Row(
                   children: [
-                    Text("Education", style: GoogleFonts.poppins(fontSize: 18)),
+                    Text("Experience", style: GoogleFonts.poppins(fontSize: 18)),
                     Spacer(),
                     GestureDetector(
                       onTap: () {
-                        navigateToEditEducation(true, null, null);
+                        navigateToEditExperience(true, null, null);
                       },
                       child: Text("Add",
                           style: GoogleFonts.poppins(color: Color(0xFFFF9228))),
@@ -55,7 +54,7 @@ class _FetchEducationState extends State<FetchEducation> {
                       Icon(Icons.settings,
                           color: Color(0xFFFF9228).withOpacity(0.5), size: 50),
                       Text(
-                        "No education",
+                        "No experiecne",
                         style: GoogleFonts.poppins(color: Colors.grey),
                       )
                     ],
@@ -65,21 +64,23 @@ class _FetchEducationState extends State<FetchEducation> {
             );
           } else {
             return ListView.separated(
-                physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  var education = _educationController.educationDetails[index];
+                  var experience =
+                      _experienceController.experienceDetails[index];
                   return Column(
                     children: [
                       Row(
                         children: [
-                          Text("Education",
+                          Text("Experience",
                               style: GoogleFonts.poppins(fontSize: 18)),
                           Spacer(),
-                          if (_educationController.educationDetails.length == 1)
+                          if (_experienceController.experienceDetails.length ==
+                              1)
                             GestureDetector(
                               onTap: () {
-                                navigateToEditEducation(true, null, null);
+                                navigateToEditExperience(true, null, null);
                               },
                               child: Text("Add",
                                   style: GoogleFonts.poppins(
@@ -88,14 +89,14 @@ class _FetchEducationState extends State<FetchEducation> {
                           SizedBox(width: 20),
                           GestureDetector(
                             onTap: () {
-                              int educationId = education["id"];
-                              navigateToEditEducation(
-                                  true, educationId, education);
+                              int experienceId = experience["id"];
+                              navigateToEditExperience(
+                                  true, experienceId, experience);
                             },
                             child: Text("Edit",
                                 style: GoogleFonts.poppins(
                                     color: Color(0xFFFF9228))),
-                          ),
+                          )
                         ],
                       ),
                       Container(
@@ -106,7 +107,8 @@ class _FetchEducationState extends State<FetchEducation> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              education["school_name"] ?? "Not Provided",
+                              experience["exp_position_title"] ??
+                                  "Not Provided",
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -114,26 +116,26 @@ class _FetchEducationState extends State<FetchEducation> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              "Field: ${education["field"] ?? "Not Provided"}",
+                              "Company: ${experience["exp_company_name"] ?? "Not Provided"}",
                               style: GoogleFonts.poppins(),
                             ),
                             SizedBox(height: 4),
                             Text(
-                              "Level: ${education["education_level"] ?? "Not Provided"}",
+                              "Job Type: ${experience["exp_job_type"] ?? "Not Provided"}",
                               style: GoogleFonts.poppins(),
                             ),
                             SizedBox(height: 4),
                             Text(
-                              "Start Date: ${education["edu_start_date"] ?? "Not Provided"}",
+                              "Start Date: ${experience["exp_start_date"] ?? "Not Provided"}",
                               style: GoogleFonts.poppins(),
                             ),
                             SizedBox(height: 4),
                             Text(
-                                "End Date: ${education["edu_end_date"] ?? "Not Provided"}",
+                                "End Date: ${experience["exp_end_date"] ?? "Not Provided"}",
                                 style: GoogleFonts.poppins()),
                             SizedBox(height: 4),
                             Text(
-                              "Description: ${education["description"] ?? "Not Provided"}",
+                              "Description: ${experience["exp_description"] ?? "Not Provided"}",
                               style: GoogleFonts.poppins(),
                             ),
                           ],
@@ -143,19 +145,22 @@ class _FetchEducationState extends State<FetchEducation> {
                   );
                 },
                 separatorBuilder: (_, index) {
-                  return SizedBox(height: 3);
+                  return SizedBox(height: 5);
                 },
-                itemCount: _educationController.educationDetails.length);
+                itemCount: _experienceController.experienceDetails.length);
           }
         });
   }
 
-  void navigateToEditEducation(
-      bool isediting, int? eduId, Map<String, dynamic>? edu) {
+  void navigateToEditExperience(
+      bool isediting, int? expId, Map<String, dynamic>? exp) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => JobSeekerCreateSecond(
-                isediting: isediting, educationid: eduId, education: edu)));
+            builder: (context) => JobSeekerExperience(
+                  isediting: isediting,
+                  experienceId: expId,
+                  experience: exp,
+                )));
   }
 }

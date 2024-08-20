@@ -10,7 +10,10 @@ import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class JobSeekerCreateSecond extends StatefulWidget {
   final bool isediting;
-  const JobSeekerCreateSecond({super.key, this.isediting = false});
+  final int? educationid;
+  final Map<String, dynamic>? education;
+  const JobSeekerCreateSecond(
+      {super.key, this.isediting = false, this.educationid, this.education});
 
   @override
   State<JobSeekerCreateSecond> createState() => _JobSeekerCreateSecondState();
@@ -27,7 +30,18 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
   final TextEditingController _description = TextEditingController();
   var educationDetails = {};
   final box = GetStorage();
-  DateTime? selectedDate;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isediting && widget.education != null) {
+      _institutionController.text = widget.education?["school_name"] ?? '';
+      _levelofeducation.text = widget.education?["education_level"] ?? '';
+      _field.text = widget.education?["field"] ?? '';
+      _startDate.text = widget.education?["edu_start_date"] ?? '';
+      _edndate.text = widget.education?["edu_end_date"] ?? '';
+      _description.text = widget.education?["description"];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,20 +88,30 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                   child: GestureDetector(
                     onTap: () async {
                       int jobseeker = box.read("jobseekerId");
-                      List<int> educationIds = _educationController
-                          .educationDetails
-                          .map<int>((education) {
-                        return education["id"];
-                      }).toList();
-                      await _educationController.updateeducation(
-                          jobseekerid: jobseeker,
-                          educationid: educationIds[0],
-                          institution: _institutionController.text.trim(),
-                          field: _field.text.trim(),
-                          eduLevel: _levelofeducation.text.trim(),
-                          eduStart: _startDate.text.trim(),
-                          eduEnd: _edndate.text.trim(),
-                          eduDescription: _description.text.trim());
+                      if (widget.isediting &&
+                          widget.educationid != null &&
+                          widget.education != null) {
+                        int? educationid = widget.educationid;
+                        await _educationController.updateeducation(
+                            jobseekerid: jobseeker,
+                            educationid: educationid,
+                            institution: _institutionController.text.trim(),
+                            field: _field.text.trim(),
+                            eduLevel: _levelofeducation.text.trim(),
+                            eduStart: _startDate.text.trim(),
+                            eduEnd: _edndate.text.trim(),
+                            eduDescription: _description.text.trim());
+                      }
+                      if (widget.isediting) {
+                        await _educationController.createeducation(
+                            jobseekerid: jobseeker,
+                            institution: _institutionController.text.trim(),
+                            field: _field.text.trim(),
+                            eduLevel: _levelofeducation.text.trim(),
+                            eduStart: _startDate.text.trim(),
+                            eduEnd: _edndate.text.trim(),
+                            eduDescription: _description.text.trim());
+                      }
                     },
                     child: Container(
                       margin: EdgeInsets.only(top: 30, bottom: 20),

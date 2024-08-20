@@ -24,8 +24,6 @@ class SkillController extends GetxController {
       skills.value = skillObjects.map((skillObjects) {
         return skillObjects["skills"];
       }).toList();
-      print(decodedResponse);
-      print(skills);
     } else {
       print(response.statusCode);
       print("Failed to fetch");

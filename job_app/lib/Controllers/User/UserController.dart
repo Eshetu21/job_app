@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -52,12 +51,12 @@ class UserAuthenticationController extends GetxController {
           body: data);
 
       if (response.statusCode == 201) {
-        regLoading.value = false;
         token.value = json.decode(response.body)["token"];
         box.write("token", token.value);
         regError.clear();
         print('Registration successful');
         await Future.delayed(Duration(seconds: 1));
+        regLoading.value = false;
         return true;
       } else if (response.statusCode == 422) {
         var errors = json.decode(response.body)['errors'];
