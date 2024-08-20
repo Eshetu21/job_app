@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
+import 'package:job_app/Screens/JobSeeker/Jobseeker/job_seeker_language.dart';
 import 'package:job_app/Widgets/JobSeeker/fetch_education.dart';
 import 'package:job_app/Widgets/JobSeeker/fetch_experience.dart';
+import 'package:job_app/Widgets/JobSeeker/fetch_language.dart';
 import 'package:job_app/Widgets/JobSeeker/fetch_skill.dart';
 
 class JobseekerProfile extends StatefulWidget {
@@ -128,21 +130,7 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                                 Divider(thickness: 2),
                                 FetchExperience(),
                                 Divider(thickness: 2),
-                                Row(
-                                  children: [
-                                    Text("Language",
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 18)),
-                                    Spacer(),
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: Text("Edit",
-                                          style: GoogleFonts.poppins(
-                                              color: Color(0xFFFF9228))),
-                                    )
-                                  ],
-                                ),
-                                Divider(thickness: 2),
+                                FetchLanguage(),
                               ],
                             ),
                           ),

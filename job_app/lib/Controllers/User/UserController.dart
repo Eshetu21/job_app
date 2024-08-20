@@ -51,12 +51,12 @@ class UserAuthenticationController extends GetxController {
           body: data);
 
       if (response.statusCode == 201) {
-        regLoading.value = false;
         token.value = json.decode(response.body)["token"];
         box.write("token", token.value);
         regError.clear();
         print('Registration successful');
         await Future.delayed(Duration(seconds: 1));
+        regLoading.value = false;
         return true;
       } else if (response.statusCode == 422) {
         var errors = json.decode(response.body)['errors'];

@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
     final box = GetStorage();
     final token = box.read("token");
     return GetMaterialApp(
-       debugShowCheckedModeBanner: false,
-        home:   token != null ? Profiles() :  LoadingScreen());
+        debugShowCheckedModeBanner: false,
+        home: token != null ? Profiles() : LoadingScreen());
   }
 }

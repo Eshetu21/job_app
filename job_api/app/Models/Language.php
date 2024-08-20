@@ -11,8 +11,7 @@ class Language extends Model
 
     protected $fillable = [
         'job_seeker_id',
-        'language',
-        'proficiency_level'
+        'languages',
     ];
 
     public function jobseeker()

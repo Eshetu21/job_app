@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_final_fields
+// ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
 
@@ -7,65 +7,71 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/JobSeeker/skill_controller.dart';
+import 'package:job_app/Controllers/JobSeeker/language_controller.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
 
-class JobSeekerSkill extends StatefulWidget {
-  const JobSeekerSkill({super.key});
+class JobSeekerLanguage extends StatefulWidget {
+  const JobSeekerLanguage({super.key});
 
   @override
-  State<JobSeekerSkill> createState() => _SkillState();
+  State<JobSeekerLanguage> createState() => _JobSeekerLanguageState();
 }
 
-class _SkillState extends State<JobSeekerSkill> {
-  SkillController _skillController = Get.put(SkillController());
-  List<dynamic> skills = [];
-  List<dynamic> fetchedSkills = <dynamic>[];
-  List<String> selectedSkills = [];
-  String? selectedSkill;
-
+class _JobSeekerLanguageState extends State<JobSeekerLanguage> {
+  final box = GetStorage();
+  final Languagecontroller _languagecontroller = Get.put(Languagecontroller());
+  List<dynamic> lnguages = [];
+  List<dynamic> fetchedLanguages = <dynamic>[];
+  List<String> selectedLanguages = [];
+  String? selectedLanguage;
   @override
   void initState() {
     super.initState();
-    loadSkills();
     fetchSkills();
+    loadSkills();
   }
 
   Future<void> fetchSkills() async {
-    await _skillController.showskills();
+    await _languagecontroller.showlanguages();
     setState(() {
-      var fetchedSkills = _skillController.skills;
-      if (fetchedSkills.isNotEmpty) {
-        var selectedString = fetchedSkills.toString();
-        var selectedSub =
-            selectedString.substring(3, selectedString.length - 3);
-        List<String> skillList =
-            selectedSub.split('","').map((skill) => skill.trim()).toList();
-        selectedSkills.addAll(skillList);
+      var fetchedLanguages = _languagecontroller.languages;
+      if (fetchedLanguages.isNotEmpty) {
+        var selectedString = fetchedLanguages.toString();
+       if(selectedString.length>6){
+          var selectedSub =
+              selectedString.substring(3, selectedString.length - 3);
+              print("selectedSub $selectedSub");
+          List<String> LanguageList =
+              selectedSub.split('","').map((skill) => skill.trim()).toList();
+          selectedLanguages.addAll(LanguageList);}
+          else{
+            print("string too short");
+          }
       }
     });
   }
 
   Future<void> loadSkills() async {
     final String response =
-        await rootBundle.loadString('assets/json/skills.json');
+        await rootBundle.loadString('assets/json/languages.json');
     final data = await json.decode(response);
     setState(() {
-      skills = data['skills'];
+      lnguages = data['languages'];
     });
   }
 
-  void _addSkill(String skill) {
+  void _addLanguage(String language) {
     setState(() {
-      if (!selectedSkills.contains(skill) && selectedSkills.length < 10) {
-        selectedSkills.add(skill);
+      if (!selectedLanguages.contains(language) &&
+          selectedLanguages.length < 5) {
+        selectedLanguages.add(language);
       }
     });
   }
 
-  void _removeSkill(String skill) {
+  void _removeSkill(String language) {
     setState(() {
-      selectedSkills.remove(skill);
+      selectedLanguages.remove(language);
     });
   }
 
@@ -79,38 +85,38 @@ class _SkillState extends State<JobSeekerSkill> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Add your skills',
+                'Add your languages',
                 style: GoogleFonts.poppins(
                     fontSize: 16, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
               Text(
-                'This will help you get discovered by clients based on your skills',
+                'This will help you get discovered by clients based on your languages',
                 style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey),
               ),
               SizedBox(height: 16),
-              Text('Choose a skill (10 Max)',
+              Text('Write a language (5 Max)',
                   style: GoogleFonts.poppins(fontSize: 14)),
               SizedBox(height: 15),
               DropdownButton<String>(
-                  hint: Text("Select skill", style: GoogleFonts.poppins()),
-                  value: selectedSkill,
-                  items: skills.map((skill) {
+                  hint: Text("Select language", style: GoogleFonts.poppins()),
+                  value: selectedLanguage,
+                  items: lnguages.map((language) {
                     return DropdownMenuItem<String>(
-                        value: skill,
-                        child: Text(skill, style: GoogleFonts.poppins()));
+                        value: language,
+                        child: Text(language, style: GoogleFonts.poppins()));
                   }).toList(),
                   onChanged: (value) {
                     setState(() {
-                      selectedSkill = value;
+                      selectedLanguage = value;
                       if (value != null) {
-                        _addSkill(value);
+                        _addLanguage(value);
                       }
                     });
                   }),
               Wrap(
                   spacing: 2,
-                  children: selectedSkills.map((skill) {
+                  children: selectedLanguages.map((skill) {
                     return Chip(
                       backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
                       labelPadding: EdgeInsets.symmetric(horizontal: 0),
@@ -125,10 +131,10 @@ class _SkillState extends State<JobSeekerSkill> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    final box = GetStorage();
                     int jobseekerId = box.read("jobseekerId");
-                    _skillController.addskills(
-                        id: jobseekerId, skills: selectedSkills);
+                    _languagecontroller.updatelanguages(
+                        jobseekerId: jobseekerId, Languages: selectedLanguages);
+                    print(jsonEncode(selectedLanguages));
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 20),
@@ -148,7 +154,7 @@ class _SkillState extends State<JobSeekerSkill> {
                 ),
               ),
               Obx(() {
-                if (_skillController.updatedSucsessfully.value == true) {
+                if (_languagecontroller.updatedSucsessfully.value == true) {
                   Future.delayed(Duration.zero, () {
                     sucessfullyUpdated(context);
                   });
@@ -167,7 +173,7 @@ class _SkillState extends State<JobSeekerSkill> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Success", style: GoogleFonts.poppins()),
-              content: Text("Skills updated sucessfully",
+              content: Text("Language updated sucessfully",
                   style: GoogleFonts.poppins()),
               actions: [
                 TextButton(
@@ -177,7 +183,7 @@ class _SkillState extends State<JobSeekerSkill> {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: ((context) => JobseekerProfile())));
-                      _skillController.updatedSucsessfully.value = false;
+                      _languagecontroller.updatedSucsessfully.value = false;
                     },
                     child: Text(
                       "Ok",

@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('job_seeker_id');
             $table->foreign('job_seeker_id')->references('id')->on('job_seekers')->onDelete('cascade');
-            $table->string('language')->nullable();
-            $table->enum('proficiency_level', ['beginner', 'intermediate', 'advanced', 'native'])->nullable();
+            $table->json('languages')->nullable();
             $table->timestamps();
         });
     }

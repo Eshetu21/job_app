@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,12 +47,19 @@ class _FetchEducationState extends State<FetchEducation> {
                     ),
                   ],
                 ),
-                Center(child: Container(
+                Center(
+                    child: Container(
                   height: 100,
-                  child: Column(children: [
-                    Icon(Icons.settings,color: Color(0xFFFF9228).withOpacity(0.5),size: 50),
-                    Text("No education",style: GoogleFonts.poppins(color: Colors.grey),)
-                  ],),
+                  child: Column(
+                    children: [
+                      Icon(Icons.settings,
+                          color: Color(0xFFFF9228).withOpacity(0.5), size: 50),
+                      Text(
+                        "No education",
+                        style: GoogleFonts.poppins(color: Colors.grey),
+                      )
+                    ],
+                  ),
                 ))
               ],
             );
@@ -88,7 +95,7 @@ class _FetchEducationState extends State<FetchEducation> {
                             child: Text("Edit",
                                 style: GoogleFonts.poppins(
                                     color: Color(0xFFFF9228))),
-                          )
+                          ),
                         ],
                       ),
                       Container(

@@ -73,21 +73,29 @@ class _FetchSkillState extends State<FetchSkill> {
                   ],
                 ),
               ))
-            : Container(
-                alignment: Alignment.centerLeft,
-                child: Wrap(
-                    spacing: 8,
-                    children: selectedSkills.map((skill) {
-                      return Chip(
-                        backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
-                        labelPadding: EdgeInsets.symmetric(horizontal: 0),
-                        label: Text(skill,
-                            style: GoogleFonts.poppins(
-                                color: Colors.white, fontSize: 12)),
-                        deleteIcon: Icon(Icons.close, size: 16),
-                      );
-                    }).toList()),
-              ),
+            : FutureBuilder(
+              future: _skillController.showskills(),
+              builder: (context,snapshot) {
+                if(snapshot.connectionState==ConnectionState.waiting){
+                  return Center(child: CircularProgressIndicator());
+                }
+                return Container(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                        spacing: 8,
+                        children: selectedSkills.map((skill) {
+                          return Chip(
+                            backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
+                            labelPadding: EdgeInsets.symmetric(horizontal: 0),
+                            label: Text(skill,
+                                style: GoogleFonts.poppins(
+                                    color: Colors.white, fontSize: 12)),
+                            deleteIcon: Icon(Icons.close, size: 16),
+                          );
+                        }).toList()),
+                  );
+              }
+            ),
       ],
     );
   }

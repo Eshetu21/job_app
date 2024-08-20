@@ -114,9 +114,10 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                   child: GestureDetector(
                     onTap: () async {
                       int jobseeker = box.read("jobseekerId");
-                      if (widget.isediting) {
-                        await _experienceController.addexperience(
-                            jobseekerid: jobseeker,
+                      if (widget.isediting && widget.experienceId != null) {
+                        await _experienceController.updateexperience(
+                            jobseekerId: jobseeker,
+                            experienceId: widget.experienceId,
                             title: _titleController.text.trim(),
                             company: _companyController.text.trim(),
                             type: selectedJobType,
@@ -124,10 +125,9 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                             end: _endController.text.trim(),
                             description: _descriptionController.text.trim());
                       }
-                      if (widget.isediting && widget.experienceId != null) {
-                        await _experienceController.updateexperience(
-                            jobseekerId: jobseeker,
-                            experienceId: widget.experienceId,
+                     else {
+                        await _experienceController.addexperience(
+                            jobseekerid: jobseeker,
                             title: _titleController.text.trim(),
                             company: _companyController.text.trim(),
                             type: selectedJobType,
@@ -153,7 +153,8 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                     ),
                   ),
                 ),
-                if (widget.isediting||widget.isediting&&widget.experienceId!=null)
+                if (widget.isediting ||
+                    widget.isediting && widget.experienceId != null)
                   Obx(() {
                     if (_experienceController.updatedSucsessfully.value ==
                         true) {
@@ -200,7 +201,7 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Success", style: GoogleFonts.poppins()),
-              content: Text("Education updated sucessfully",
+              content: Text("Experience updated sucessfully",
                   style: GoogleFonts.poppins()),
               actions: [
                 TextButton(
