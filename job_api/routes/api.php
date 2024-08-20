@@ -40,9 +40,12 @@ Route::delete('delete', [UserController::class, "delete"])->middleware("auth:san
 //JobSeeker +
 Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"])->middleware("auth:sanctum");
 Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"])->middleware("auth:sanctum");
-Route::put('updatejobseeker/{id}', [JobSeekerController::class, "updatejobseeker"])->middleware("auth:sanctum");
+Route::put('updatejobseeker', [JobSeekerController::class, "updatejobseeker"])->middleware("auth:sanctum");
 Route::delete('deletejobseeker', [JobSeekerController::class, "delete"])->middleware("auth:sanctum");
 Route::post('applyjob/{jobid}', [JobSeekerController::class, "applyJob"])->middleware("auth:sanctum");
+Route::get('getapplications', [JobSeekerController::class, "getapplications"])->middleware("auth:sanctum");
+Route::delete('deleteapplications/{appid}', [JobSeekerController::class, "deleteApplication"])->middleware("auth:sanctum");
+Route::post('updateapplication/{appid}', [JobSeekerController::class, "updateApplication"])->middleware("auth:sanctum");
 
 //PrivateClient +
 Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");
@@ -55,6 +58,14 @@ Route::post('createcompany', [CompanyController::class, 'createcompany'])->middl
 Route::post('companycreatejob', [CompanyController::class, 'companycreatejob'])->middleware("auth:sanctum");
 Route::put('companyupdate', [CompanyController::class, "update"])->middleware("auth:sanctum");
 Route::delete('companydelete', [CompanyController::class, "delete"])->middleware("auth:sanctum");
+Route::get('getmyjobs', [CompanyController::class, "getMyJobs"])->middleware("auth:sanctum");
+Route::get('getmyjobbyid/{jobid}', [CompanyController::class, "getJobbyId"])->middleware("auth:sanctum");
+Route::delete('deletejob/{jobid}', [CompanyController::class, "deleteJob"])->middleware("auth:sanctum");
+Route::put('updatejob/{jobid}', [CompanyController::class, "updateJob"])->middleware("auth:sanctum");
+Route::put('rejectapp/{jobid}/{appid}', [CompanyController::class, "rejectApplication"])->middleware("auth:sanctum");
+Route::put('acceptapp/{jobid}/{appid}', [CompanyController::class, "acceptApplication"])->middleware("auth:sanctum");
+Route::get('getappbyid/{jobid}/{appid}', [CompanyController::class, "getAppById"])->middleware("auth:sanctum");
+Route::get('getallapp/{jobid}', [CompanyController::class, "getAllApp"])->middleware("auth:sanctum");
 
 
 

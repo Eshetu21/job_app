@@ -24,8 +24,7 @@ class UpdateJobSeekerRequest extends FormRequest
         return [
             'category' => 'required|string',
             'sub_category' => 'required|string',
-            "profile_pic" => "nullable|string",
-            'cv' => 'nullable|string',
+   
             'phone_number' => 'nullable|string',
             'about_me' => 'nullable|string'
         ];

@@ -8,6 +8,7 @@ use App\Models\Job;
 use App\Models\JobSeeker;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,7 +31,7 @@ class JobSeekerController extends Controller
 
             return response()->json([
                 "message" => "Succesfully created",
-                "created_by" => $user
+                "jobseeker" => $jobseeker
             ], 201);
         } catch (ValidationException $e) {
             return response()->json([
@@ -53,43 +54,88 @@ class JobSeekerController extends Controller
         ], 200);
     }
 
-    public function updatejobseeker(UpdateJobSeekerRequest $request, $id)
+    public function updatejobseeker(Request $request)
     {
+try{
         $user = $request->user();
-        $jobseeker = JobSeeker::find($id);
+
+        $jobseeker =  $user->jobseeker;
 
         if (!$jobseeker) {
             return response()->json([
                 "message" => "JobSeeker not found"
             ], 404);
         }
-        $validatedData = $request->validated();
-        if ($request->hasFile('cv')) {
-            if ($jobseeker->cv && Storage::disk('public')->exists('CVs/' . $jobseeker->cv)) {
-                Storage::disk('public')->delete($jobseeker->cv);
+        $validatedData = $request->validate([
+            'category' => 'string',
+            'sub_category' => 'string',
+       
+            'phone_number' => 'string',
+            'about_me' => 'string'
+        ]);
+       
+        if ($request->has('cv')) {
+            $request->validate([
+               "cv" => "mimes:pdf,doc|max:2048",
+            ]);
+            if($jobseeker->cv){
+                $cvLogoPath = public_path('uploads/cv/' . $jobseeker->cv);
+        
+                    
+                if (File::exists($cvLogoPath)) {
+                    File::delete($cvLogoPath);
+                }
             }
             $cv = $request->file('cv');
-            $cvName = time() . '.' . $cv->getClientOriginalExtension();
-            $cvPath = $cv->storeAs('CVs', $cvName, 'public');
-            $validatedData['cv'] = $cvPath;
+            $extention = $cv->getClientOriginalExtension();
+            $originalfilename = $cv->getClientOriginalName();
+            $filename = time() . $originalfilename . "." .$extention;
+            $cv->move(public_path('uploads/cv'), $filename);
+            $jobseeker->update(['cv'=>$filename]);
         }
-        try {
+        if ($request->has('profile_pic')) {
+            $request->validate([
+               "profile_pic" => "mimes:png,jpg,jpeg|max:2048",
+            ]);
+            if($jobseeker->profile_pic){
+                $profile_picLogoPath = public_path('uploads/profile_pic/' . $jobseeker->profile_pic);
+        
+                    
+                if (File::exists($profile_picLogoPath)) {
+                    File::delete($profile_picLogoPath);
+                }
+            }
+            $profile_pic = $request->file('profile_pic');
+            $extention = $profile_pic->getClientOriginalExtension();
+            $originalfilename = $profile_pic->getClientOriginalName();
+            $filename = time() . $originalfilename . "." .$extention;
+            $profile_pic->move(public_path('uploads/profile_pic'), $filename);
+            $jobseeker->update(['profile_pic'=>$filename]);
+        }
+      
+        
 
-            $jobseeker->update($validatedData);
-            $jobseeker->refresh();
+            $jobseeker->update([
+                'category' => isset($validatedData["category"])? $validatedData["category"]:$jobseeker->category,
+                'sub_category' => isset($validatedData["sub_category"])? $validatedData["sub_category"]:$jobseeker->sub_category,
+           
+                'phone_number' => isset($validatedData["phone_number"])? $validatedData["phone_number"]:$jobseeker->phone_number,
+                'about_me' => isset($validatedData["about_me"])? $validatedData["about_me"]:$jobseeker->about_me
+            ]);
 
             return response()->json([
                 "message" => "Successfully updated",
                 "jobseeker" => $jobseeker,
                 "user" => $user
             ], 200);
-        } catch (ValidationException $e) {
+        } catch (Exception $e) {
             return response()->json([
-                "error" => $e->getMessage(),
-            ], 422);
+                "success" => false,
+                "message" => $e->getMessage(),
+            ], 400);
         }
     }
-  
+
     public function delete(Request $request)
     {
 
@@ -116,67 +162,211 @@ class JobSeekerController extends Controller
 
         ], 200);
     }
-    public function applyJob(Request $request, $jobid){
-       try{
-        $user = $request->user();
-      $request->validate([
 
-            "cover_letter"=> 'required|mimes:,png,jpg,jpeg'
 
-        ]);
-       
-        if($request->has('cover_letter')){
-            $cover_letter = $request->file('cover_letter');
-            $extention = $cover_letter->getClientOriginalExtension();
-            $originalfilename = $cover_letter->getClientOriginalName();
-            $filename = time().$originalfilename.".".$extention;
-            $cover_letter->move(public_path('uploads'),$filename);
-        }
 
-        if (!$user->jobseeker) {
+    // application
+
+    public function applyJob(Request $request, $jobid)
+    {
+        try {
+            $user = $request->user();
+            if (!$user->jobseeker) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "jobseeker not registerd"
+                ], 400);
+            }
+            $job = Job::find($jobid);
+            if (!$job) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "No Job exist with this id",
+
+                ], 401);
+            }
+            $request->validate([
+                'cover_letter' => 'required|mimes:pdf,doc|max:2048'
+            ]);
+
+            if ($request->has('cover_letter')) {
+                $cover_letter = $request->file('cover_letter');
+                $extention = $cover_letter->getClientOriginalExtension();
+                $originalfilename = $cover_letter->getClientOriginalName();
+                $filename = time() . $originalfilename . "." . $extention;
+                $cover_letter->move(public_path('uploads/cover_letters'), $filename);
+            }
+
+
+            $application = Application::where(["job_id" => $jobid, "user_id" => $user->id])->first();
+
+            if ($application) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "You already applied to this Job",
+
+                ], 401);
+            }
+
+
+
+
+
+
+            $application = Application::create([
+                'job_id' => $jobid,
+                'user_id' => $user->id,
+                'cover_letter' => $filename
+            ]);
+
+            if ($application) {
+                return response()->json([
+                    "success" => true,
+                    "message" => "Job Applied successfully",
+
+                ], 200);
+            }
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
-                "message" => "jobseeker not registerd"
+                "message" => $e->getMessage(),
+
             ], 400);
         }
-        $job = Job::find($jobid);
-        if (!$job) {
-            return response()->json([
-                "success" => false,
-                "message" => "No Job exist with this id",
+    }
+    public function getApplications(Request $request)
+    {
+        try {
 
-            ], 401);
-        }
-        $application =Application::where(["$jobid"=>$jobid,"user_id"=>$user->id]);
-        if($application){
-            return response()->json([
-                "success" => false,
-                "message" => "You already applied to this Job",
+            $user = $request->user();
+            if (!$user->jobseeker) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "jobseeker not registerd"
+                ], 400);
+            }
 
-            ], 401);
-        } 
-        
-        
-                $application = Application::create(['job_id'=>$jobid,
-        'user_id'=>$user->id,
-        'cover_letter'=>$filename]);
-        
-        if($application){
+            $application = Application::where(["user_id" => $user->id])->get()->load(['job']);
+            if (!$application) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "No applications found",
+
+                ], 401);
+            }
             return response()->json([
                 "success" => true,
-                "image" =>$filename,
-                "message" => "Job Applied successfully",
-    
-            ], 200);
-        }
-       }
-       catch(Exception $e){
-        return response()->json([
-            "success" => false,
-            "message" => $e->getMessage(),
+                "applications" => $application,
 
-        ], 400);
-       }
-        
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
+        }
+    }
+
+
+
+    public function deleteApplication(Request $request, $appid)
+    {
+        try {
+
+
+
+
+            $user = $request->user();
+            if (!$user->jobseeker) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "jobseeker not registerd"
+                ], 400);
+            }
+
+            $application = Application::find($appid);
+            if (!$application) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "No applications found",
+
+                ], 401);
+            }
+            $coverLetterPath = public_path('uploads/cover_letters' . $application->cover_letter);
+            if (File::exists($coverLetterPath)) {
+
+                File::delete($coverLetterPath);
+            }
+            $application->delete();
+
+            return response()->json([
+                "success" => true,
+                "message" => "Application deleted",
+
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
+        }
+    }
+
+
+    public function updateApplication(Request $request, $appid)
+    {
+        try {
+            $user = $request->user();
+            if (!$user->jobseeker) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Jobseeker not registered"
+                ], 400);
+            }
+
+
+            $application = Application::find($appid);
+            if (!$application) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "No application found"
+                ], 404);
+            }
+
+
+            $request->validate([
+                'cover_letter' => 'nullable|mimes:pdf,doc|max:2048'
+            ]);
+
+
+            if ($request->has('cover_letter')) {
+
+                $coverLetterPath = public_path('uploads/cover_letters' . $application->cover_letter);
+                if (File::exists($coverLetterPath)) {
+                    File::delete($coverLetterPath);
+                }
+
+
+                $cover_letter = $request->file('cover_letter');
+                $extention = $cover_letter->getClientOriginalExtension();
+                $originalfilename = $cover_letter->getClientOriginalName();
+                $filename = time() . $originalfilename . "." . $extention;
+                $cover_letter->move(public_path('uploads'), $filename);
+
+                $application->update(['cover_letter' => $filename]);
+            }
+
+            return response()->json([
+                "success" => true,
+                "message" => "Application updated successfully"
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage()
+            ], 400);
+        }
     }
 }
