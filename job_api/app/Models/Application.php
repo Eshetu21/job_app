@@ -14,7 +14,8 @@ class Application extends Model
         'user_id',
         'status',
         'statement',
-        'cover_letter'
+        'cover_letter',
+        'cv'
     ];
 
     public function job(){

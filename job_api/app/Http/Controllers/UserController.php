@@ -9,6 +9,7 @@ use App\Models\User;
 use Dotenv\Exception\ValidationException as ExceptionValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -77,16 +78,30 @@ class UserController extends Controller
         $validatedData = $request->validated();
        
         try {
-            $user->update([
+            $updateData = [];
+            if($request->hasFile('profile_pic')) {
+
+                $profile_picLogoPath = public_path('uploads/users/profile_pic/' . $user->profile_pic);
+                if (File::exists($profile_picLogoPath)) {
+                    File::delete($profile_picLogoPath);
+                }
+                $profile_pic = $request->file('profile_pic');
+                $filenamep = time() . '_' . $profile_pic->getClientOriginalName();
+                $profile_pic->move(public_path('uploads/users/profile_pic'), $filenamep);
+                $updateData['profile_pic'] = $filenamep;
+            }
+            $user->update(array_merge($updateData,[
                 "firstname" => $validatedData["firstname"] ?? $user->firstname,
                 "lastname" => $validatedData["lastname"] ?? $user->lastname,
                 "email" => $validatedData["email"] ?? $user->email,
                 "age" => $validatedData["age"] ?? $user->age,
                 "gender" => $validatedData["gender"] ?? $user->gender,
-                "profile_pic" => $validatedData["profile_pic"] ?? $user->profile_pic,
+         
                 "about_me" => $validatedData["about_me"] ?? $user->about_me,
               
-            ]);
+            ]));
+
+
         } catch (ExceptionValidationException $e) {
         }
         return response()->json([
