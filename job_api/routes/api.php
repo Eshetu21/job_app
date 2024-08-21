@@ -43,11 +43,12 @@ Route::delete('delete', [UserController::class, "delete"])->middleware("auth:san
 Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"])->middleware("auth:sanctum");
 Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"])->middleware("auth:sanctum");
 Route::put('updatejobseeker', [JobSeekerController::class, "updatejobseeker"])->middleware("auth:sanctum");
+Route::put('updatecv', [JobSeekerController::class, "updatecv"])->middleware("auth:sanctum");
 Route::delete('deletejobseeker', [JobSeekerController::class, "delete"])->middleware("auth:sanctum");
 Route::post('applyjob/{jobid}', [JobSeekerController::class, "applyJob"])->middleware("auth:sanctum");
 Route::get('getapplications', [JobSeekerController::class, "getapplications"])->middleware("auth:sanctum");
 Route::delete('deleteapplications/{appid}', [JobSeekerController::class, "deleteApplication"])->middleware("auth:sanctum");
-Route::post('updateapplication/{appid}', [JobSeekerController::class, "updateApplication"])->middleware("auth:sanctum");
+// Route::post('updateapplication/{appid}', [JobSeekerController::class, "updateApplication"])->middleware("auth:sanctum");
 
 //PrivateClient +
 Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Company;
 use App\Models\Job;
 use Exception;
@@ -11,8 +12,6 @@ use Illuminate\Support\Facades\Validator;
 class CompanyController extends Controller
 {
 
-
-    
     public function createcompany(Request $request)
     {
 
@@ -35,7 +34,7 @@ class CompanyController extends Controller
                 $company_logo = $request->file('company_logo');
                 $extention = $company_logo->getClientOriginalExtension();
                 $originalfilename = $company_logo->getClientOriginalName();
-                $filename = time() . $originalfilename . "." .$extention;
+                $filename = time() . $originalfilename . "." . $extention;
                 $company_logo->move(public_path('uploads/company_logo'), $filename);
                 $validatedData["user_id"] = $user->id;
                 $validatedData["company_logo"] = $filename;
@@ -57,15 +56,13 @@ class CompanyController extends Controller
     {
         try {
             $user = $request->user();
-    
+
             if (!$user->company) {
                 return response()->json([
                     "success" => false,
                     "message" => "Company not registered",
                 ], 400);
             }
-    
-            
             $validatedData = Validator::make($request->all(), [
                 "company_name" => "nullable|string|unique:companies,company_name," . $user->company->id,
                 "company_logo" => "nullable|mimes:png,jpg,jpeg|max:2048",
@@ -73,47 +70,38 @@ class CompanyController extends Controller
                 "company_address" => "nullable|string",
                 "company_description" => "nullable|string",
             ]);
-    
+
             if ($validatedData->fails()) {
                 return response()->json([
                     "success" => false,
                     "message" => $validatedData->errors(),
                 ], 400);
             }
-    
+
             $company = $user->company;
-    
+
             if ($request->hasFile('company_logo')) {
-                
+
                 $companyLogoPath = public_path('uploads/company_logo/' . $company->company_logo);
-    
-                
                 if (File::exists($companyLogoPath)) {
                     File::delete($companyLogoPath);
                 }
-    
-                
                 $companyLogo = $request->file('company_logo');
                 $filename = time() . '_' . $companyLogo->getClientOriginalName();
                 $companyLogo->move(public_path('uploads/company_logo'), $filename);
-    
-                
                 $company->update(['company_logo' => $filename]);
             }
-    
-            
             $company->update([
                 "company_name" => $validatedData->getData()["company_name"] ?? $company->company_name,
                 "company_phone" => $validatedData->getData()["company_phone"] ?? $company->company_phone,
                 "company_address" => $validatedData->getData()["company_address"] ?? $company->company_address,
                 "company_description" => $validatedData->getData()["company_description"] ?? $company->company_description,
             ]);
-    
+
             return response()->json([
                 "message" => "Data updated successfully",
                 "updatedCompany" => $company,
             ], 200);
-    
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
@@ -121,7 +109,7 @@ class CompanyController extends Controller
             ], 400);
         }
     }
-    
+
     public function delete(Request $request)
     {
         try {
@@ -152,8 +140,6 @@ class CompanyController extends Controller
             ], 400);
         }
     }
-    
-
     public function companycreatejob(Request $request)
     {
         try {
@@ -222,8 +208,6 @@ class CompanyController extends Controller
             ], 400);
         }
     }
-
-    
     public function deleteJob(Request $request, $jobid)
     {
         try {
@@ -340,8 +324,6 @@ class CompanyController extends Controller
             ], 400);
         }
     }
-
-    
     public function rejectApplication(Request $request, $jobid, $appid)
     {
         try {
