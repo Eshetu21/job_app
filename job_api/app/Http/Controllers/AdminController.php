@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
-use App\Http\Requests\StoreAdminRequest;
-use App\Http\Requests\UpdateAdminRequest;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\JobSeeker;
@@ -13,10 +11,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Process;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator; 
 
 class AdminController extends Controller
 {

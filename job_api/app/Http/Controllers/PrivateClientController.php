@@ -9,11 +9,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PrivateClientController extends Controller
-{
+{   public function showprivateclient(Request $request){
+    $user = $request->user();
+    $privateclient = PrivateClient::with('user')->where("user_id",$user->id)->first();
+        if (!$user->privateclient) {
+            return response()->json([
+                "message" => "PrivateClient doesn't exists"
+            ], 400);
+        }
+        return response()->json([
+            "privateclient"=>$privateclient
+        ],200);
+}
     public function createprivateclient(Request $request)
     {
         $user = $request->user();
-        if ($user->PrivateClient) {
+        if ($user->privateclient) {
             return response()->json([
                 "message" => "PrivateClient already exists"
             ], 400);

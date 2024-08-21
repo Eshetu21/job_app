@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
+import 'package:job_app/Screens/PrivateClient/private_client_homepage.dart';
 
 class Profiles extends StatefulWidget {
   const Profiles({super.key});
@@ -18,7 +20,11 @@ class _ProfilesState extends State<Profiles> {
   final ProfileController _profileController = Get.put(ProfileController());
   final UserAuthenticationController _userAuthenticationController =
       Get.put(UserAuthenticationController());
+  final PrivateclientController _privateclientController =
+      Get.put(PrivateclientController());
   String selectedProfile = '';
+  bool showAddAcount = false;
+
   @override
   Widget build(BuildContext context) {
     print(_profileController.profiles);
@@ -134,100 +140,87 @@ class _ProfilesState extends State<Profiles> {
                                     }),
                               ),
                               "company"),
+                        if (showAddAcount)
+                          Column(
+                            children: [
+                              if (_profileController.profiles['jobseeker'] ==
+                                  null)
+                                _profileContainer(
+                                    ListTile(
+                                      leading: Image.asset(
+                                          "assets/icons/job_seeker.png",
+                                          width: 23,
+                                          color: Color(0xFFFF9228)
+                                              .withOpacity(0.4)),
+                                      title: Text("Job Seeker"),
+                                      subtitle: Text("Add account"),
+                                      trailing: Radio(
+                                          value: 'jobseeker',
+                                          groupValue: selectedProfile,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedProfile =
+                                                  value.toString();
+                                            });
+                                          }),
+                                    ),
+                                    "jobseeker"),
+                              if (_profileController
+                                      .profiles['privateclient'] ==
+                                  null)
+                                _profileContainer(
+                                    ListTile(
+                                      leading: Image.asset(
+                                          "assets/icons/private.png",
+                                          width: 28,
+                                          color: Color(0xFFFF9228)
+                                              .withOpacity(0.4)),
+                                      title: Text("Private Client"),
+                                      subtitle: Text("Add account"),
+                                      trailing: Radio(
+                                          value: 'private',
+                                          groupValue: selectedProfile,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedProfile =
+                                                  value.toString();
+                                            });
+                                          }),
+                                    ),
+                                    "privateclient"),
+                              if (_profileController.profiles['company'] ==
+                                  null)
+                                _profileContainer(
+                                    ListTile(
+                                      leading: Image.asset(
+                                          "assets/icons/company.png",
+                                          width: 28,
+                                          color: Color(0xFFFF9228)
+                                              .withOpacity(0.4)),
+                                      title: Text("Company"),
+                                      subtitle: Text("Add account"),
+                                      trailing: Radio(
+                                          value: 'company',
+                                          groupValue: selectedProfile,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedProfile =
+                                                  value.toString();
+                                            });
+                                          }),
+                                    ),
+                                    "company"),
+                            ],
+                          ),
                         if (_profileController.profiles['jobseeker'] == null ||
                             _profileController.profiles['privateclient'] ==
                                 null ||
                             _profileController.profiles['company'] == null)
                           GestureDetector(
                             onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: Colors.transparent,
-                                  builder: (context) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.6),
-                                        borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20)),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          if (_profileController
-                                                  .profiles['jobseeker'] ==
-                                              null)
-                                            _profileContainer(
-                                                ListTile(
-                                                  leading: Image.asset(
-                                                      "assets/icons/job_seeker.png",
-                                                      width: 23,
-                                                      color: Color(0xFFFF9228)
-                                                          .withOpacity(0.4)),
-                                                  title: Text("Job Seeker"),
-                                                  subtitle: Text("Add account"),
-                                                  trailing: Radio(
-                                                      value: 'jobseeker',
-                                                      groupValue:
-                                                          selectedProfile,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          selectedProfile =
-                                                              value.toString();
-                                                        });
-                                                      }),
-                                                ),
-                                                "jobseeker"),
-                                          if (_profileController
-                                                  .profiles['privateclient'] ==
-                                              null)
-                                            _profileContainer(
-                                                ListTile(
-                                                  leading: Image.asset(
-                                                      "assets/icons/private.png",
-                                                      width: 28,
-                                                      color: Color(0xFFFF9228)
-                                                          .withOpacity(0.4)),
-                                                  title: Text("Private Client"),
-                                                  subtitle: Text("Add account"),
-                                                  trailing: Radio(
-                                                      value: 'private',
-                                                      groupValue:
-                                                          selectedProfile,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          selectedProfile =
-                                                              value.toString();
-                                                        });
-                                                      }),
-                                                ),
-                                                "privateclient"),
-                                          if (_profileController
-                                                  .profiles['company'] ==
-                                              null)
-                                            _profileContainer(
-                                                ListTile(
-                                                  leading: Image.asset(
-                                                      "assets/icons/company.png",
-                                                      width: 28,
-                                                      color: Color(0xFFFF9228)
-                                                          .withOpacity(0.4)),
-                                                  title: Text("Company"),
-                                                  subtitle: Text("Add account"),
-                                                  trailing: Radio(
-                                                      value: 'company',
-                                                      groupValue:
-                                                          selectedProfile,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          selectedProfile =
-                                                              value.toString();
-                                                        });
-                                                      }),
-                                                ),
-                                                "company"),
-                                        ],
-                                      ),
-                                    );
-                                  });
+                              setState(() {
+                                showAddAcount = !showAddAcount;
+                              });
                             },
                             child: Container(
                               margin: EdgeInsets.all(20),
@@ -238,7 +231,10 @@ class _ProfilesState extends State<Profiles> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: Colors.grey.withOpacity(0.2)),
-                                  child: Text("Add Account",
+                                  child: Text(
+                                      showAddAcount
+                                          ? "My Accounts"
+                                          : "Add Account",
                                       style: GoogleFonts.poppins(
                                           color: Color(0xFF130160),
                                           fontWeight: FontWeight.w500)),
@@ -252,6 +248,14 @@ class _ProfilesState extends State<Profiles> {
                             if (selectedProfile == 'jobseeker') {
                               Get.off(JobSeekerHomepage());
                             }
+                            if (_profileController.profiles['privateclient'] ==
+                                null&&selectedProfile=="private") {
+                              _privateclientController.createprivateclient();
+                              print("Creating private client profile...");
+                            }
+
+                            print("Navigating to PrivateClientHomepage...");
+                            Get.off(PrivateClientHomepage());
                           },
                           child: Center(
                             child: Container(

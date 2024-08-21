@@ -19,12 +19,16 @@ return new class extends Migration
             $table->foreign('private_client_id')->references('id')->on('private_clients')->onDelete('cascade');
             $table->unsignedBigInteger('company_id')->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->string('job_title');
-            $table->string('job_location');
-            $table->double('job_salary')->nullable();
-
-            $table->date('deadline');
-            $table->text('job_description');
+            $table->string('title');
+            $table->string('site');
+            $table->string('type');
+            $table->string('sector');
+            $table->string('city');
+            $table->string('gender');
+            $table->string('location');
+            $table->double('salary')->nullable();
+            $table->string('deadline');
+            $table->text('description');
             $table->timestamps();
         });
     }
