@@ -37,8 +37,8 @@ class UserController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $validatedData = $request->validated();
         try {
+            $validatedData = $request->validated();
             $user = User::create([
                 "firstname" => $validatedData["firstname"],
                 "lastname" => $validatedData["lastname"],
@@ -48,50 +48,50 @@ class UserController extends Controller
             ]);
             $token = $user->createToken("job_portal")->plainTextToken;
             return response()->json([
+                "success" => true,
                 "name" => $user->firstname . " " . $user->lastname,
                 "token" => $token
             ], 201);
-        } catch (ValidationException $e) {
+        } catch (Exception $e) {
             return response()->json([
-                "message" => "Validation Failed",
-                "errors" => $e->errors()
-            ], 422);
+                "sucess" => false,
+                "message" => $e->getMessage()
+            ], 500);
         }
     }
-    public function changepassword(Request $request){
+    public function changepassword(Request $request)
+    {
         try {
             $user = $request->user();
-            $request->validate(['oldpassword'=>'required|string|min:6',"newpassword"=>'required|string|min:6']);
-            if(Hash::check($request->oldpassword,$user->password)){
-                $user->update(['password'=>Hash::make($request->newpassword)]);
+            $request->validate(['oldpassword' => 'required|string|min:6', "newpassword" => 'required|string|min:6']);
+            if (Hash::check($request->oldpassword, $user->password)) {
+                $user->update(['password' => Hash::make($request->newpassword)]);
                 $user->save();
                 return response()->json([
                     "success" => true,
                     "message" => "Password Updated",
-    
+
                 ], 200);
-            }
-            else{
+            } else {
                 return response()->json([
                     "success" => false,
                     "message" => "Old password is incorrect",
-    
+
                 ], 400);
             }
-
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
 
-            ], 400);
+            ], 500);
+        }
     }
-}
 
     public function checkpincode(Request $request)
     {
         $user = $request->user();
-        if($user->email_verified){
+        if ($user->email_verified) {
             return response()->json([
                 "success" => false,
                 "message" => "You already verified",
@@ -99,14 +99,14 @@ class UserController extends Controller
             ], 400);
         }
 
-        
+
         $request->validate([
-            'pincode'=>'required|integer'
+            'pincode' => 'required|integer'
         ]);
         $user = $request->user();
         $pin = $request->pincode;
-        
-        if($user->email_verification_pincode==null){
+
+        if ($user->email_verification_pincode == null) {
             return response()->json([
                 "success" => false,
                 "message" => "Not requested",
@@ -114,7 +114,7 @@ class UserController extends Controller
             ], 400);
         }
 
-        if($user->pincode_expire<Carbon::now()->timestamp){
+        if ($user->pincode_expire < Carbon::now()->timestamp) {
             return response()->json([
                 "success" => false,
                 "message" => "Pincode Expired",
@@ -122,8 +122,8 @@ class UserController extends Controller
             ], 400);
         }
         if ((int)$pin === (int)$user->email_verification_pincode) {
-           
-            $user->update(["email_verification_pincode"=>null,"pincode_expire"=>Carbon::now()->format('Uu')-1000,"email_verified" => true]);
+
+            $user->update(["email_verification_pincode" => null, "pincode_expire" => Carbon::now()->format('Uu') - 1000, "email_verified" => true]);
 
             return response()->json([
                 "success" => true,
@@ -136,30 +136,39 @@ class UserController extends Controller
             "success" => false,
             "message" => "Invalid Pincode",
 
-        ], 200);
+        ], 400);
     }
 
     public function login(LoginRequest $request)
     {
-        $validatedData = $request->validated();
-        $user = User::whereemail($request->email)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                "error" => "Invalid Credientials"
-            ], 401);
-        }
+        try {
+            $validatedData = $request->validated();
+            $user = User::whereemail($request->email)->first();
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    "error" => "Invalid Credientials"
+                ], 401);
+            }
 
-        $token = $user->createToken("job_portal")->plainTextToken;
-        return response()->json([
-            "message" => $user,
-            "token" => $token
-        ], 200);
+            $token = $user->createToken("job_portal")->plainTextToken;
+            return response()->json([
+                "success" => true,
+                "user" => $user,
+                "token" => $token
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 500);
+        }
     }
 
     public function sendpin(Request $request)
     {
         $user = $request->user();
-        if($user->email_verified){
+        if ($user->email_verified) {
             return response()->json([
                 "success" => false,
                 "message" => "You already verified",
@@ -170,8 +179,8 @@ class UserController extends Controller
         try {
             $pin = rand(100000, 999999);
             $pincode_expire = Carbon::now()->addMinutes(5)->timestamp;
-          
-            $user->update(['email_verification_pincode'=>$pin,"pincode_expire"=> $pincode_expire]); 
+
+            $user->update(['email_verification_pincode' => $pin, "pincode_expire" => $pincode_expire]);
             $user->save();
             Mail::to($user->email)->send(new SendPin($pin));
             return response()->json(["success" => true, "messasge" => "Pincode send"]);
@@ -180,7 +189,7 @@ class UserController extends Controller
                 "success" => false,
                 "message" => $e->getMessage(),
 
-            ], 400);
+            ], 500);
         }
     }
 
@@ -202,6 +211,9 @@ class UserController extends Controller
                 $profile_pic->move(public_path('uploads/users/profile_pic'), $filenamep);
                 $updateData['profile_pic'] = $filenamep;
             }
+            if($user->email){
+                $updateData['email_verified'] = 0;
+            }
             $user->update(array_merge($updateData, [
                 "firstname" => $validatedData["firstname"] ?? $user->firstname,
                 "lastname" => $validatedData["lastname"] ?? $user->lastname,
@@ -212,24 +224,58 @@ class UserController extends Controller
                 "about_me" => $validatedData["about_me"] ?? $user->about_me,
 
             ]));
-        } catch (ExceptionValidationException $e) {
+            return response()->json([
+                "success" => true,
+                "message" => "User updated successfully",
+                "user" => $user
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 500);
         }
-        return response()->json([
-            "message" => "Data updated successfully",
-            "user" => $user
-        ], 200);
     }
 
     public function delete(Request $request)
     {
+        try {
 
-        $request->user()->delete();
+            $request->user()->delete();
 
-        $user = $request->user();
-        $user->delete();
+            $user = $request->user();
+            if($user->profile_pic){
+            $profile_picLogoPath = public_path('uploads/users/profile_pic/' . $user->profile_pic);
+            if (File::exists($profile_picLogoPath)) {
+                File::delete($profile_picLogoPath);
+            }}
+            $user->delete();
 
-        return response()->json([
-            "message" => "No content"
-        ]);
+            return response()->json([
+                "success" => true,
+                "message" => "User deleted"
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 500);
+        }
+    }
+    public function logout(Request $request) {
+        try{
+            $user = $request->user();
+            $user->tokens()->delete();
+            return response()->json(['sucess'=>true,'message' => 'Logged out'], 200);
+        }
+        catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 500); 
+        }
     }
 }

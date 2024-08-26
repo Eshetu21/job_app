@@ -17,83 +17,105 @@ use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Sanctum;
 
+// ADMIN ,JOB SEEKER, COMPANY AND PC aPPLICATION
 
+
+// User 
+// all routes works fine
 Route::post('register', [UserController::class, "register"]);
 Route::post('login', [UserController::class, "login"]);
-
-
-
 Route::middleware("auth:sanctum")->group(function () {
-    // user
-    Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
+    Route::post('logout', [UserController::class, "logout"]);
+    Route::get("profile", [UserController::class, "getuserprofile"]);
     Route::post('checkpincode', [UserController::class, "checkpincode"]);
-    Route::post('changepassword', [UserController::class, "changepassword"]);
-    Route::get('/user', function (Request $request) {
-        return $request->user();
+    Route::get('user', function (Request $request) {
+        return response()->json(["success"=>true,"user"=>$request->user()]);
     });
-    //admin
-    Route::post('/admin/login', [AdminController::class, 'login']);
-    Route::post('/admin/register', [AdminController::class, 'register']);
-    Route::get('/admin/statistic', [AdminController::class, 'statistic']);
-    Route::delete('/admin/deletecompany/{companyp}', [AdminController::class, 'deletecompanyA']);
-    Route::delete('/admin/deleteprivateclient/{privateclientp}', [AdminController::class, 'deletePrivateClientA']);
-    Route::delete('/admin/deleteuser/{userp}', [AdminController::class, 'deleteuserA']);
-    Route::delete('/admin/deletejobseeker/{userp}', [AdminController::class, 'dseleteJobSeekerA']);
-});
+    Route::put('update', [UserController::class, "update"]);
+    Route::delete('delete', [UserController::class, "delete"]);
+    Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
+    Route::post('changepassword', [UserController::class, "changepassword"]);
 
-//PrivateClient +
-Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");
-Route::get('showprivateclient', [PrivateClientController::class, "showprivateclient"])->middleware("auth:sanctum");
-Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatejob"])->middleware("auth:sanctum");
-Route::put('privatecreateupdate', [PrivateClientController::class, "update"])->middleware("auth:sanctum");
-Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"])->middleware("auth:sanctum");
+
+    // admin 
+    Route::prefix('admin')->group(function () {
+
+
+        Route::post('login', [AdminController::class, 'login']);
+        Route::post('register', [AdminController::class, 'register']);
+        Route::get('statistic', [AdminController::class, 'statistic']);
+        Route::delete('deletec/{companyId}', [AdminController::class, 'deletecompanyA']);
+        Route::delete('deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA']);
+        Route::delete('deleteu/{userId}', [AdminController::class, 'deleteuserA']);
+        Route::delete('deletejs/{jobseekerId}', [AdminController::class, 'deleteJobSeekerA']);
+    });
+});
 
 Route::middleware("auth:sanctum", 'verifiedemail')->group(
     function () {
-        // user
-        Route::put('update', [UserController::class, "update"]);
-        Route::delete('delete', [UserController::class, "delete"]);
-        Route::get("profile", [UserController::class, "getuserprofile"]);
+
+
 
 
         // jobseeker
-        Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"]);
-        Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"]);
-        Route::put('updatejobseeker', [JobSeekerController::class, "updatejobseeker"]);
-        Route::put('updatecv', [JobSeekerController::class, "updatecv"]);
-        Route::delete('deletejobseeker', [JobSeekerController::class, "delete"]);
-        Route::post('applyjob/{jobid}', [JobSeekerController::class, "applyJob"]);
-        Route::get('getapplications', [JobSeekerController::class, "getapplications"]);
-        Route::delete('deleteapplications/{appid}', [JobSeekerController::class, "deleteApplication"]);
+        Route::prefix('js')->group(function () {
+            Route::post('create', [JobSeekerController::class, "createjobseeker"]);
+            Route::get('get', [JobSeekerController::class, "showjobseeker"]);
+            Route::put('update', [JobSeekerController::class, "updatejobseeker"]);
+            Route::put('updatecv', [JobSeekerController::class, "updatecv"]);
+            Route::delete('delete', [JobSeekerController::class, "delete"]);
+            Route::prefix('app')->group(function () { 
+                Route::post('apply/{jobid}', [JobSeekerController::class, "applyJob"]);
+                Route::get('get', [JobSeekerController::class, "getapplications"]);
+                Route::delete('delete/{appid}', [JobSeekerController::class, "deleteApplication"]);
+            });
+             });
 
 
-        // Route::post('updateapplication/{appid}', [JobSeekerController::class, "updateApplication"]);
-
-        //PrivateClient +
-        Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"]);
-        Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatejob"]);
-        Route::put('privatecreateupdate', [PrivateClientController::class, "update"]);
-        Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"]);
-
-        //Company +
-        Route::post('createcompany', [CompanyController::class, 'createcompany']);
-        Route::post('companycreatejob', [CompanyController::class, 'companycreatejob']);
-        Route::put('companyupdate', [CompanyController::class, "update"]);
-        Route::delete('companydelete', [CompanyController::class, "delete"]);
-        Route::get('getmyjobs', [CompanyController::class, "getMyJobs"]);
-        Route::get('getmyjobbyid/{jobid}', [CompanyController::class, "getJobbyId"]);
-        Route::delete('deletejob/{jobid}', [CompanyController::class, "deleteJob"]);
-        Route::put('updatejob/{jobid}', [CompanyController::class, "updateJob"]);
-        Route::put('rejectapp/{jobid}/{appid}', [CompanyController::class, "rejectApplication"]);
-        Route::put('acceptapp/{jobid}/{appid}', [CompanyController::class, "acceptApplication"]);
-        Route::get('getappbyid/{jobid}/{appid}', [CompanyController::class, "getAppById"]);
-        Route::get('getallapp/{jobid}', [CompanyController::class, "getAllApp"]);
-
+        //private client 
+        Route::prefix('pc')->group(function () {
+            Route::post('create', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");
+            Route::get('get', [PrivateClientController::class, "showprivateclient"])->middleware("auth:sanctum");
+            Route::put('update', [PrivateClientController::class, "update"])->middleware("auth:sanctum");
+            Route::delete('delete', [PrivateClientController::class, "delete"])->middleware("auth:sanctum");
+            Route::prefix('job')->group(function () {
+                Route::get('get', [PrivateClientController::class, "getMyJobs"]);
+                Route::get('get/{jobid}', [PrivateClientController::class, "getJobbyId"]);
+                Route::post('create', [PrivateClientController::class, 'privateclientcreatejob']);
+                Route::delete('delete/{jobid}', [PrivateClientController::class, "deleteJob"]);
+                Route::put('update/{jobid}', [PrivateClientController::class, "updateJob"]);
+            });
+            Route::prefix('app')->group(function () {
+                Route::put('reject/{jobid}/{appid}', [PrivateClientController::class, "rejectApplication"]);
+                Route::put('accept/{jobid}/{appid}', [PrivateClientController::class, "acceptApplication"]);
+                Route::get('get/{jobid}/{appid}', [PrivateClientController::class, "getAppById"]);
+                Route::get('get/{jobid}', [PrivateClientController::class, "getAllApp"]);
+            });
+        });
 
 
 
-        // job +
+        //Company
+        Route::prefix('c')->group(function () {
+            Route::post('create', [CompanyController::class, 'createcompany']);
+            Route::get('get', [CompanyController::class, "showcompany"])->middleware("auth:sanctum");
+            Route::put('update', [CompanyController::class, "update"]);
+            Route::delete('delete', [CompanyController::class, "delete"]);
+            Route::prefix('job')->group(function () {
+                Route::get('get', [CompanyController::class, "getMyJobs"]);
+                Route::get('get/{jobid}', [CompanyController::class, "getJobbyId"]);
+                Route::post('create', [CompanyController::class, 'companycreatejob']);
+                Route::delete('delete/{jobid}', [CompanyController::class, "deleteJob"]);
+                Route::put('update/{jobid}', [CompanyController::class, "updateJob"]);
+            });
 
+            Route::prefix('app')->group(function () {
+                Route::put('reject/{jobid}/{appid}', [CompanyController::class, "rejectApplication"]);
+                Route::put('accept/{jobid}/{appid}', [CompanyController::class, "acceptApplication"]);
+                Route::get('get/{jobid}/{appid}', [CompanyController::class, "getAppById"]);
+                Route::get('get/{jobid}', [CompanyController::class, "getAllApp"]);
+            });
+        });
 
         //Education
         Route::post('addeducation/{id}', [EducationController::class, 'addeducation']);;
@@ -114,10 +136,11 @@ Route::middleware("auth:sanctum", 'verifiedemail')->group(
         //Language
         Route::get("showlanguage", [LanguageController::class, "showlanguage"]);
         Route::post("updatelanguage/{id}", [LanguageController::class, "updatelanguage"]);
-
-        Route::delete('deletejob/{type}/{id}', [JobController::class, 'deletejob']);
-        Route::put('editjob/{type}/{id}', [JobController::class, 'editjob']);
     }
 );
-Route::get('fetchjobs', [JobController::class, 'fetchjobs']);
-Route::get('fetchjob/{id}', [JobController::class, 'fetchjob']);
+
+//jobs
+Route::prefix('job')->group(function () {
+    Route::get('get', [JobController::class, 'fetchjobs']);
+    Route::get('get/{id}', [JobController::class, 'fetchjob']);
+});

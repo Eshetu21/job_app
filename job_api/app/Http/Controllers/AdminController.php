@@ -228,9 +228,9 @@ class AdminController extends Controller
         }
     }
 
-    public function deletePrivateClientA(Request $request,  $privateclientp)
+    public function deletePrivateClientA(Request $request,  $privateclientId)
     {
-        $privateclient = PrivateClient::find($privateclientp);
+        $privateclient = PrivateClient::find($privateclientId);
         if (!$privateclient) {
             return response()->json([
                 "success" => false,
@@ -265,9 +265,9 @@ class AdminController extends Controller
             ], 200);
         }
     }
-    public function deleteCompanyA(Request $request,  $companyp)
+    public function deleteCompanyA(Request $request,  $companyId)
     {
-        $company = Company::find($companyp);
+        $company = Company::find($companyId);
         if (!$company) {
             return response()->json([
                 "success" => false,
@@ -305,9 +305,9 @@ class AdminController extends Controller
         }
     }
 
-    public function deleteUserA(Request $request,  $userp)
+    public function deleteUserA(Request $request,  $userId)
     {
-        $user = User::find($userp);
+        $user = User::find($userId);
         if (!$user) {
             return response()->json([
                 "success" => false,
@@ -334,9 +334,9 @@ class AdminController extends Controller
         }
     }
 
-    public function deleteJobSeekerA(Request $request,  $jsp)
+    public function deleteJobSeekerA(Request $request,  $jobseekerId)
     {
-        $jobseeker = JobSeeker::find($jsp);
+        $jobseeker = JobSeeker::find($jobseekerId);
         if (!$jobseeker) {
             return response()->json([
                 "success" => false,

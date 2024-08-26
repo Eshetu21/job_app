@@ -12,11 +12,17 @@ class Job extends Model
     protected $fillable = [
         'private_client_id',
         'company_id',
-        'job_title',
-        'job_location',
-        'job_salary',    
+        'title' ,
+        'site' ,
+        'type' ,
+        'sector' ,
+        'city' ,
+        'field',
+        'gender' ,
+        'location' ,
+        'salary' ,
         'deadline',
-        'job_description'
+        'description'
     ];
 
     public function user()
