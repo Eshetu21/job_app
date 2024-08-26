@@ -60,6 +60,15 @@ class UserController extends Controller
     }
     public function checkpincode(Request $request)
     {
+        $user = $request->user();
+        if($user->email_verified){
+            return response()->json([
+                "success" => false,
+                "message" => "You already verified",
+
+            ], 400);
+        }
+
         
         $request->validate([
             'pincode'=>'required|integer'

@@ -22,7 +22,7 @@ Route::post('register', [UserController::class, "register"]);
 Route::post('login', [UserController::class, "login"]);
 
 
-<<<<<<< HEAD
+
 Route::middleware("auth:sanctum")->group(function () {
     // user
     Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
@@ -39,14 +39,13 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::delete('/admin/deleteuser/{userp}', [AdminController::class, 'deleteuserA']);
     Route::delete('/admin/deletejobseeker/{userp}', [AdminController::class, 'dseleteJobSeekerA']);
 });
-=======
+
 //PrivateClient +
 Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"])->middleware("auth:sanctum");
 Route::get('showprivateclient', [PrivateClientController::class, "showprivateclient"])->middleware("auth:sanctum");
 Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatejob"])->middleware("auth:sanctum");
 Route::put('privatecreateupdate', [PrivateClientController::class, "update"])->middleware("auth:sanctum");
 Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"])->middleware("auth:sanctum");
->>>>>>> 6d9f34ee536b44d518f53f56c8d5c41f7ac7713e
 
 Route::middleware("auth:sanctum", 'verifiedemail')->group(
     function () {
