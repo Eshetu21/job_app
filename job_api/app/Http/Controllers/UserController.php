@@ -58,6 +58,36 @@ class UserController extends Controller
             ], 422);
         }
     }
+    public function changepassword(Request $request){
+        try {
+            $user = $request->user();
+            $request->validate(['oldpassword'=>'required|string|min:6',"newpassword"=>'required|string|min:6']);
+            if(Hash::check($request->oldpassword,$user->password)){
+                $user->update(['password'=>Hash::make($request->newpassword)]);
+                $user->save();
+                return response()->json([
+                    "success" => true,
+                    "message" => "Password Updated",
+    
+                ], 200);
+            }
+            else{
+                return response()->json([
+                    "success" => false,
+                    "message" => "Old password is incorrect",
+    
+                ], 400);
+            }
+
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
+    }
+}
+
     public function checkpincode(Request $request)
     {
         $user = $request->user();

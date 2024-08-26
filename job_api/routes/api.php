@@ -27,6 +27,7 @@ Route::middleware("auth:sanctum")->group(function () {
     // user
     Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
     Route::post('checkpincode', [UserController::class, "checkpincode"]);
+    Route::post('changepassword', [UserController::class, "changepassword"]);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
