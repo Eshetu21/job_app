@@ -17,12 +17,16 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('email')->unique();
             $table->integer('age')->nullable();
+            $table->integer('email_verification_pincode')->nullable();
+            $table->bigInteger('pincode_expire')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->string('address')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('email_verified')->default(false);
             $table->string('password');
+
             $table->string('profile_pic')->nullable();
             $table->rememberToken();
+            
             $table->timestamps();
         });
 

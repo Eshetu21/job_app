@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest\LoginRequest;
 use App\Http\Requests\UserRequest\RegisterRequest;
 use App\Http\Requests\UserRequest\UpdateRequest;
+use App\Mail\SendPin;
 use App\Models\User;
+use Carbon\Carbon;
 use Dotenv\Exception\ValidationException as ExceptionValidationException;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 
@@ -53,6 +58,47 @@ class UserController extends Controller
             ], 422);
         }
     }
+    public function checkpincode(Request $request)
+    {
+        
+        $request->validate([
+            'pincode'=>'required|integer'
+        ]);
+        $user = $request->user();
+        $pin = $request->pincode;
+        
+        if($user->email_verification_pincode==null){
+            return response()->json([
+                "success" => false,
+                "message" => "Not requested",
+
+            ], 400);
+        }
+
+        if($user->pincode_expire<Carbon::now()->timestamp){
+            return response()->json([
+                "success" => false,
+                "message" => "Pincode Expired",
+
+            ], 400);
+        }
+        if ((int)$pin === (int)$user->email_verification_pincode) {
+           
+            $user->update(["email_verification_pincode"=>null,"pincode_expire"=>Carbon::now()->format('Uu')-1000,"email_verified" => true]);
+
+            return response()->json([
+                "success" => true,
+                "message" => "Email verified",
+
+            ], 200);
+        }
+
+        return response()->json([
+            "success" => false,
+            "message" => "Invalid Pincode",
+
+        ], 200);
+    }
 
     public function login(LoginRequest $request)
     {
@@ -71,15 +117,42 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function sendpin(Request $request)
+    {
+        $user = $request->user();
+        if($user->email_verified){
+            return response()->json([
+                "success" => false,
+                "message" => "You already verified",
+
+            ], 400);
+        }
+
+        try {
+            $pin = rand(100000, 999999);
+            $pincode_expire = Carbon::now()->addMinutes(5)->timestamp;
+          
+            $user->update(['email_verification_pincode'=>$pin,"pincode_expire"=> $pincode_expire]); 
+            $user->save();
+            Mail::to($user->email)->send(new SendPin($pin));
+            return response()->json(["success" => true, "messasge" => "Pincode send"]);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
+        }
+    }
 
     public function update(UpdateRequest $request)
     {
         $user = $request->user();
         $validatedData = $request->validated();
-       
+
         try {
             $updateData = [];
-            if($request->hasFile('profile_pic')) {
+            if ($request->hasFile('profile_pic')) {
 
                 $profile_picLogoPath = public_path('uploads/users/profile_pic/' . $user->profile_pic);
                 if (File::exists($profile_picLogoPath)) {
@@ -90,18 +163,16 @@ class UserController extends Controller
                 $profile_pic->move(public_path('uploads/users/profile_pic'), $filenamep);
                 $updateData['profile_pic'] = $filenamep;
             }
-            $user->update(array_merge($updateData,[
+            $user->update(array_merge($updateData, [
                 "firstname" => $validatedData["firstname"] ?? $user->firstname,
                 "lastname" => $validatedData["lastname"] ?? $user->lastname,
                 "email" => $validatedData["email"] ?? $user->email,
                 "age" => $validatedData["age"] ?? $user->age,
                 "gender" => $validatedData["gender"] ?? $user->gender,
-         
+
                 "about_me" => $validatedData["about_me"] ?? $user->about_me,
-              
+
             ]));
-
-
         } catch (ExceptionValidationException $e) {
         }
         return response()->json([
