@@ -1,28 +1,29 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, avoid_unnecessary_containers, sized_box_for_whitespace, invalid_use_of_protected_member
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/applications_page.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/explore_page.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
-import 'package:job_app/Screens/PrivateClient/private_client_homepage.dart';
+import 'package:job_app/Screens/Job/add_job.dart';
+import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
+import 'package:job_app/Screens/PrivateClient/Privateclient/private_applications.dart';
+import 'package:job_app/Screens/PrivateClient/Privateclient/private_jobs.dart';
+import 'package:job_app/Screens/PrivateClient/Privateclient/private_profile.dart';
 import 'package:job_app/Screens/Profiles/profiles.dart';
 
-class JobSeekerHomepage extends StatefulWidget {
-  const JobSeekerHomepage({super.key});
+class PrivateClientHomepage extends StatefulWidget {
+  const PrivateClientHomepage({super.key});
 
   @override
-  State<JobSeekerHomepage> createState() => _JobSeekerHomepageState();
+  State<PrivateClientHomepage> createState() => _PrivateClientHomepageState();
 }
 
-class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
+class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
   final JobSeekerController _jobSeekerController =
       Get.put(JobSeekerController());
   final ProfileController _profileController = Get.put(ProfileController());
-  String selectedProfile = 'jobseeker';
+  String selectedProfile = 'privateclient';
   int currentindex = 0;
   final PageController _pageController = PageController();
   @override
@@ -43,10 +44,11 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
           children: [
             Row(
               children: [
-                Text("Welcome",
+                Text("My Job Posts",
                     style: GoogleFonts.poppins(
                         fontSize: 24, color: Color(0xFFFF9228))),
                 Spacer(),
+                Icon(Icons.settings_rounded),
                 SizedBox(width: 10),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -78,111 +80,7 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                       fontSize: 22))),
                                         ),
                                         if (_profileController
-                                                .profiles["jobseeker"] !=
-                                            null)
-                                          _profileContainer(
-                                              ListTile(
-                                                leading: Image.asset(
-                                                  "assets/icons/job_seeker.png",
-                                                  width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
-                                                ),
-                                                title: Text(
-                                                  _profileController.profiles[
-                                                                  'jobseeker']
-                                                              ['user']
-                                                          ['firstname'] +
-                                                      " " +
-                                                      _profileController
-                                                                  .profiles[
-                                                              'jobseeker']
-                                                          ['user']['lastname'],
-                                                ),
-                                                subtitle: Text("Job Seeker"),
-                                                trailing: Radio(
-                                                  value: 'jobseeker',
-                                                  groupValue: selectedProfile,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedProfile =
-                                                          value.toString();
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              "jobseeker",
-                                              () {}),
-                                        if (_profileController
-                                                .profiles["privateclient"] !=
-                                            null)
-                                          _profileContainer(
-                                              ListTile(
-                                                leading: Image.asset(
-                                                  "assets/icons/private.png",
-                                                  width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
-                                                ),
-                                                title: Text(
-                                                  _profileController.profiles[
-                                                              'jobseeker'][
-                                                          'user']['firstname'] +
-                                                      " " +
-                                                      _profileController
-                                                                  .profiles[
-                                                              'jobseeker']
-                                                          ['user']['lastname'],
-                                                ),
-                                                subtitle:
-                                                    Text("Private Client"),
-                                                trailing: Radio(
-                                                  value: 'privateclient',
-                                                  groupValue: selectedProfile,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedProfile =
-                                                          value.toString();
-                                                      if (selectedProfile ==
-                                                          "privateclient") {
-                                                        Get.offAll(
-                                                            PrivateClientHomepage());
-                                                      }
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              "private", () {
-                                            Get.offAll(PrivateClientHomepage());
-                                          }),
-                                        if (_profileController
-                                                .profiles["company"] !=
-                                            null)
-                                          _profileContainer(
-                                              ListTile(
-                                                leading: Image.asset(
-                                                  "assets/icons/company.png",
-                                                  width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
-                                                ),
-                                                title: Text("company"),
-                                                subtitle: Text("Company"),
-                                                trailing: Radio(
-                                                  value: 'company',
-                                                  groupValue: selectedProfile,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedProfile =
-                                                          value.toString();
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              "company",
-                                              () {}),
-                                        if (_profileController.profiles[
-                                                    "privateclient"] ==
+                                                    .profiles["jobseeker"] ==
                                                 null &&
                                             _profileController
                                                     .profiles["company"] ==
@@ -233,6 +131,110 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                               ],
                                             ),
                                           ),
+                                        if (_profileController
+                                                .profiles["jobseeker"] !=
+                                            null)
+                                          _profileContainer(
+                                              ListTile(
+                                                leading: Image.asset(
+                                                  "assets/icons/job_seeker.png",
+                                                  width: 28,
+                                                  color: Color(0xFFFF9228)
+                                                      .withOpacity(0.4),
+                                                ),
+                                                title: Text(
+                                                  _profileController.profiles[
+                                                                  'jobseeker']
+                                                              ['user']
+                                                          ['firstname'] +
+                                                      " " +
+                                                      _profileController
+                                                                  .profiles[
+                                                              'jobseeker']
+                                                          ['user']['lastname'],
+                                                ),
+                                                subtitle: Text("Job Seeker"),
+                                                trailing: Radio(
+                                                  value: 'jobseeker',
+                                                  groupValue: selectedProfile,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      selectedProfile =
+                                                          value.toString();
+                                                      if (selectedProfile ==
+                                                          "jobseeker") {
+                                                        Get.offAll(
+                                                            JobSeekerHomepage());
+                                                      }
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                              "jobseeker", () {
+                                            Get.offAll(JobSeekerHomepage());
+                                          }),
+                                        if (_profileController
+                                                .profiles["privateclient"] !=
+                                            null)
+                                          _profileContainer(
+                                              ListTile(
+                                                leading: Image.asset(
+                                                  "assets/icons/private.png",
+                                                  width: 28,
+                                                  color: Color(0xFFFF9228)
+                                                      .withOpacity(0.4),
+                                                ),
+                                                title: Text(
+                                                  _profileController.profiles[
+                                                              'jobseeker'][
+                                                          'user']['firstname'] +
+                                                      " " +
+                                                      _profileController
+                                                                  .profiles[
+                                                              'jobseeker']
+                                                          ['user']['lastname'],
+                                                ),
+                                                subtitle:
+                                                    Text("Private Client"),
+                                                trailing: Radio(
+                                                  value: 'privateclient',
+                                                  groupValue: selectedProfile,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      selectedProfile =
+                                                          value.toString();
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                              "private",
+                                              () {}),
+                                        if (_profileController
+                                                .profiles["company"] !=
+                                            null)
+                                          _profileContainer(
+                                              ListTile(
+                                                leading: Image.asset(
+                                                  "assets/icons/company.png",
+                                                  width: 28,
+                                                  color: Color(0xFFFF9228)
+                                                      .withOpacity(0.4),
+                                                ),
+                                                title: Text("company"),
+                                                subtitle: Text("Company"),
+                                                trailing: Radio(
+                                                  value: 'company',
+                                                  groupValue: selectedProfile,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      selectedProfile =
+                                                          value.toString();
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                              "company",
+                                              () {}),
                                       ],
                                     ],
                                   ),
@@ -246,48 +248,7 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                 )
               ],
             ),
-            Obx(() {
-              if (_jobSeekerController.jobseeker.isEmpty) {
-                return FutureBuilder(
-                    future: _jobSeekerController.getJobSeeker(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text("Error ${snapshot.error}");
-                      } else if (snapshot.hasData) {
-                        var jobseekerData =
-                            snapshot.data as Map<String, dynamic>;
-                        _jobSeekerController.jobseeker.value = jobseekerData;
-                        String firstname =
-                            jobseekerData["jobseeker"]["user"]["firstname"];
-                        return Text(
-                          firstname,
-                        );
-                      } else {
-                        return Text("No data found");
-                      }
-                    });
-              } else {
-                var jobSeekerData = _jobSeekerController.jobseeker;
-                String firstname =
-                    jobSeekerData["jobseeker"]["user"]["firstname"];
-                return Text(firstname,
-                    style: GoogleFonts.poppins(fontSize: 20));
-              }
-            }),
             SizedBox(height: 15),
-            TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide.none),
-                  hintText: "Search for jobs...",
-                  hintStyle: GoogleFonts.poppins(),
-                  prefixIcon: Icon(Icons.search_outlined),
-                  fillColor: Colors.white.withOpacity(0.7),
-                  filled: true),
-            ),
             Expanded(
               child: PageView(
                 controller: _pageController,
@@ -296,18 +257,27 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                     currentindex = index;
                   });
                 },
-                children: [
-                  ExplorePage(),
-                  ApplicationPage(),
-                ],
+                children: [PrivateJobs(), PrivateApplications()],
               ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                  margin: EdgeInsets.only(bottom: 30, right: 10),
+                  child: FloatingActionButton(
+                      backgroundColor: Color(0xFFFF9228),
+                      child: Icon(Icons.add, color: Colors.white),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => AddJob()));
+                      })),
             ),
             BottomNavigationBar(
               currentIndex: currentindex,
               onTap: (index) {
                 if (index == 2) {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => JobseekerProfile()));
+                      builder: (context) => PrivateProfile()));
                 } else {
                   setState(() {
                     currentindex = index;
@@ -317,12 +287,12 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
               },
               items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.explore),
-                  label: 'Explore',
+                  icon: Icon(Icons.work),
+                  label: 'My Jobs',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.description),
-                  label: 'Applications',
+                  label: 'My Applications',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),

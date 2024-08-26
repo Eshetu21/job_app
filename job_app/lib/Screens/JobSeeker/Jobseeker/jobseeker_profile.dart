@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/job_seeker_language.dart';
 import 'package:job_app/Widgets/JobSeeker/fetch_education.dart';
 import 'package:job_app/Widgets/JobSeeker/fetch_experience.dart';
 import 'package:job_app/Widgets/JobSeeker/fetch_language.dart';
@@ -54,72 +53,92 @@ class _JobseekerProfileState extends State<JobseekerProfile> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CircleAvatar(
-                                    radius: 45,
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.2),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                Row(children: [
+                                  Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      margin:
+                                          EdgeInsets.only(right: 20, top: 20),
+                                      padding: EdgeInsets.all(16),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                                _profileController
+                                                        .profiles["jobseeker"]
+                                                    ["user"]["firstname"][0],
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 50)),
+                                            Text(
+                                                _profileController
+                                                        .profiles["jobseeker"]
+                                                    ["user"]["lastname"][0],
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 50)),
+                                          ])),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
                                         children: [
-                                          Text(
-                                              _profileController
-                                                      .profiles["jobseeker"]
-                                                  ["user"]["firstname"][0],
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 45)),
-                                          Text(
-                                              _profileController
-                                                      .profiles["jobseeker"]
-                                                  ["user"]["lastname"][0],
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 45)),
-                                        ])),
-                                SizedBox(height: 8),
-                                _profileController.isloading.value
-                                    ? Text("loading...")
-                                    : Text(
-                                        _profileController.profiles["jobseeker"]
-                                                ["user"]["firstname"] +
-                                            " " +
-                                            _profileController
-                                                    .profiles["jobseeker"]
-                                                ["user"]["lastname"],
-                                        style: GoogleFonts.poppins()),
-                                SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Icon(Icons.location_on_outlined, size: 18),
-                                    _profileController.profiles["jobseeker"]
-                                                ["user"]["address"] !=
-                                            null
-                                        ? Text(
-                                            _profileController
-                                                    .profiles["jobseeker"]
-                                                ["user"]["address"],
-                                            style: GoogleFonts.poppins(),
-                                          )
-                                        : Text("Null",
-                                            style: GoogleFonts.poppins()),
-                                  ],
-                                ),
-                                SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Icon(Icons.email_outlined, size: 20),
-                                    _profileController.profiles["jobseeker"]
-                                                ["user"]["email"] !=
-                                            null
-                                        ? Text(
-                                            _profileController
-                                                    .profiles["jobseeker"]
-                                                ["user"]["email"],
-                                            style: GoogleFonts.poppins(),
-                                          )
-                                        : Text("Null",
-                                            style: GoogleFonts.poppins()),
-                                  ],
-                                ),
+                                          _profileController.isloading.value
+                                              ? Text("loading...")
+                                              : Text(
+                                                  _profileController.profiles[
+                                                                  "jobseeker"]
+                                                              ["user"]
+                                                          ["firstname"] +
+                                                      " " +
+                                                      _profileController
+                                                                  .profiles[
+                                                              "jobseeker"]
+                                                          ["user"]["lastname"],
+                                                  style: GoogleFonts.poppins(
+                                                      fontSize: 20)),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.location_on_outlined,
+                                              size: 18),
+                                          _profileController
+                                                          .profiles["jobseeker"]
+                                                      ["user"]["address"] !=
+                                                  null
+                                              ? Text(
+                                                  _profileController
+                                                          .profiles["jobseeker"]
+                                                      ["user"]["address"],
+                                                  style: GoogleFonts.poppins(),
+                                                )
+                                              : Text("Null",
+                                                  style: GoogleFonts.poppins()),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.email_outlined, size: 20),
+                                          _profileController
+                                                          .profiles["jobseeker"]
+                                                      ["user"]["email"] !=
+                                                  null
+                                              ? Text(
+                                                  _profileController
+                                                          .profiles["jobseeker"]
+                                                      ["user"]["email"],
+                                                  style: GoogleFonts.poppins(),
+                                                )
+                                              : Text("Null",
+                                                  style: GoogleFonts.poppins()),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ]),
                                 SizedBox(
                                     height: MediaQuery.of(context).size.height *
                                         0.02),

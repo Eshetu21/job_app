@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Widgets/dateformat.dart';
 
-Widget buildTextFormField(String label, TextEditingController controller) {
+Widget buildTextFormField(String label, TextEditingController ?controller) {
   return TextFormField(
     controller: controller,
     decoration: InputDecoration(

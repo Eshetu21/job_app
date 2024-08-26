@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Admin as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Admin extends Authenticatable
+class Admin extends Model 
 {
     use HasFactory, HasApiTokens;
 
