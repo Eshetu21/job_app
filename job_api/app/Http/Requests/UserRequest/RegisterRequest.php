@@ -21,12 +21,15 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
+        
         return [
             'firstname'=>'required|string|min:2',
             'lastname'=>'required|string|min:2',
             'email'=>'required|email|unique:users,email',
             'password'=>'required|string|min:6',
-            'address'=>'required|string'
+            'address'=>'required|string',
+            'profile_pic'=> 'mimes:png,jpg,jpeg|max:2046',
+            "age"=>'integer'
         ];
     }
 }

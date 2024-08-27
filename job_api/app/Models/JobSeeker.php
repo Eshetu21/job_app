@@ -13,8 +13,6 @@ class JobSeeker extends Model
         'user_id',
         'category',
         'sub_category',
-        'profile_pic',
-        'cv',
         'phone_number',
         'about_me'
     ];

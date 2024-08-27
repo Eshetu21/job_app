@@ -21,6 +21,7 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+      
         return [
             'firstname' => 'nullable|string',
             'lastname' => 'nullable|string',
@@ -28,7 +29,8 @@ class UpdateRequest extends FormRequest
             'age' => 'nullable|integer',
             'gender' => 'nullable|string',
             'about_me' => 'nullable|string',
-           
+            'profile_pic'=> 'mimes:png,jpg,jpeg|max:2046',
+           'address'=>'string',
         ];
     }
 }
