@@ -552,7 +552,7 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => true,
 
-                "applications" => $apps
+                "applications" => $apps->load('job')
 
             ], 200);
         } catch (ValidationException $e) {
@@ -601,7 +601,7 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => true,
 
-                "application" => $app
+                "application" => $app->load('job')
 
             ], 200);
         } catch (ValidationException $e) {

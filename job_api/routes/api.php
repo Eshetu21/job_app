@@ -8,6 +8,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobSeekerController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PrivateClientController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use App\Models\JobSeeker;
@@ -17,7 +18,8 @@ use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Sanctum;
 
-// ADMIN ,JOB SEEKER, COMPANY AND PC aPPLICATION
+
+// admin
 
 
 // User 
@@ -51,7 +53,7 @@ Route::middleware("auth:sanctum")->group(function () {
     });
 });
 
-Route::middleware("auth:sanctum", 'verifiedemail')->group(
+Route::middleware("auth:sanctum")->group(
     function () {
 
 
@@ -62,11 +64,11 @@ Route::middleware("auth:sanctum", 'verifiedemail')->group(
             Route::post('create', [JobSeekerController::class, "createjobseeker"]);
             Route::get('get', [JobSeekerController::class, "showjobseeker"]);
             Route::put('update', [JobSeekerController::class, "updatejobseeker"]);
-            Route::put('updatecv', [JobSeekerController::class, "updatecv"]);
-            Route::delete('delete', [JobSeekerController::class, "delete"]);
+             Route::delete('delete', [JobSeekerController::class, "delete"]);
             Route::prefix('app')->group(function () { 
                 Route::post('apply/{jobid}', [JobSeekerController::class, "applyJob"]);
                 Route::get('get', [JobSeekerController::class, "getapplications"]);
+                Route::get('get/{appid}', [JobSeekerController::class, "getapplication"]);
                 Route::delete('delete/{appid}', [JobSeekerController::class, "deleteApplication"]);
             });
              });
@@ -139,8 +141,20 @@ Route::middleware("auth:sanctum", 'verifiedemail')->group(
     }
 );
 
-//jobs
-Route::prefix('job')->group(function () {
-    Route::get('get', [JobController::class, 'fetchjobs']);
-    Route::get('get/{id}', [JobController::class, 'fetchjob']);
+
+// public
+
+Route::prefix('p')->group(function (){
+    Route::prefix('job')->group(function () {
+        Route::get('get', [JobController::class, 'fetchjobs']);
+        Route::get('get/{id}', [JobController::class, 'fetchjob']);
+        
+    
+    });
+
+Route::get('pc/{privateclient_id}', [PublicController::class, "getprivateclient"]);
+Route::get('c/{company_id}', [PublicController::class, "getcompany"]);
+Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
+Route::get('u/{user_id}', [PublicController::class, "getuser"]);
+
 });

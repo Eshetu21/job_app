@@ -9,6 +9,7 @@ use App\Models\JobSeeker;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 
@@ -191,59 +192,59 @@ class JobSeekerController extends Controller
         }
     }
 
-    public function updatecv(Request $request)
-    {
-        try {
+    // public function updatecv(Request $request)
+    // {
+    //     try {
 
-            $user = $request->user();
-            $jobseeker = $user->jobseeker;
+    //         $user = $request->user();
+    //         $jobseeker = $user->jobseeker;
 
-            if (!$jobseeker) {
-                return response()->json([
-                    "success"=>false,
-                    "message" => "JobSeeker not found"
-                ], 404);
-            }
-            $validatedData = $request->validate([
+    //         if (!$jobseeker) {
+    //             return response()->json([
+    //                 "success"=>false,
+    //                 "message" => "JobSeeker not found"
+    //             ], 404);
+    //         }
+    //         $validatedData = $request->validate([
 
-                'cv' => 'mimes:pdf,doc|max:2048|nullable',
-            ]);
+    //             'cv' => 'mimes:pdf,doc|max:2048|nullable',
+    //         ]);
 
-            if ($request->hasFile('cv')) {
+    //         if ($request->hasFile('cv')) {
 
-                $cvLogoPath = public_path('uploads/job_seekers/cv/' . $jobseeker->cv);
-                if (File::exists($cvLogoPath)) {
-                    File::delete($cvLogoPath);
-                }
-                $cv = $request->file('cv');
-                $filename = time() . '_' . $cv->getClientOriginalName();
-                $cv->move(public_path('uploads/job_seekers/cv'), $filename);
-                $jobseeker->update(["cv" => $filename]);
-            }
+    //             $cvLogoPath = public_path('uploads/job_seekers/cv/' . $jobseeker->cv);
+    //             if (File::exists($cvLogoPath)) {
+    //                 File::delete($cvLogoPath);
+    //             }
+    //             $cv = $request->file('cv');
+    //             $filename = time() . '_' . $cv->getClientOriginalName();
+    //             $cv->move(public_path('uploads/job_seekers/cv'), $filename);
+    //             $jobseeker->update(["cv" => $filename]);
+    //         }
 
-            return response()->json([
-                "success"=>true,
-                "message" => "CV successfully updated",
-                "jobseeker" => $jobseeker,
-                "user" => $user
-            ], 200);
-        } 
+    //         return response()->json([
+    //             "success"=>true,
+    //             "message" => "CV successfully updated",
+    //             "jobseeker" => $jobseeker,
+    //             "user" => $user
+    //         ], 200);
+    //     } 
         
-        catch (ValidationException $e) {
-            return response()->json([
-                "success" => false,
-                "message" => $e->errors(),
+    //     catch (ValidationException $e) {
+    //         return response()->json([
+    //             "success" => false,
+    //             "message" => $e->errors(),
 
 
-            ], 400);
-        } catch (Exception $e) {
-            return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+    //         ], 400);
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             "success" => false,
+    //             "message" => $e->getMessage(),
 
-            ], 400);
-        }
-    }
+    //         ], 400);
+    //     }
+    // }
 
 
     // app
@@ -266,6 +267,16 @@ class JobSeekerController extends Controller
 
                 ], 401);
             }
+            if ($user->privateclient) {
+             
+                if ($user->privateclient->id == $job->private_client_id) {
+                    return response()->json([
+                        "success" => false,
+                        "message" => "You can not apply to your own job",
+
+                    ], 401);
+                }
+            }
             if ($user->company) {
                 if ($user->company->id == $job->company_id) {
                     return response()->json([
@@ -273,41 +284,13 @@ class JobSeekerController extends Controller
                         "message" => "You can not apply to your own job",
 
                     ], 401);
+                 
                 }
             }
-            if ($user->privateclient) {
-                if ($user->privateclient->id == $job->privateclient_id) {
-                    return response()->json([
-                        "success" => false,
-                        "message" => "You can not apply to your own job",
-
-                    ], 401);
-                }
-            }
-            $request->validate([
-                'cover_letter' => 'required|string'
-            ]);
-
-            $cv = $user->jobseeker->cv;
-
-            if (!$cv) {
-
-                $request->validate([
-                    'cv' => 'required|mimes:pdf,doc|max:2048'
-                ]);
-
-                if ($request->has('cv')) {
-                    $cv = $request->file('cv');
-                    $extention = $cv->getClientOriginalExtension();
-                    $originalfilename = $cv->getClientOriginalName();
-                    $filename = time() . $originalfilename . "." . $extention;
-                    $cv->move(public_path('uploads/cv'), $filename);
-                    $cv =  $filename;
-                }
-            }
-
             $application = Application::where(["job_id" => $jobid, "user_id" => $user->id])->first();
-
+           
+            
+           
             if ($application) {
                 return response()->json([
                     "success" => false,
@@ -315,12 +298,38 @@ class JobSeekerController extends Controller
 
                 ], 401);
             }
+           
+      
+            $request->validate([
+                    'cover_letter' => 'required|mimes:pdf,doc|max:2048',
+                        'cv' => 'required|mimes:pdf,doc|max:2048'
+            ]);
+           
+
+              
+                    $cv = $request->file('cv');
+                    $extention = $cv->getClientOriginalExtension();
+                    $originalfilename = $cv->getClientOriginalName();
+                    $filename = time() . $originalfilename . "." . $extention;
+                    $cv->move(public_path('uploads/application/cv'), $filename);
+                    $cv =  $filename;
+              
+                    $cover_letter = $request->file('cover_letter');
+                    $extention = $cover_letter->getClientOriginalExtension();
+                    $originalfilename = $cover_letter->getClientOriginalName();
+                    $filename = time() . $originalfilename . "." . $extention;
+                    $cover_letter->move(public_path('uploads//application/cover_letter'), $filename);
+                    $cover_letter =  $filename;
+            
+            
+
+           
 
 
             $application = Application::create([
                 'job_id' => $jobid,
                 'user_id' => $user->id,
-                'cover_letter' => $request->cover_letter,
+                'cover_letter' => $cover_letter,
                 'cv' => $cv
             ]);
 
@@ -331,6 +340,13 @@ class JobSeekerController extends Controller
 
                 ], 200);
             }
+        } catch (ValidationException $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->errors(),
+
+
+            ], 400);
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
@@ -373,6 +389,7 @@ class JobSeekerController extends Controller
         }
     }
 
+
     public function deleteApplication(Request $request, $appid)
     {
         try {
@@ -405,7 +422,38 @@ class JobSeekerController extends Controller
             ], 500);
         }
     }
+ public function getapplication(Request $request, $appid)
+    {
+        try {
+            $user = $request->user();
+            if (!$user->jobseeker) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Jobseeker not registered"
+                ], 400);
+            }
+            $application = Application::where('user_id', $user->id)
+                ->where('id', $appid)
+                ->first();
+            if (!$application) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "No application found"
+                ], 404);
+            }
+           
+            return response()->json([
+                "success" => true,
+                "application" => $application
+            ], 200);
+        } catch (Exception $e) {
 
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage()
+            ], 500);
+        }
+    }
     /*   public function updateApplication(Request $request, $appid)
     {
         try {
