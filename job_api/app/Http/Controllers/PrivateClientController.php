@@ -15,7 +15,7 @@ class PrivateClientController extends Controller
     public function showprivateclient(Request $request)
     {
         try {
-           
+
         $user = $request->user();
         $privateclient = PrivateClient::with('user')->where("user_id", $user->id)->first();
         if (!$user->privateclient) {
@@ -41,6 +41,8 @@ class PrivateClientController extends Controller
                 "message" => $e->getMessage(),
             ], 400);
         }
+            "privateclient" => $privateclient
+        ], 200);
     }
     public function createprivateclient(Request $request)
     {
@@ -94,11 +96,15 @@ class PrivateClientController extends Controller
             ], 400);
         }
         $validatedData = $request->validate([
-            'job_title' => 'required|string|max:255',
-            'job_location' => 'required|string|max:255',
-            'job_salary' => 'nullable|numeric',
-            'deadline' => 'required|date|',
-            'job_description' => 'required|string',
+            'title' => 'required|string',
+            'type' => 'required|string',
+            'sector' => 'required|string',
+            'city' => 'required|string',
+            'gender' => 'required|string',
+            'salary' => 'nullable|numeric',
+            'deadline' => 'required|string',
+            'description' => 'required|string',
+
         ]);
 
         $job = $user->privateclient->jobs()->create(

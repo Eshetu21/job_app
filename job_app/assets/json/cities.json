@@ -1,4 +1,5 @@
-[
+{
+  "cities": [
     "Abomsa",
     "Adama",
     "Addis Ababa",
@@ -70,4 +71,5 @@
     "Yabelo",
     "Yirgalem",
     "Zeway"
-]
+  ]
+}

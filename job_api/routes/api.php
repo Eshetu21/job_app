@@ -37,8 +37,6 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::delete('delete', [UserController::class, "delete"]);
     Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
     Route::post('changepassword', [UserController::class, "changepassword"]);
-
-
     // admin 
     Route::prefix('admin')->group(function () {
 
@@ -55,9 +53,6 @@ Route::middleware("auth:sanctum")->group(function () {
 
 Route::middleware("auth:sanctum", "verifiedemail")->group(
     function () {
-
-
-
 
         // jobseeker
         Route::prefix('js')->group(function () {

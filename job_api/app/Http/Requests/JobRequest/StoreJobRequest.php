@@ -24,8 +24,7 @@ class StoreJobRequest extends FormRequest
         return [
             "job_title"=>"required|string",
             "job_location"=>"required|string",
-            "job_salary"=>"required|string",
-         
+            "job_salary"=>"required|string", 
             "deadline"=>"required|date",
             "job_description"=>"required|text"
         ];
