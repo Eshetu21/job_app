@@ -16,41 +16,116 @@ class JobSeekerController extends Controller
 {
     public function createjobseeker(Request $request)
     {
-        $user = $request->user();
-        if ($user->JobSeeker) {
+       
+       
+            try {
+                $user = $request->user();
+                if ($user->JobSeeker) {
+                    return response()->json([
+                        "success"=>false,
+                        "message" => "JobSeeker already exists"
+                    ], 400);
+                }
+        
+              
+                    $jobseeker = JobSeeker::create([
+                        "user_id" => $user->id,
+                    ]);
+        
+                    return response()->json([
+                        "success"=>true,
+                        "message" => "Succesfully created",
+                        "jobseeker" => $jobseeker
+                    ], 201);
+            } catch (ValidationException $e) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $e->errors(),
+    
+    
+                ], 400);
+            } catch (Exception $e) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $e->getMessage(),
+                ], 400);
+            }
+    }
+
+    public function delete(Request $request)
+    {
+
+        $user =   $request->user();
+     
+        if (!$user->jobseeker) {
             return response()->json([
-                "message" => "JobSeeker already exists"
+                "success" => false,
+                "message" => "jobseeker not registerd"
             ], 400);
         }
 
         try {
-            $jobseeker = JobSeeker::create([
-                "user_id" => $user->id,
-            ]);
-
-            return response()->json([
-                "message" => "Succesfully created",
-                "jobseeker" => $jobseeker
-            ], 201);
+            $jobseeker = $user->jobseeker;
+            $jobseekerpicPath = public_path('uploads/job_seeker/profile_pic/' . $jobseeker->profile_pic);
+            if (File::exists($jobseekerpicPath)) {
+                File::delete($jobseekerpicPath);
+            }
+            $cvLogoPath = public_path('uploads/job_seekers/cv/' . $jobseeker->cv);
+            if (File::exists($cvLogoPath)) {
+                File::delete($cvLogoPath);
+            }
+            $user->jobseeker->delete();
         } catch (ValidationException $e) {
             return response()->json([
-                "errors" => $e->errors()
-            ], 422);
+                "success" => false,
+                "message" => $e->errors(),
+
+
+            ], 400);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
         }
+        return response()->json([
+            "success" => true,
+            "message" => "Job seeker Deleted successfully",
+
+        ], 200);
     }
+
 
     public function showjobseeker(Request $request)
     {
+       try {
         $user = $request->user();
         $jobseeker = JobSeeker::with('user')->where('user_id', $user->id)->first();
         if (!$jobseeker) {
             return response()->json([
-                "error" => "not found"
+                "success"=>false,
+                "message" => "not found"
             ]);
         }
         return response()->json([
+            "success"=>true,
             "jobseeker" => $jobseeker
         ], 200);
+       } catch (ValidationException $e) {
+        return response()->json([
+            "success" => false,
+            "message" => $e->errors(),
+
+
+        ], 400);
+    } catch (Exception $e) {
+        return response()->json([
+            "success" => false,
+            "message" => $e->getMessage(),
+
+        ], 400);
+    }
     }
     public function updatejobseeker(Request $request)
     {
@@ -60,6 +135,7 @@ class JobSeekerController extends Controller
 
             if (!$jobseeker) {
                 return response()->json([
+                    "success"=>false,
                     "message" => "JobSeeker not found"
                 ], 404);
             }
@@ -72,16 +148,16 @@ class JobSeekerController extends Controller
                 'cv' => 'mimes:pdf,doc|max:2048|nullable',
             ]);
 
-
+            $updateData= [];
             if ($request->hasFile('profile_pic')) {
 
-                $profile_picLogoPath = public_path('uploads/profile_pic/' . $jobseeker->profile_pic);
+                $profile_picLogoPath = public_path('uploads/job_seekers/profile_pic/' . $jobseeker->profile_pic);
                 if (File::exists($profile_picLogoPath)) {
                     File::delete($profile_picLogoPath);
                 }
                 $profile_pic = $request->file('profile_pic');
                 $filenamep = time() . '_' . $profile_pic->getClientOriginalName();
-                $profile_pic->move(public_path('uploads/profile_pic'), $filenamep);
+                $profile_pic->move(public_path('uploads/job_seekers/profile_pic'), $filenamep);
                 $updateData['profile_pic'] = $filenamep;
             }
 
@@ -94,14 +170,23 @@ class JobSeekerController extends Controller
             $jobseeker->update($updateData);
 
             return response()->json([
+                "success"=>true,
                 "message" => "Successfully updated",
                 "jobseeker" => $jobseeker,
                 "user" => $user
             ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->errors(),
+
+
+            ], 400);
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
+
             ], 400);
         }
     }
@@ -115,6 +200,7 @@ class JobSeekerController extends Controller
 
             if (!$jobseeker) {
                 return response()->json([
+                    "success"=>false,
                     "message" => "JobSeeker not found"
                 ], 404);
             }
@@ -125,28 +211,42 @@ class JobSeekerController extends Controller
 
             if ($request->hasFile('cv')) {
 
-                $cvLogoPath = public_path('uploads/cv/' . $jobseeker->cv);
+                $cvLogoPath = public_path('uploads/job_seekers/cv/' . $jobseeker->cv);
                 if (File::exists($cvLogoPath)) {
                     File::delete($cvLogoPath);
                 }
                 $cv = $request->file('cv');
                 $filename = time() . '_' . $cv->getClientOriginalName();
-                $cv->move(public_path('uploads/cv'), $filename);
+                $cv->move(public_path('uploads/job_seekers/cv'), $filename);
                 $jobseeker->update(["cv" => $filename]);
             }
 
             return response()->json([
+                "success"=>true,
                 "message" => "CV successfully updated",
                 "jobseeker" => $jobseeker,
                 "user" => $user
             ], 200);
+        } 
+        
+        catch (ValidationException $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->errors(),
+
+
+            ], 400);
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
+
             ], 400);
         }
     }
+
+
+    // app
     public function applyJob(Request $request, $jobid)
     {
         try {

@@ -204,6 +204,11 @@ class PrivateClientController extends Controller
                 File::delete($privateclientpicPath);
             }
             $user->privateclient->delete();
+            return response()->json([
+                "success" => true,
+                "message" => "Private Client Deleted successfully",
+    
+            ], 200);
         } catch (ValidationException $e) {
             return response()->json([
                 "success" => false,
@@ -218,11 +223,7 @@ class PrivateClientController extends Controller
 
             ], 400);
         }
-        return response()->json([
-            "success" => true,
-            "message" => "Private Client Deleted successfully",
-
-        ], 200);
+       
     }
 
 
@@ -546,6 +547,8 @@ class PrivateClientController extends Controller
             ], 400);
         }
     }
+
+    
     public function acceptApplication(Request $request, $jobid, $appid)
     {
         try {
