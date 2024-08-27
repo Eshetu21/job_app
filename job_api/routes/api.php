@@ -93,7 +93,7 @@ Route::middleware("auth:sanctum")->group(
 
 
         // job +
-
+        Route::post('privatecreatejob',[PrivateClientController::class,'privatecreatejob']);
 
         //Education
         Route::post('addeducation/{id}', [EducationController::class, 'addeducation']);;

@@ -1,0 +1,37 @@
+{
+    "type":[
+        "Full-Time",
+        "Part-Time",
+        "Remote"
+    ],
+    "sectors": [
+        "Accounting",
+        "Administration",
+        "Agriculture",
+        "Arts and Design",
+        "Banking and Finance",
+        "Business Management",
+        "Customer Service",
+        "Education",
+        "Engineering",
+        "Healthcare",
+        "Hospitality",
+        "Human Resources",
+        "Information Technology",
+        "Legal",
+        "Logistics",
+        "Manufacturing",
+        "Marketing",
+        "Media and Communications",
+        "Public Relations",
+        "Real Estate",
+        "Retail",
+        "Sales",
+        "Science and Research",
+        "Social Work",
+        "Supply Chain",
+        "Tourism",
+        "Transport and Logistics",
+        "Writing and Editing"
+    ]
+}

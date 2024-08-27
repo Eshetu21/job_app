@@ -1,7 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:job_app/Controllers/Job/JobController.dart';
 import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class AddJob extends StatefulWidget {
@@ -12,16 +17,41 @@ class AddJob extends StatefulWidget {
 }
 
 class _AddJobState extends State<AddJob> {
+  final Jobcontroller _jobcontroller = Get.put(Jobcontroller());
   final TextEditingController _title = TextEditingController();
-  final TextEditingController _site = TextEditingController();
   final TextEditingController _type = TextEditingController();
   final TextEditingController _sector = TextEditingController();
   final TextEditingController _gender = TextEditingController();
   final TextEditingController _city = TextEditingController();
-  final TextEditingController _location = TextEditingController();
   final TextEditingController _salary = TextEditingController();
   final TextEditingController _deadline = TextEditingController();
   final TextEditingController _description = TextEditingController();
+  List sector = [];
+  List city = [];
+  List gender = [];
+  List type = [];
+  @override
+  void initState() {
+    super.initState();
+    loadDatas();
+  }
+
+  Future<void> loadDatas() async {
+    final sectors = await rootBundle.loadString("assets/json/jobsector.json");
+    var sec = json.decode(sectors);
+    final cities = await rootBundle.loadString("assets/json/cities.json");
+    var ci = json.decode(cities);
+    final gen = await rootBundle.loadString("assets/json/gender.json");
+    var gende = json.decode(gen);
+
+    setState(() {
+      sector = sec['sectors'];
+      type = sec['type'];
+      city = ci['cities'];
+      gender = gende["gender"];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,17 +73,63 @@ class _AddJobState extends State<AddJob> {
                   SizedBox(height: 20),
                   buildTextFormField("Job title", _title),
                   SizedBox(height: 8),
-                  buildTextFormField("Job site", _site),
+                  DropdownButtonFormField(
+                      decoration: InputDecoration(
+                          labelText: "Job Type", border: OutlineInputBorder()),
+                      items: type
+                          .map((type) => DropdownMenuItem(
+                            value: type,
+                              child: Text(type, style: GoogleFonts.poppins())))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _type.text = value.toString();
+                        });
+                      }),
                   SizedBox(height: 8),
-                  buildTextFormField("Job type", _type),
+                  DropdownButtonFormField(
+                      decoration: InputDecoration(
+                          labelText: "Sector", border: OutlineInputBorder()),
+                      items: sector
+                          .map((sector) => DropdownMenuItem(
+                              value: sector,
+                              child:
+                                  Text(sector, style: GoogleFonts.poppins())))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _sector.text = value.toString();
+                        });
+                      }),
                   SizedBox(height: 8),
-                  buildTextFormField("Job sector", _sector),
+                  DropdownButtonFormField(
+                      decoration: InputDecoration(
+                          labelText: "City", border: OutlineInputBorder()),
+                      items: city
+                          .map((city) => DropdownMenuItem(
+                              value: city,
+                              child: Text(city, style: GoogleFonts.poppins())))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _city.text = value.toString();
+                        });
+                      }),
                   SizedBox(height: 8),
-                  buildTextFormField("City", _city),
-                  SizedBox(height: 8),
-                  buildTextFormField("Gender", _gender),
-                  SizedBox(height: 8),
-                  buildTextFormField("Job location", _location),
+                  DropdownButtonFormField(
+                      decoration: InputDecoration(
+                          labelText: "Gender", border: OutlineInputBorder()),
+                      items: gender
+                          .map((gender) => DropdownMenuItem(
+                              value: gender,
+                              child:
+                                  Text(gender, style: GoogleFonts.poppins())))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _gender.text = value.toString();
+                        });
+                      }),
                   SizedBox(height: 8),
                   buildTextFormField("Salary", _salary),
                   SizedBox(height: 8),
@@ -63,7 +139,16 @@ class _AddJobState extends State<AddJob> {
                   SizedBox(height: 20),
                   Center(
                     child: GestureDetector(
-                      onTap: () async {},
+                      onTap: () async {
+                        await _jobcontroller.createjob(
+                            title: _title.text.trim(),
+                            city: _city.text.trim(),
+                            type: _type.text.trim(),
+                            sector: _sector.text.trim(),
+                            gender: _gender.text.trim(),
+                            deadline: _deadline.text.trim(),
+                            description: _description.text.trim());
+                      },
                       child: Container(
                         margin: EdgeInsets.only(top: 30, bottom: 20),
                         width: 266,
@@ -80,7 +165,16 @@ class _AddJobState extends State<AddJob> {
                         ),
                       ),
                     ),
+
                   ),
+              Obx((){
+                if(_jobcontroller.sucess.value==true){
+                  Future.delayed(Duration.zero,(){
+                   sucessfullyUpdated(context);
+                  });
+                }
+                return SizedBox.shrink();
+              }),
                 ],
               ),
             ),
@@ -95,11 +189,15 @@ class _AddJobState extends State<AddJob> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Success", style: GoogleFonts.poppins()),
-              content: Text("Education updated sucessfully",
+              content: Text("Job added sucessfully",
                   style: GoogleFonts.poppins()),
               actions: [
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);  
+                      Navigator.pop(context); 
+                      _jobcontroller.sucess.value=false; 
+                    },
                     child: Text(
                       "Ok",
                       style: GoogleFonts.poppins(),

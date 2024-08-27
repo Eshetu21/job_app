@@ -55,16 +55,14 @@ class PrivateClientController extends Controller
             ], 400);
         }
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'site' => 'required|string|max:255',
+            'title' => 'required|string',
             'type' => 'required|string',
             'sector' => 'required|string',
             'city' => 'required|string',
             'gender' => 'required|string',
-            'location' => 'required|string',
             'salary' => 'nullable|numeric',
             'deadline' => 'required|string',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
 
         ]);
 
