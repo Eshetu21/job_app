@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('location');
             $table->double('salary')->nullable();
             $table->string('deadline');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

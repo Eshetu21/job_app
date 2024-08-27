@@ -9,18 +9,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PrivateClientController extends Controller
-{   public function showprivateclient(Request $request){
-    $user = $request->user();
-    $privateclient = PrivateClient::with('user')->where("user_id",$user->id)->first();
+{
+    public function showprivateclient(Request $request)
+    {
+        $user = $request->user();
+        $privateclient = PrivateClient::with('user')->where("user_id", $user->id)->first();
         if (!$user->privateclient) {
             return response()->json([
                 "message" => "PrivateClient doesn't exists"
             ], 400);
         }
         return response()->json([
-            "privateclient"=>$privateclient
-        ],200);
-}
+            "privateclient" => $privateclient
+        ], 200);
+    }
     public function createprivateclient(Request $request)
     {
         $user = $request->user();
@@ -53,11 +55,17 @@ class PrivateClientController extends Controller
             ], 400);
         }
         $validatedData = $request->validate([
-            'job_title' => 'required|string|max:255',
-            'job_location' => 'required|string|max:255',
-            'job_salary' => 'nullable|numeric',
-            'deadline' => 'required|date|',
-            'job_description' => 'required|string',
+            'title' => 'required|string|max:255',
+            'site' => 'required|string|max:255',
+            'type' => 'required|string',
+            'sector' => 'required|string',
+            'city' => 'required|string',
+            'gender' => 'required|string',
+            'location' => 'required|string',
+            'salary' => 'nullable|numeric',
+            'deadline' => 'required|string',
+            'description' => 'nullable|string',
+
         ]);
 
         $job = $user->privateclient->jobs()->create(
