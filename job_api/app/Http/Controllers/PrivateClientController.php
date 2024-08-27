@@ -16,18 +16,18 @@ class PrivateClientController extends Controller
     {
         try {
 
-        $user = $request->user();
-        $privateclient = PrivateClient::with('user')->where("user_id", $user->id)->first();
-        if (!$user->privateclient) {
+            $user = $request->user();
+            $privateclient = PrivateClient::with('user')->where("user_id", $user->id)->first();
+            if (!$user->privateclient) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "PrivateClient doesn't exists"
+                ], 400);
+            }
             return response()->json([
-                "success" =>false,
-                "message" => "PrivateClient doesn't exists"
-            ], 400);
-        }
-        return response()->json([
-            "success"=>true,
-            "privateclient" => $privateclient
-        ], 200);
+                "success" => true,
+                "privateclient" => $privateclient
+            ], 200);
         } catch (ValidationException $e) {
             return response()->json([
                 "success" => false,
@@ -41,33 +41,31 @@ class PrivateClientController extends Controller
                 "message" => $e->getMessage(),
             ], 400);
         }
-            "privateclient" => $privateclient
-        ], 200);
     }
     public function createprivateclient(Request $request)
     {
-       
+
         try {
             $user = $request->user();
-        if ($user->privateclient) {
+            if ($user->privateclient) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "PrivateClient already exists"
+                ], 400);
+            }
+            $validatedData = $request->validate(
+                ["profile_pic" => "nullable|string"]
+            );
+            $profile_pic = $validatedData["profile_pic"] ?? null;
+            $privateclient = PrivateClient::create([
+                'profile_pic' => $profile_pic,
+                'user_id' => $user->id
+            ]);
             return response()->json([
-                "success"=>false,
-                "message" => "PrivateClient already exists"
-            ], 400);
-        }
-        $validatedData = $request->validate(
-            ["profile_pic" => "nullable|string"]
-        );
-        $profile_pic = $validatedData["profile_pic"] ?? null;
-        $privateclient = PrivateClient::create([
-            'profile_pic' => $profile_pic,
-            'user_id' => $user->id
-        ]);
-        return response()->json([
-            "success"=>true,
-            'message' => 'Private client profile created successfully.',
-            'private_client' => $privateclient,
-        ], 201);
+                "success" => true,
+                'message' => 'Private client profile created successfully.',
+                'private_client' => $privateclient,
+            ], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 "success" => false,
@@ -87,36 +85,36 @@ class PrivateClientController extends Controller
     {
 
         try {
-          
-        $user = $request->user();
-        if (!$user->privateclient) {
+
+            $user = $request->user();
+            if (!$user->privateclient) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "not private client"
+                ], 400);
+            }
+            $validatedData = $request->validate([
+                'title' => 'required|string',
+                'type' => 'required|string',
+                'sector' => 'required|string',
+                'city' => 'required|string',
+                'gender' => 'required|string',
+                'salary' => 'nullable|numeric',
+                'deadline' => 'required|string',
+                'description' => 'required|string',
+
+            ]);
+
+            $job = $user->privateclient->jobs()->create(
+                $validatedData
+            );
+            $user->privateclient->load('user');
             return response()->json([
-                "success"=>false,
-                "message" => "not private client"
-            ], 400);
-        }
-        $validatedData = $request->validate([
-            'title' => 'required|string',
-            'type' => 'required|string',
-            'sector' => 'required|string',
-            'city' => 'required|string',
-            'gender' => 'required|string',
-            'salary' => 'nullable|numeric',
-            'deadline' => 'required|string',
-            'description' => 'required|string',
-
-        ]);
-
-        $job = $user->privateclient->jobs()->create(
-            $validatedData
-        );
-        $user->privateclient->load('user');
-        return response()->json([
-            "success"=>true,
-            "message" => "job created sucessfully",
-            "job" => $job,
-            "creater" => $user->privateclient
-        ], 201); 
+                "success" => true,
+                "message" => "job created sucessfully",
+                "job" => $job,
+                "creater" => $user->privateclient
+            ], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 "success" => false,
@@ -195,7 +193,7 @@ class PrivateClientController extends Controller
     {
 
         $user =   $request->user();
-     
+
         if (!$user->privateclient) {
             return response()->json([
                 "success" => false,
@@ -213,7 +211,7 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => true,
                 "message" => "Private Client Deleted successfully",
-    
+
             ], 200);
         } catch (ValidationException $e) {
             return response()->json([
@@ -229,7 +227,6 @@ class PrivateClientController extends Controller
 
             ], 400);
         }
-       
     }
 
 
@@ -251,7 +248,7 @@ class PrivateClientController extends Controller
             $user = $request->user();
             if (!$user->privateclient) {
                 return response()->json([
-                    "success"=>false,
+                    "success" => false,
                     "message" => "privateclient not registerd"
                 ], 400);
             }
@@ -554,7 +551,7 @@ class PrivateClientController extends Controller
         }
     }
 
-    
+
     public function acceptApplication(Request $request, $jobid, $appid)
     {
         try {
