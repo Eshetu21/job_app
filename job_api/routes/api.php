@@ -53,7 +53,7 @@ Route::middleware("auth:sanctum")->group(function () {
     });
 });
 
-Route::middleware("auth:sanctum")->group(
+Route::middleware("auth:sanctum", "verifiedemail")->group(
     function () {
 
 
