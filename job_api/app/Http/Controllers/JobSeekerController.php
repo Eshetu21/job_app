@@ -21,7 +21,7 @@ class JobSeekerController extends Controller
        
             try {
                 $user = $request->user();
-                if ($user->JobSeeker) {
+                if ($user->jobseeker) {
                     return response()->json([
                         "success"=>false,
                         "message" => "JobSeeker already exists"

@@ -32,8 +32,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -70,8 +68,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -119,8 +115,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -132,8 +126,6 @@ class PrivateClientController extends Controller
 
     public function update(Request $request)
     {
-
-
         try {
             $user = $request->user();
             if (!$user->privateclient) {
@@ -178,8 +170,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -217,8 +207,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -228,20 +216,6 @@ class PrivateClientController extends Controller
             ], 400);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function privateclientcreatejob(Request $request)
     {
         try {
@@ -252,21 +226,16 @@ class PrivateClientController extends Controller
                     "message" => "privateclient not registerd"
                 ], 400);
             }
-
-
-
             $validatedData = $request->validate([
 
                 'title' => 'required|string',
-                'site' => 'required|string',
                 'type' => 'required|string',
                 'sector' => 'required|string',
                 'city' => 'required|string',
                 'gender' => 'required|string',
-                'location' => 'required|string',
-                'salary' => 'integer',
-                'deadline' => 'required|date',
-                'description' => 'required|string'
+                'salary' => 'nullable|numeric',
+                'deadline' => 'required|string',
+                'description' => 'required|string',
 
             ]);
             $validatedData['privateclient_id'] = $user->privateclient->id;
@@ -284,22 +253,16 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (ValidationException $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
-
-
             ], 500);
         }
     }
@@ -331,8 +294,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -371,8 +332,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -438,8 +397,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -477,8 +434,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -488,10 +443,6 @@ class PrivateClientController extends Controller
             ], 400);
         }
     }
-
-
-
-
     public function rejectApplication(Request $request, $jobid, $appid)
     {
         try {
@@ -539,8 +490,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -550,8 +499,6 @@ class PrivateClientController extends Controller
             ], 400);
         }
     }
-
-
     public function acceptApplication(Request $request, $jobid, $appid)
     {
         try {
@@ -599,8 +546,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -648,8 +593,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([
@@ -698,8 +641,6 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-
-
             ], 400);
         } catch (Exception $e) {
             return response()->json([

@@ -64,7 +64,7 @@ Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatej
 Route::put('privatecreateupdate', [PrivateClientController::class, "update"]);
 Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"]);
 
-Route::middleware("auth:sanctum", "verifiedemail")->group(
+Route::middleware("auth:sanctum")->group(
     function () {
 
         // jobseeker

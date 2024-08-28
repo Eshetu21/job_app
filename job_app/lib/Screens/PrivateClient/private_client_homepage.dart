@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
+import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Screens/Job/add_job.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
@@ -23,14 +24,18 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
   final JobSeekerController _jobSeekerController =
       Get.put(JobSeekerController());
   final ProfileController _profileController = Get.put(ProfileController());
+  final PrivateclientController _privateclientController =
+      Get.put(PrivateclientController());
   String selectedProfile = 'privateclient';
   int currentindex = 0;
   final PageController _pageController = PageController();
+  List<dynamic> jobs = <dynamic>[];
   @override
   void initState() {
     super.initState();
     _jobSeekerController.getJobSeeker();
     _jobSeekerController.fetchJobSeeker();
+   
   }
 
   @override
@@ -186,8 +191,9 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                                 ),
                                                 title: Text(
                                                   _profileController.profiles[
-                                                              'jobseeker'][
-                                                          'user']['firstname'] +
+                                                                  'jobseeker']
+                                                              ['user']
+                                                          ['firstname'] +
                                                       " " +
                                                       _profileController
                                                                   .profiles[

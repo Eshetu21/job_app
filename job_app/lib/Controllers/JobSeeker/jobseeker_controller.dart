@@ -24,7 +24,7 @@ class JobSeekerController extends GetxController {
 
   Future<void> createjobseeker() async {
     final response = await http.post(
-      Uri.parse("${url}createjobseeker"),
+      Uri.parse("${url}js/create"),
       headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
     );
     if (response.statusCode == 201) {
@@ -36,7 +36,7 @@ class JobSeekerController extends GetxController {
 
   Future<Map<String, dynamic>> getJobSeeker() async {
     final response = await http.get(
-      Uri.parse("${url}showjobseeker"),
+      Uri.parse("${url}js/get"),
       headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
     );
     if (response.statusCode == 200) {
@@ -59,7 +59,7 @@ class JobSeekerController extends GetxController {
   }
 
   Future updatejobseeker(
-      {required int id,
+      {
       required String category,
       required String subCategory,
       String? cv,
@@ -79,7 +79,7 @@ class JobSeekerController extends GetxController {
           .map((e) =>
               '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
           .join('&');
-      final response = await http.put(Uri.parse("${url}updatejobseeker/$id"),
+      final response = await http.put(Uri.parse("${url}js/update"),
           headers: {
             "Accept": "application/json",
             "Authorization": "Bearer $token",

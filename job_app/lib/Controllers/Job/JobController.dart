@@ -34,7 +34,7 @@ class Jobcontroller extends GetxController {
           .map((e) =>
               '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
           .join("&");
-      var response = await http.post(Uri.parse('${url}privatecreatejob'),
+      var response = await http.post(Uri.parse('${url}pc/job/create'),
           headers: {
             "Accept": "application/json",
             "Authorization": "Bearer $token",

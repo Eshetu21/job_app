@@ -129,6 +129,7 @@ class _AddAccountState extends State<AddAccount> {
               GestureDetector(
                 onTap: () async {
                   if (selected == 'jobseeker') {
+                    _jobSeekerController.createjobseeker();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => JobSeekerCreate()));
                   }
