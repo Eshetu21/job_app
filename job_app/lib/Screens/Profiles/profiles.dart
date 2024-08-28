@@ -105,12 +105,12 @@ class _ProfilesState extends State<Profiles> {
                                 leading: Image.asset("assets/icons/private.png",
                                     width: 28,
                                     color: Color(0xFFFF9228).withOpacity(0.4)),
-                                title: Text(
+                                title: Text(_profileController
+                                            .profiles['privateclient']['user']
+                                        ['firstname'] +
+                                    " " +
                                     _profileController.profiles['privateclient']
-                                            ['user']['firstname'] +
-                                        " " +
-                                        _profileController.profiles['jobseeker']
-                                            ['user']['lastname']),
+                                        ['user']['lastname']),
                                 subtitle: Text("Private Client"),
                                 trailing: Radio(
                                     value: 'privateclient',
@@ -249,11 +249,11 @@ class _ProfilesState extends State<Profiles> {
                               Get.off(JobSeekerHomepage());
                             }
                             if (_profileController.profiles['privateclient'] ==
-                                null&&selectedProfile=="private") {
+                                    null &&
+                                selectedProfile == "private") {
                               _privateclientController.createprivateclient();
                               print("Creating private client profile...");
                             }
-
                             print("Navigating to PrivateClientHomepage...");
                             Get.off(PrivateClientHomepage());
                           },

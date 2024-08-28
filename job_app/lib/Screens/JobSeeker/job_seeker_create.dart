@@ -115,15 +115,8 @@ class _JobSeekerCreateState extends State<JobSeekerCreate> {
               ),
               SizedBox(height: 160),
               GestureDetector(
-                onTap: () async {
-                  var jobSeekerData = await _jobSeekerController.getJobSeeker();
-                  int jobSeekerId = jobSeekerData["jobseeker"]["id"];
-                  print(jobSeekerId);
-                  await _jobSeekerController.updatejobseeker(
-                    id: jobSeekerId,
-                    category: selectedCategory!,
-                    subCategory: selectedSubcategory!,
-                  );
+                onTap: ()  {
+               
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => JobSeekerCreateSecond()));
                 },

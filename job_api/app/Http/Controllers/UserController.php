@@ -37,8 +37,8 @@ class UserController extends Controller
 
     public function register(RegisterRequest $request)
     {
+        $validatedData = $request->validated();
         try {
-            $validatedData = $request->validated();
             $user = User::create([
                 "firstname" => $validatedData["firstname"],
                 "lastname" => $validatedData["lastname"],
@@ -48,15 +48,14 @@ class UserController extends Controller
             ]);
             $token = $user->createToken("job_portal")->plainTextToken;
             return response()->json([
-                "success" => true,
                 "name" => $user->firstname . " " . $user->lastname,
                 "token" => $token
             ], 201);
-        } catch (Exception $e) {
+        } catch (ValidationException $e) {
             return response()->json([
-                "sucess" => false,
-                "message" => $e->getMessage()
-            ], 500);
+                "message" => "Validation Failed",
+                "errors" => $e->errors()
+            ], 422);
         }
     }
     public function changepassword(Request $request)
@@ -141,28 +140,19 @@ class UserController extends Controller
 
     public function login(LoginRequest $request)
     {
-        try {
-            $validatedData = $request->validated();
-            $user = User::whereemail($request->email)->first();
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                return response()->json([
-                    "error" => "Invalid Credientials"
-                ], 401);
-            }
-
-            $token = $user->createToken("job_portal")->plainTextToken;
+        $validatedData = $request->validated();
+        $user = User::whereemail($request->email)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                "success" => true,
-                "user" => $user,
-                "token" => $token
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
-
-            ], 500);
+                "error" => "Invalid Credientials"
+            ], 401);
         }
+
+        $token = $user->createToken("job_portal")->plainTextToken;
+        return response()->json([
+            "message" => $user,
+            "token" => $token
+        ], 200);
     }
 
     public function sendpin(Request $request)
