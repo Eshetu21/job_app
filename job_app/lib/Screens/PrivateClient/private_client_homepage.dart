@@ -35,7 +35,6 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
     super.initState();
     _jobSeekerController.getJobSeeker();
     _jobSeekerController.fetchJobSeeker();
-   
   }
 
   @override
@@ -84,58 +83,7 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                                   style: GoogleFonts.poppins(
                                                       fontSize: 22))),
                                         ),
-                                        if (_profileController
-                                                    .profiles["jobseeker"] ==
-                                                null &&
-                                            _profileController
-                                                    .profiles["company"] ==
-                                                null)
-                                          Padding(
-                                            padding: EdgeInsets.all(20),
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  "No other accounts created tap to add",
-                                                  style: GoogleFonts.poppins(),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                Profiles()));
-                                                  },
-                                                  child: Container(
-                                                    margin: EdgeInsets.all(20),
-                                                    child: Center(
-                                                      child: Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 80,
-                                                                vertical: 10),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            color: Colors.grey
-                                                                .withOpacity(
-                                                                    0.2)),
-                                                        child: Text(
-                                                            "Add Account",
-                                                            style: GoogleFonts.poppins(
-                                                                color: Color(
-                                                                    0xFF130160),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                       
                                         if (_profileController
                                                 .profiles["jobseeker"] !=
                                             null)
@@ -242,6 +190,50 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                               "company",
                                               () {}),
                                       ],
+                                       if (_profileController
+                                                    .profiles["jobseeker"] ==
+                                                null ||
+                                            _profileController
+                                                    .profiles["company"] ==
+                                                null)
+                                          Padding(
+                                            padding: EdgeInsets.all(20),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Profiles()));
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.all(20),
+                                                child: Center(
+                                                  child: Container(
+                                                    padding: EdgeInsets
+                                                        .symmetric(
+                                                            horizontal: 80,
+                                                            vertical: 10),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    20),
+                                                        color: Colors.grey
+                                                            .withOpacity(
+                                                                0.2)),
+                                                    child: Text(
+                                                        "Add Account",
+                                                        style: GoogleFonts.poppins(
+                                                            color: Color(
+                                                                0xFF130160),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                     ],
                                   ),
                                 );

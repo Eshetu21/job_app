@@ -9,7 +9,7 @@ class PrivateclientController extends GetxController {
   final box = GetStorage();
   late final String token;
   RxMap<String, dynamic> privateclient = <String, dynamic>{}.obs;
-  List<dynamic> privatejobs = <dynamic>[].obs;
+  RxList<dynamic> privatejobs = <dynamic>[].obs;
   PrivateclientController() {
     token = box.read("token");
   }
@@ -21,6 +21,8 @@ class PrivateclientController extends GetxController {
         });
     if (response.statusCode == 201) {
       print("sucessfully created privaeclient");
+       PrivateclientController privateClientController = Get.find<PrivateclientController>();
+      await privateClientController.getPrivateJobs();
     } else {
       print(response.statusCode);
       print(token);
@@ -35,7 +37,7 @@ class PrivateclientController extends GetxController {
     });
     if (response.statusCode == 200) {
       print("sucessfully fetched job");
-      privatejobs = json.decode(response.body)["jobs"];
+      privatejobs.value = json.decode(response.body)["jobs"];
     } else {
       print(response.statusCode);
       print(token);

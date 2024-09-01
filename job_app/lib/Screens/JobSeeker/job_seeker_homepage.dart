@@ -126,12 +126,12 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                 ),
                                                 title: Text(
                                                   _profileController.profiles[
-                                                              'jobseeker'][
+                                                              'privateclient'][
                                                           'user']['firstname'] +
                                                       " " +
                                                       _profileController
                                                                   .profiles[
-                                                              'jobseeker']
+                                                              'privateclient']
                                                           ['user']['lastname'],
                                                 ),
                                                 subtitle:
@@ -183,7 +183,7 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                               () {}),
                                         if (_profileController.profiles[
                                                     "privateclient"] ==
-                                                null &&
+                                                null ||
                                             _profileController
                                                     .profiles["company"] ==
                                                 null)
@@ -191,10 +191,6 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                             padding: EdgeInsets.all(20),
                                             child: Column(
                                               children: [
-                                                Text(
-                                                  "No other accounts created tap to add",
-                                                  style: GoogleFonts.poppins(),
-                                                ),
                                                 GestureDetector(
                                                   onTap: () {
                                                     Navigator.of(context).push(

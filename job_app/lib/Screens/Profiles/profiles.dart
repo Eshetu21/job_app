@@ -248,14 +248,14 @@ class _ProfilesState extends State<Profiles> {
                             if (selectedProfile == 'jobseeker') {
                               Get.off(JobSeekerHomepage());
                             }
-                            if (_profileController.profiles['privateclient'] ==
+                            if (_profileController.profiles['privateclient'] !=
                                     null &&
                                 selectedProfile == "private") {
                               _privateclientController.createprivateclient();
                               print("Creating private client profile...");
+                              print("Navigating to PrivateClientHomepage...");
+                              Get.off(PrivateClientHomepage());
                             }
-                            print("Navigating to PrivateClientHomepage...");
-                            Get.off(PrivateClientHomepage());
                           },
                           child: Center(
                             child: Container(
