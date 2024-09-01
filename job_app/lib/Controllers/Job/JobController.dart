@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +9,7 @@ class Jobcontroller extends GetxController {
   final box = GetStorage();
   late final String token;
   RxBool sucess = false.obs;
+  RxList<dynamic>alljobs = <dynamic>[].obs;
   Jobcontroller() {
     token = box.read('token');
   }
@@ -41,14 +44,30 @@ class Jobcontroller extends GetxController {
             "Content-Type": "application/x-www-form-urlencoded",
           },
           body: encodedData);
-          if(response.statusCode==201){
-            sucess.value = true;
-            print("Successfully posted a job");
-            print(response.body);
-          }
+      if (response.statusCode == 201) {
+        sucess.value = true;
+        print("Successfully posted a job");
+        print(response.body);
+      }
     } catch ($e) {
       print("Failed");
       print($e.toString());
+    }
+  }
+
+  Future<void> getJobs() async {
+    final response = await http.get(Uri.parse("${url}p/job/get"), headers: {
+      "Accept": "application/json",
+      "Authorization": "Bearer $token"
+    });
+    if(response.statusCode==200){
+     alljobs.value = json.decode(response.body)["jobs"];
+    
+     print(alljobs);
+    }
+    else{
+      print(response.statusCode);
+      print("failed to fetch all jobs");
     }
   }
 }
