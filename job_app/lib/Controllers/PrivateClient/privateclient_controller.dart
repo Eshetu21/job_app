@@ -13,8 +13,8 @@ class PrivateclientController extends GetxController {
   PrivateclientController() {
     token = box.read("token");
   }
-  Future<void> createprivateclient() async {
-    final response = await http.post(Uri.parse("${url}createprivateclient"),
+  Future<bool> createprivateclient() async {
+    final response = await http.post(Uri.parse("${url}pc/create"),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token"
@@ -23,10 +23,12 @@ class PrivateclientController extends GetxController {
       print("sucessfully created privaeclient");
        PrivateclientController privateClientController = Get.find<PrivateclientController>();
       await privateClientController.getPrivateJobs();
+      return true;
     } else {
       print(response.statusCode);
       print(token);
       print("failed");
+      return false;
     }
   }
 

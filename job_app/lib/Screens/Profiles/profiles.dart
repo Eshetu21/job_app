@@ -244,17 +244,25 @@ class _ProfilesState extends State<Profiles> {
                           ),
                         Spacer(),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             if (selectedProfile == 'jobseeker') {
                               Get.off(JobSeekerHomepage());
                             }
-                            if (_profileController.profiles['privateclient'] !=
-                                    null &&
-                                selectedProfile == "private") {
-                              _privateclientController.createprivateclient();
-                              print("Creating private client profile...");
-                              print("Navigating to PrivateClientHomepage...");
-                              Get.off(PrivateClientHomepage());
+                            if (selectedProfile == "private") {
+                              print(_profileController.profiles["privateclient"]);
+                              if (_profileController
+                                      .profiles['privateclient'] ==
+                                  null) {
+                                bool success = await _privateclientController
+                                    .createprivateclient();
+                                if (success) {
+                                  Get.off(PrivateClientHomepage());
+                                } else {
+                                  print("failed to create privaeclient");
+                                }
+                              } else {
+                                Get.off(PrivateClientHomepage());
+                              }
                             }
                           },
                           child: Center(

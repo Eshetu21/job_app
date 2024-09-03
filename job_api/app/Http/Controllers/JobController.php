@@ -1,16 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Job;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+
 class JobController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function fetchjobs(Request $request)
     {
         try {
@@ -27,15 +25,14 @@ class JobController extends Controller
     public function fetchjob(Request $request, $id)
     {
         try {
-          
-   
+
+
             $job = Job::findorfail($id);
-               
+
             return response()->json(["success" => true, "jobs" => $job], 200);
-        }catch (ModelNotFoundException $m) {
+        } catch (ModelNotFoundException $m) {
             return response()->json(["success" => false, "message" => "Job not found"], 404);
-        }
-         catch (Exception $e) {
+        } catch (Exception $e) {
             return response()->json(["success" => false, "message" => $e->getMessage()]);
         }
     }

@@ -140,6 +140,7 @@ class _AddJobState extends State<AddJob> {
                   Center(
                     child: GestureDetector(
                       onTap: () async {
+                        print(_title.text);
                         await _jobcontroller.createjob(
                             title: _title.text.trim(),
                             city: _city.text.trim(),

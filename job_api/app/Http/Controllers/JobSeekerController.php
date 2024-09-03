@@ -267,8 +267,7 @@ class JobSeekerController extends Controller
 
                 ], 401);
             }
-            if ($user->privateclient) {
-             
+            if ($user->privateclient) {             
                 if ($user->privateclient->id == $job->private_client_id) {
                     return response()->json([
                         "success" => false,
@@ -320,12 +319,6 @@ class JobSeekerController extends Controller
                     $filename = time() . $originalfilename . "." . $extention;
                     $cover_letter->move(public_path('uploads//application/cover_letter'), $filename);
                     $cover_letter =  $filename;
-            
-            
-
-           
-
-
             $application = Application::create([
                 'job_id' => $jobid,
                 'user_id' => $user->id,

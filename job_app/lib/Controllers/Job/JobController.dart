@@ -9,7 +9,8 @@ class Jobcontroller extends GetxController {
   final box = GetStorage();
   late final String token;
   RxBool sucess = false.obs;
-  RxList<dynamic>alljobs = <dynamic>[].obs;
+  RxList<dynamic> alljobs = <dynamic>[].obs;
+  RxList<dynamic> singlejob = <dynamic>[].obs;
   Jobcontroller() {
     token = box.read('token');
   }
@@ -60,14 +61,20 @@ class Jobcontroller extends GetxController {
       "Accept": "application/json",
       "Authorization": "Bearer $token"
     });
-    if(response.statusCode==200){
-     alljobs.value = json.decode(response.body)["jobs"];
-    
-     print(alljobs);
-    }
-    else{
+    if (response.statusCode == 200) {
+      alljobs.value = json.decode(response.body)["jobs"];
+      print(alljobs);
+    } else {
       print(response.statusCode);
       print("failed to fetch all jobs");
     }
+  }
+
+  Future<void> applyJob({required int jobId}) async {
+    final response = await http.post(Uri.parse("${url}js/apply/$jobId"),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token"
+        });
   }
 }
