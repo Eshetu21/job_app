@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
-import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Screens/Company/company_homepage.dart';
@@ -67,7 +66,7 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                 return Container(
                                   width: double.infinity,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.4,
+                                      MediaQuery.of(context).size.height * 0.45,
                                   child: Column(
                                     children: [
                                       if (_profileController.isloading.value)

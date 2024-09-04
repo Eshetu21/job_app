@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:job_app/Controllers/Company/company_controller.dart';
 import 'package:job_app/Controllers/Job/JobController.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_apply.dart';
 
@@ -13,19 +14,18 @@ class ExplorePage extends StatefulWidget {
   State<ExplorePage> createState() => _ExplorePageState();
 }
 
-var tabList = ["All Jobs", "Saved Jobs"];
-
 class _ExplorePageState extends State<ExplorePage> {
+  final CompanyController _companyController = Get.put(CompanyController());
   final Jobcontroller _jobcontroller = Get.put(Jobcontroller());
   @override
   void initState() {
     super.initState();
     _jobcontroller.getJobs();
+    _companyController.fetchCompany();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_jobcontroller.alljobs);
     return FutureBuilder(
         future: _jobcontroller.getJobs(),
         builder: (context, snapshot) {
@@ -42,18 +42,29 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: ListView.separated(
                       itemBuilder: (context, index) {
                         var jobs = _jobcontroller.alljobs[index];
+                        var poster = jobs["company_id"] != null
+                            ? "Company Job"
+                            : "PrivateClient Job";
+                        var companyName = _companyController.company["company_name"];
+                        var companyLogo = _companyController.company["company_logo"];
                         var id = jobs["id"];
                         return Column(
                           children: [
                             GestureDetector(
                               onTap: () {
+                                print("company: ${_companyController.company}");
+                                print("logo ${companyLogo}");
+                                print(companyName);
                                 _showApplyModal(
                                     context,
                                     id,
+                                    poster,
                                     jobs["title"],
                                     jobs["type"],
                                     jobs["salary"] ?? "Negotiable",
-                                    jobs["description"] ?? "Null");
+                                    jobs["description"] ?? "Null",
+                                    companyLogo,
+                                    companyName);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -110,21 +121,38 @@ class _ExplorePageState extends State<ExplorePage> {
         });
   }
 
-  void _showApplyModal(BuildContext context, int jobId, String title,
-      String type, String salary, String description) {
+  void _showApplyModal(
+      BuildContext context,
+      int jobId,
+      String poster,
+      String title,
+      String type,
+      String salary,
+      String description,
+      String? companyLogo,
+      String? companyName) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
           return Container(
             margin: EdgeInsets.all(20),
             width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.45,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
+                Text(poster,
                     style: GoogleFonts.poppins(
                         fontSize: 22, fontWeight: FontWeight.bold)),
+                Column(
+                  children: [
+                    if (companyName != null) ...[Text(companyName)],
+                    companyLogo != null?Image.asset("uploads/company_logo/$companyLogo"):Container(),
+                  ],
+                ),
+                Text(title,
+                    style: GoogleFonts.poppins(
+                        fontSize: 20, fontWeight: FontWeight.w500)),
                 Text(type),
                 Text(salary),
                 Text(description),

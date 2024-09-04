@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/Company/company_controller.dart';
 import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
@@ -25,7 +24,6 @@ class _ProfilesState extends State<Profiles> {
       Get.put(UserAuthenticationController());
   final PrivateclientController _privateclientController =
       Get.put(PrivateclientController());
-  final CompanyController _companyController = Get.put(CompanyController());
   String selectedProfile = '';
   bool showAddAcount = false;
 

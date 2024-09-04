@@ -41,6 +41,7 @@ class CompanyController extends Controller
                 $validatedData["user_id"] = $user->id;
                 $validatedData["company_logo"] = $filename;
                 $company = Company::create($validatedData);
+                $company->company_logo = asset('uploads/company_logo/' . $company->company_logo);
             }
             return response()->json([
                 "success"=>true,
@@ -70,6 +71,7 @@ class CompanyController extends Controller
                     "message" => "company doesn't exists"
                 ], 400);
             }
+            $company->company_logo = asset('uploads/company_logo/' . $company->company_logo);
             return response()->json([
                 "success"=>true,
                 "company"=>$company
@@ -245,6 +247,7 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => true,
                 "jobs" => $jobs,
+                
 
             ], 200);
         } catch (ValidationException $e) {
