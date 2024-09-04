@@ -76,11 +76,14 @@ class JobController extends Controller
                 $jobOwnerId = $job->company_id;
                 if ($jobOwnerId === $companyId) {
                     $validatedData = $request->validate([
-                        'job_title' => 'string|max:255',
-                        'job_location' => 'string|max:255',
-                        'job_salary' => 'numeric',
-                        'deadline' => 'date',
-                        'job_description' => 'string',
+                        'title' => 'required|string',
+                        'type' => 'required|string',
+                        'sector' => 'required|string',
+                        'city' => 'required|string',
+                        'gender' => 'required|string',
+                        'salary' => 'nullable|numeric',
+                        'deadline' => 'required|string',
+                        'description' => 'required|string',
                     ]);
                     $job->update($validatedData);
                     return response()->json(["success" => true, "message" => $job], 200);
@@ -92,11 +95,14 @@ class JobController extends Controller
                 $jobOwnerId = $job->private_client_id;
                 if ($jobOwnerId === $privateClientId) {
                     $validatedData = $request->validate([
-                        'job_title' => 'string|max:255',
-                        'job_location' => 'string|max:255',
-                        'job_salary' => 'numeric',
-                        'deadline' => 'date',
-                        'job_description' => 'string',
+                        'title' => 'required|string',
+                        'type' => 'required|string',
+                        'sector' => 'required|string',
+                        'city' => 'required|string',
+                        'gender' => 'required|string',
+                        'salary' => 'nullable|numeric',
+                        'deadline' => 'required|string',
+                        'description' => 'required|string',
                     ]);
                     $job->update($validatedData);
                     return response()->json(["success" => true, "message" => $job], 200);

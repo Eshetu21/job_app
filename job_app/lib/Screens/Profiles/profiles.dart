@@ -3,9 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:job_app/Controllers/Company/company_controller.dart';
 import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
+import 'package:job_app/Screens/Company/add_company.dart';
+import 'package:job_app/Screens/Company/company_homepage.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
 import 'package:job_app/Screens/PrivateClient/private_client_homepage.dart';
 
@@ -22,6 +25,7 @@ class _ProfilesState extends State<Profiles> {
       Get.put(UserAuthenticationController());
   final PrivateclientController _privateclientController =
       Get.put(PrivateclientController());
+  final CompanyController _companyController = Get.put(CompanyController());
   String selectedProfile = '';
   bool showAddAcount = false;
 
@@ -113,7 +117,7 @@ class _ProfilesState extends State<Profiles> {
                                         ['user']['lastname']),
                                 subtitle: Text("Private Client"),
                                 trailing: Radio(
-                                    value: 'privateclient',
+                                    value: 'private',
                                     groupValue: selectedProfile,
                                     onChanged: (value) {
                                       setState(() {
@@ -128,7 +132,8 @@ class _ProfilesState extends State<Profiles> {
                                 leading: Image.asset("assets/icons/company.png",
                                     width: 28,
                                     color: Color(0xFFFF9228).withOpacity(0.4)),
-                                title: Text("company"),
+                                title: Text(_profileController
+                                    .profiles["company"]["company_name"]),
                                 subtitle: Text("Company"),
                                 trailing: Radio(
                                     value: 'company',
@@ -249,19 +254,24 @@ class _ProfilesState extends State<Profiles> {
                               Get.off(JobSeekerHomepage());
                             }
                             if (selectedProfile == "private") {
-                              print(_profileController.profiles["privateclient"]);
                               if (_profileController
                                       .profiles['privateclient'] ==
                                   null) {
-                                bool success = await _privateclientController
+                                await _privateclientController
                                     .createprivateclient();
-                                if (success) {
-                                  Get.off(PrivateClientHomepage());
-                                } else {
-                                  print("failed to create privaeclient");
-                                }
+
+                                Get.off(PrivateClientHomepage());
                               } else {
                                 Get.off(PrivateClientHomepage());
+                              }
+                            }
+                            if (selectedProfile == "company") {
+                              if (_profileController.profiles["company"] ==
+                                  null) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AddCompany()));
+                              } else {
+                                Get.offAll(CompanyHomepage());
                               }
                             }
                           },

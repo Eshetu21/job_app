@@ -39,6 +39,7 @@ class PrivateclientController extends GetxController {
     });
     if (response.statusCode == 200) {
       print("sucessfully fetched job");
+      print(json.decode(response.body)["jobs"]);
       privatejobs.value = json.decode(response.body)["jobs"];
     } else {
       print(response.statusCode);

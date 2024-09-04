@@ -1,38 +1,40 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, avoid_unnecessary_containers, sized_box_for_whitespace, invalid_use_of_protected_member
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
+import 'package:job_app/Controllers/Company/company_controller.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
-import 'package:job_app/Screens/Company/company_homepage.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/applications_page.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/explore_page.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
+import 'package:job_app/Screens/Company/company/company_applications.dart';
+import 'package:job_app/Screens/Company/company/company_jobs.dart';
+import 'package:job_app/Screens/Company/company/company_profile.dart';
+import 'package:job_app/Screens/Job/add_job.dart';
+import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
 import 'package:job_app/Screens/PrivateClient/private_client_homepage.dart';
 import 'package:job_app/Screens/Profiles/profiles.dart';
 
-class JobSeekerHomepage extends StatefulWidget {
-  const JobSeekerHomepage({super.key});
+class CompanyHomepage extends StatefulWidget {
+  const CompanyHomepage({super.key});
 
   @override
-  State<JobSeekerHomepage> createState() => _JobSeekerHomepageState();
+  State<CompanyHomepage> createState() => _CompanyHomepageState();
 }
 
-class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
-  final UserAuthenticationController _userAuthenticationController = Get.put(UserAuthenticationController());
-  final JobSeekerController _jobSeekerController =
-      Get.put(JobSeekerController());
+class _CompanyHomepageState extends State<CompanyHomepage> {
+  final UserAuthenticationController _userAuthenticationController =
+      Get.put(UserAuthenticationController());
   final ProfileController _profileController = Get.put(ProfileController());
-  String selectedProfile = 'jobseeker';
+  final CompanyController _companyController = Get.put(CompanyController());
+  String selectedProfile = 'company';
   int currentindex = 0;
   final PageController _pageController = PageController();
+  List<dynamic> companyJobs = <dynamic>[];
   @override
   void initState() {
     super.initState();
-    _jobSeekerController.getJobSeeker();
-    _jobSeekerController.fetchJobSeeker();
+    _companyController.fetchCompany();
+    _companyController.fetchCompanyJob();
   }
 
   @override
@@ -46,11 +48,10 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
           children: [
             Row(
               children: [
-                Text("Welcome",
+                Text("Company Posts",
                     style: GoogleFonts.poppins(
                         fontSize: 24, color: Color(0xFFFF9228))),
                 Spacer(),
-                SizedBox(width: 10),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: GestureDetector(
@@ -64,7 +65,7 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                 return Container(
                                   width: double.infinity,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.4,
+                                      MediaQuery.of(context).size.height * 0.45,
                                   child: Column(
                                     children: [
                                       if (_profileController.isloading.value)
@@ -110,12 +111,18 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                     setState(() {
                                                       selectedProfile =
                                                           value.toString();
+                                                      if (selectedProfile ==
+                                                          "jobseeker") {
+                                                        Get.offAll(
+                                                            JobSeekerHomepage());
+                                                      }
                                                     });
                                                   },
                                                 ),
                                               ),
-                                              "jobseeker",
-                                              () {}),
+                                              "jobseeker", () {
+                                            Get.offAll(JobSeekerHomepage());
+                                          }),
                                         if (_profileController
                                                 .profiles["privateclient"] !=
                                             null)
@@ -129,25 +136,26 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                 ),
                                                 title: Text(
                                                   _profileController.profiles[
-                                                              'privateclient'][
-                                                          'user']['firstname'] +
+                                                                  'jobseeker']
+                                                              ['user']
+                                                          ['firstname'] +
                                                       " " +
                                                       _profileController
                                                                   .profiles[
-                                                              'privateclient']
+                                                              'jobseeker']
                                                           ['user']['lastname'],
                                                 ),
                                                 subtitle:
                                                     Text("Private Client"),
                                                 trailing: Radio(
-                                                  value: 'privateclient',
+                                                  value: 'private',
                                                   groupValue: selectedProfile,
                                                   onChanged: (value) {
                                                     setState(() {
                                                       selectedProfile =
                                                           value.toString();
                                                       if (selectedProfile ==
-                                                          "privateclient") {
+                                                          "private") {
                                                         Get.offAll(
                                                             PrivateClientHomepage());
                                                       }
@@ -170,8 +178,8 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                       .withOpacity(0.4),
                                                 ),
                                                 title: Text(_profileController
-                                                        .profiles["company"]
-                                                    ["company_name"]),
+                                                        .profiles['company']
+                                                    ['company_name']),
                                                 subtitle: Text("Company"),
                                                 trailing: Radio(
                                                   value: 'company',
@@ -180,67 +188,54 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                                                     setState(() {
                                                       selectedProfile =
                                                           value.toString();
-                                                      if (selectedProfile ==
-                                                          "company") {
-                                                        Get.off(
-                                                            CompanyHomepage());
-                                                      }
                                                     });
                                                   },
                                                 ),
                                               ),
-                                              "company", () {
-                                            Get.offAll(CompanyHomepage());
-                                          }),
-                                        if (_profileController.profiles[
-                                                    "privateclient"] ==
-                                                null ||
-                                            _profileController
-                                                    .profiles["company"] ==
-                                                null)
-                                          Padding(
-                                            padding: EdgeInsets.all(20),
-                                            child: Column(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                Profiles()));
-                                                  },
-                                                  child: Container(
-                                                    margin: EdgeInsets.all(20),
-                                                    child: Center(
-                                                      child: Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 80,
-                                                                vertical: 10),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            color: Colors.grey
-                                                                .withOpacity(
-                                                                    0.2)),
-                                                        child: Text(
-                                                            "Add Account",
-                                                            style: GoogleFonts.poppins(
-                                                                color: Color(
-                                                                    0xFF130160),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500)),
-                                                      ),
-                                                    ),
-                                                  ),
+                                              "company",
+                                              () {}),
+                                      ],
+                                      if (_profileController
+                                                  .profiles["jobseeker"] ==
+                                              null ||
+                                          _profileController
+                                                  .profiles["privateclient"] ==
+                                              null)
+                                        Padding(
+                                          padding: EdgeInsets.all(20),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Profiles()));
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.all(20),
+                                              child: Center(
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 80,
+                                                      vertical: 10),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      color: Colors.grey
+                                                          .withOpacity(0.2)),
+                                                  child: Text("Add Account",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              color: Color(
+                                                                  0xFF130160),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
                                                 ),
-                                              ],
+                                              ),
                                             ),
                                           ),
-                                      ],
+                                        ),
                                       GestureDetector(
                                         onTap: () {
                                           _userAuthenticationController
@@ -276,51 +271,10 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                         );
                       },
                       child: Image.asset("assets/icons/switch.png")),
-                )
+                ),
               ],
             ),
-            Obx(() {
-              if (_jobSeekerController.jobseeker.isEmpty) {
-                return FutureBuilder(
-                    future: _jobSeekerController.getJobSeeker(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text("Error ${snapshot.error}");
-                      } else if (snapshot.hasData) {
-                        var jobseekerData =
-                            snapshot.data as Map<String, dynamic>;
-                        _jobSeekerController.jobseeker.value = jobseekerData;
-                        String firstname =
-                            jobseekerData["jobseeker"]["user"]["firstname"];
-                        return Text(
-                          firstname,
-                        );
-                      } else {
-                        return Text("No data found");
-                      }
-                    });
-              } else {
-                var jobSeekerData = _jobSeekerController.jobseeker;
-                String firstname =
-                    jobSeekerData["jobseeker"]["user"]["firstname"];
-                return Text(firstname,
-                    style: GoogleFonts.poppins(fontSize: 20));
-              }
-            }),
             SizedBox(height: 15),
-            TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide.none),
-                  hintText: "Search for jobs...",
-                  hintStyle: GoogleFonts.poppins(),
-                  prefixIcon: Icon(Icons.search_outlined),
-                  fillColor: Colors.white.withOpacity(0.7),
-                  filled: true),
-            ),
             Expanded(
               child: PageView(
                 controller: _pageController,
@@ -329,18 +283,27 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                     currentindex = index;
                   });
                 },
-                children: [
-                  ExplorePage(),
-                  ApplicationPage(),
-                ],
+                children: [CompanyJobs(), CompanyApplications()],
               ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                  margin: EdgeInsets.only(bottom: 30, right: 10),
+                  child: FloatingActionButton(
+                      backgroundColor: Color(0xFFFF9228),
+                      child: Icon(Icons.add, color: Colors.white),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => AddJob()));
+                      })),
             ),
             BottomNavigationBar(
               currentIndex: currentindex,
               onTap: (index) {
                 if (index == 2) {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => JobseekerProfile()));
+                      builder: (context) => CompanyProfile()));
                 } else {
                   setState(() {
                     currentindex = index;
@@ -350,12 +313,12 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
               },
               items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.explore),
-                  label: 'Explore',
+                  icon: Icon(Icons.work),
+                  label: 'My Jobs',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.description),
-                  label: 'Applications',
+                  label: 'My Applications',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),

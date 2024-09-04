@@ -41,8 +41,8 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::prefix('admin')->group(function () {
 
 
-        Route::post('login', [AdminController::class, 'login']);
-        Route::post('register', [AdminController::class, 'register']);
+        /* Route::post('login', [AdminController::class, 'login']);
+        Route::post('register', [AdminController::class, 'register']); */
         Route::get('statistic', [AdminController::class, 'statistic']);
         Route::delete('deletec/{companyId}', [AdminController::class, 'deletecompanyA']);
         Route::delete('deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA']);

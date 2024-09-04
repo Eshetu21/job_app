@@ -189,15 +189,13 @@ class CompanyController extends Controller
             $validatedData = $request->validate([
 
                 'title' => 'required|string',
-                'site' => 'required|string',
                 'type' => 'required|string',
                 'sector' => 'required|string',
                 'city' => 'required|string',
                 'gender' => 'required|string',
-                'location' => 'required|string',
-                'salary' => 'integer',
-                'deadline' => 'required|date',
-                'description' => 'required|string'
+                'salary' => 'nullable|numeric',
+                'deadline' => 'required|string',
+                'description' => 'required|string',
 
             ]);
             $validatedData['company_id'] = $user->company->id;
@@ -325,26 +323,22 @@ class CompanyController extends Controller
 
             $validatedData = $request->validate([
 
-                'title' => 'string',
-                'site' => 'string',
-                'type' => 'string',
-                'sector' => 'string',
-                'city' => 'string',
-                'gender' => 'string',
-                'location' => 'string',
-                'salary' => 'integer',
-                'deadline' => 'date',
-                'description' => 'string'
+                'title' => 'required|string',
+                'type' => 'required|string',
+                'sector' => 'required|string',
+                'city' => 'required|string',
+                'gender' => 'required|string',
+                'salary' => 'nullable|numeric',
+                'deadline' => 'required|string',
+                'description' => 'required|string',
             ]);
 
             $job->update([
                 'title' =>  $validatedData['title'] ??  $job->title,
-                'site' =>  $validatedData["site"] ??  $job->site,
                 'type' =>  $validatedData["type"] ??  $job->type,
                 'sector' =>  $validatedData["sector"] ??  $job->sector,
                 'city' =>  $validatedData["city"] ??  $job->city,
                 'gender' =>  $validatedData["gender"] ??  $job->gender,
-                'location' =>  $validatedData["location"] ??  $job->location,
                 'salary' => $validatedData["salary"] ??  $job->salary,
                 'deadline' => $validatedData["deadline"] ??  $job->deadline,
                 'description' => $validatedData["description"] ??  $job->description,
