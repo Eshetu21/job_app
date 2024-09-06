@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
@@ -19,37 +20,13 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Sanctum;
 
 
-// admin
 
-
-// User 
-// all routes works fine
+// auth
 Route::post('register', [UserController::class, "register"]);
 Route::post('login', [UserController::class, "login"]);
-Route::middleware("auth:sanctum")->group(function () {
-    Route::post('logout', [UserController::class, "logout"]);
-    Route::get("profile", [UserController::class, "getuserprofile"]);
-    Route::post('checkpincode', [UserController::class, "checkpincode"]);
-    Route::get('user', function (Request $request) {
-        return response()->json(["success" => true, "user" => $request->user()]);
-    });
-    Route::put('update', [UserController::class, "update"]);
-    Route::delete('delete', [UserController::class, "delete"]);
-    Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
-    Route::post('changepassword', [UserController::class, "changepassword"]);
-    // admin 
-    Route::prefix('admin')->group(function () {
 
 
-        Route::post('login', [AdminController::class, 'login']);
-        Route::post('register', [AdminController::class, 'register']);
-        Route::get('statistic', [AdminController::class, 'statistic']);
-        Route::delete('deletec/{companyId}', [AdminController::class, 'deletecompanyA']);
-        Route::delete('deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA']);
-        Route::delete('deleteu/{userId}', [AdminController::class, 'deleteuserA']);
-        Route::delete('deletejs/{jobseekerId}', [AdminController::class, 'deleteJobSeekerA']);
-    });
-});
+// eshetu
 Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"]);
 Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"]);
 Route::put('updatejobseeker', [JobSeekerController::class, "updatejobseeker"]);
@@ -58,7 +35,6 @@ Route::delete('deletejobseeker', [JobSeekerController::class, "delete"]);
 Route::post('applyjob/{jobid}', [JobSeekerController::class, "applyJob"]);
 Route::get('getapplications', [JobSeekerController::class, "getapplications"]);
 Route::delete('deleteapplications/{appid}', [JobSeekerController::class, "deleteApplication"]);
-
 Route::post('createprivateclient', [PrivateClientController::class, "createprivateclient"]);
 Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatejob"]);
 Route::put('privatecreateupdate', [PrivateClientController::class, "update"]);
@@ -66,7 +42,60 @@ Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"])
 
 Route::middleware("auth:sanctum")->group(
     function () {
-
+        // auth
+        Route::post('logout', [UserController::class, "logout"]);
+        // user
+        Route::get("profile", [UserController::class, "getuserprofile"]);
+        Route::post('checkpincode', [UserController::class, "checkpincode"]);
+        Route::get('user', function (Request $request) {
+            return response()->json(["success" => true, "user" => $request->user()]);
+        });
+        Route::put('update', [UserController::class, "update"]);
+        Route::delete('delete', [UserController::class, "delete"]);
+        Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
+        Route::post('changepassword', [UserController::class, "changepassword"]);
+    
+        // admin 
+        // --------------------------------------------------------------------------------------------------------
+        Route::prefix('admin')->middleware('isadmin')->group(function () {
+    
+            // company
+           // Route::get('c/{companyid}', [AdminController::class, "cstat"])->middleware('canGetStat');
+            Route::delete('c/delete/{companyId}', [AdminController::class, 'deletecompanyA'])->middleware('canManageAccounts');
+    
+            // private client 
+           // Route::get('c/{privateclientId}', [AdminController::class, "pcstat"])->middleware('canGetStat');;
+            Route::delete('pc/deletepkkkc/{privateclientId}', [AdminController::class, 'deletePrivateClientA'])->middleware('canManageAccounts');
+    
+            // jobseeker
+            Route::delete('deletejs/{jobseekerId}', [AdminController::class, 'deleteJobSeekerA'])->middleware('canManageAccounts');
+            //Route::get('jsstat/{jobseekerId}', [AdminController::class, 'jsstat'])->middleware('canGetStat');;
+    
+            // user
+            Route::get("u/profile/{id}", [AdminController::class, "getuserprofile"])->middleware('canManageAccounts');
+            Route::delete('u/deleteu/{userId}', [AdminController::class, 'deleteuserA'])->middleware('canManageAccounts');
+    
+            // job and app 
+            Route::prefix('job')->group(function () {
+                // Route::get('get', [AdminController::class, 'fetchjobs']);
+                // Route::get('get/{id}', [AdminController::class, 'fetchjob']);
+                Route::delete('delete/{jobid}', [AdminController::class, "deleteJob"])->middleware('canManageJobs');
+                Route::get('getstat/{jobid}', [AdminController::class, "jobstat"])->middleware('canGetStat');
+                Route::put('postjob/{jobid}', [AdminController::class, "postjob"])->middleware('canManageJobs');
+                Route::put('ignorejob/{jobid}', [AdminController::class, "ignorejob"])->middleware('canManageJobs');
+            });
+            Route::prefix('app')->group(function () {
+                // Route::get('get', [AdminController::class, 'fetchapps']);
+                // Route::get('get/{id}', [AdminController::class, 'fetchapp']);
+                 Route::delete('delete/{appid}', [AdminController::class, "deleteAppadmin"])->middleware('canManageJobs');;
+            });
+    
+    
+            Route::get('statistic', [AdminController::class, 'statistic'])->middleware('canGetStat');;
+            Route::post('createadmin', [AdminController::class, 'createadmin'])->middleware('canAddAdmins');;
+            Route::delete('deleteadmin', [AdminController::class, 'deleteadmin'])->middleware('canDeleteAdmin');;
+        });
+        // --------------------------------------------------------------------------------------------------------
         // jobseeker
         Route::prefix('js')->group(function () {
             Route::post('create', [JobSeekerController::class, "createjobseeker"]);
@@ -151,15 +180,21 @@ Route::middleware("auth:sanctum")->group(
 
 
 // public
-
+// --------------------------------------------------------------------------------------------------------
 Route::prefix('p')->group(function () {
     Route::prefix('job')->group(function () {
-        Route::get('get', [JobController::class, 'fetchjobs']);
-        Route::get('get/{id}', [JobController::class, 'fetchjob']);
+        Route::get('get', [PublicController::class, 'fetchjobs']);
+        Route::get('get/{id}', [PublicController::class, 'fetchjob']);
     });
-
-    Route::get('pc/{privateclient_id}', [PublicController::class, "getprivateclient"]);
-    Route::get('c/{company_id}', [PublicController::class, "getcompany"]);
-    Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
     Route::get('u/{user_id}', [PublicController::class, "getuser"]);
+    Route::post('u/forget_password', [PublicController::class, "forgetpassword"]);
+    Route::post('u/reset_password', [PublicController::class, "resetpassword"]);
+    Route::get('c/{company_id}', [PublicController::class, "getcompany"]);
+    Route::get('c/get/{$companyid}', [PublicController::class, "getCJobs"]);
+    Route::get('pc/{privateclient_id}', [PublicController::class, "getprivateclient"]);
+    Route::get('pc/get/{privateclientId}', [PublicController::class, "getPCJobs"]);
+    Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
+
 });
+    // --------------------------------------------------------------------------------------------------------
+// 

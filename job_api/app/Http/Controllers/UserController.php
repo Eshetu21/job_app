@@ -172,7 +172,10 @@ class UserController extends Controller
 
             $user->update(['email_verification_pincode' => $pin, "pincode_expire" => $pincode_expire]);
             $user->save();
-            Mail::to($user->email)->send(new SendPin($pin));
+           
+            $username =  $user->firstname. " ".  $user->lastname;
+          
+            Mail::to($user->email)->send(new SendPin($pin,$username));
             return response()->json(["success" => true, "messasge" => "Pincode send"]);
         } catch (Exception $e) {
             return response()->json([
@@ -210,6 +213,10 @@ class UserController extends Controller
                 "email" => $validatedData["email"] ?? $user->email,
                 "age" => $validatedData["age"] ?? $user->age,
                 "gender" => $validatedData["gender"] ?? $user->gender,
+                'facebook_profile_link'=>$validatedData["facebook_profile_link"]??$user->facebook_profile_link,
+                'linkedin_profile_link'=>$validatedData["linkedin_profile_link"]??$user->linkedin_profile_link,
+                'github_profile_link'=>$validatedData["github_profile_link"]??$user->github_profile_link,
+                'other_profile_link'=>$validatedData["other_profile_link"]??$user->other_profile_link,
 
                 "about_me" => $validatedData["about_me"] ?? $user->about_me,
 

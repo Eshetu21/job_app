@@ -15,6 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('password');
+            $table->boolean('manage_accounts');
+            $table->boolean('add_admins');
+            $table->boolean('manage_stats');
+            $table->boolean('manage_jobs');  
+            $table->boolean('can_delete_admin');  
             $table->timestamps();
         });
     }

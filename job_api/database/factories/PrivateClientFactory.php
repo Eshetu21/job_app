@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Admin>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PrivateClient>
  */
-class AdminFactory extends Factory
+class PrivateClientFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,8 +16,11 @@ class AdminFactory extends Factory
      */
     public function definition(): array
     {
+        static $num = 1;
         return [
-            //
+            'user_id'=>$num++,
+            'profile_pic'=>fake()->text(20),
+       
         ];
     }
 }

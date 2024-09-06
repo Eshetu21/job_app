@@ -28,10 +28,20 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender',
         'address',
         'profile_pic',
+        'role',
         'password',
         'email_verification_pincode',
+       'facebook_profile_link',
+       'other_profile_link',
+        'linkedin_profile_link',
+        'github_profile_link',
         'pincode_expire',
-        "email_verified"
+        "email_verified",
+        'manage_accounts',
+        'add_admins',
+        'manage_stats',
+        'manage_jobs',
+        'can_delete_admin'
     ];
 
     /**
@@ -44,13 +54,18 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
         'email_verification_pincode',
         'pincode_expire',
-        "email_verified"
+        "email_verified",
+        'manage_accounts',
+        'add_admins',
+        'manage_stats',
+        'manage_jobs',
+        'can_delete_admin'
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+    /*
+      Get the attributes that should be cast.
+     
+      @return array<string, string>
      */
     protected function casts(): array
     {

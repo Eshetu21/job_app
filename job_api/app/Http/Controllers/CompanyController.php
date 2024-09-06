@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AcceptedMail;
+use App\Mail\RejectedMail;
 use App\Models\Company;
 use App\Models\Job;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -369,18 +372,18 @@ class CompanyController extends Controller
             ], 400);
         }
     }
-    public function getJobbyId(Request $request, $jobid)
+    public function getJobbyId(Request $request,$companyid, $jobid)
     {
         try {
-            $user =   $request->user();
-            if (!$user->company) {
+            $company =   Company::find($companyid);
+            if (!$company) {
                 return response()->json([
                     "success" => false,
                     "message" => "company not registerd"
                 ], 400);
             }
 
-            $job = $user->company->jobs->find($jobid);
+            $job = $company->jobs->find($jobid);
             if (!$job) {
                 return response()->json([
                     "success" => false,
@@ -435,6 +438,13 @@ class CompanyController extends Controller
 
                 ], 400);
             }
+            if($app->status=="Rejected"){
+                return response()->json([
+                    "success" => false,
+                    "message" => "Already Rejected",
+                    
+                ], 400);  
+            }
             $validatedData = $request->validate([
                 'statement' => 'string',
 
@@ -444,6 +454,8 @@ class CompanyController extends Controller
                 'statement' => isset($validatedData["statement"]) ? $validatedData["statement"] : null,
                 'status' => "Rejected"
             ]);
+            Mail::to($app->jobseeker->email)->send(new RejectedMail($app->jobseeker->firstname,$app->job->company->company_name,$app->job->title));
+   
             return response()->json([
                 "success" => true,
                 "message" => "Application Rejected",
@@ -474,23 +486,32 @@ class CompanyController extends Controller
                     "message" => "company not registerd"
                 ], 400);
             }
-
+            
             $job = $user->company->jobs->find($jobid);
+          
             if (!$job) {
                 return response()->json([
                     "success" => false,
                     "message" => "Job not found",
-
+                    
                 ], 400);
             }
-
+            
             $app = $job->applications->find($appid);
+           
             if (!$app) {
                 return response()->json([
                     "success" => false,
                     "message" => "Application not found",
-
+                    
                 ], 400);
+            }
+            if($app->status=="Accepted"){
+                return response()->json([
+                    "success" => false,
+                    "message" => "Already Accepted",
+                    
+                ], 400);  
             }
             $validatedData = $request->validate([
                 'statement' => 'required|string',
@@ -501,6 +522,8 @@ class CompanyController extends Controller
                 'statement' => $validatedData["statement"],
                 'status' => "Accepted"
             ]);
+            
+            Mail::to($app->jobseeker->email)->send(new AcceptedMail($app->jobseeker->firstname,$app->job->company->company_name,$app->job->title));
             return response()->json([
                 "success" => true,
                 "message" => "Application Accepted",
@@ -517,6 +540,7 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
+                "line"=>$e->getLine()
 
             ], 400);
         }
@@ -552,7 +576,7 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => true,
 
-                "applications" => $apps->load('job')
+                "applications" => $apps->load(['job','jobseeker'])
 
             ], 200);
         } catch (ValidationException $e) {
