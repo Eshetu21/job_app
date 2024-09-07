@@ -35,7 +35,11 @@ Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatej
 Route::put('privatecreateupdate', [PrivateClientController::class, "update"]);
 Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"]);
 
+// table for categories and and cities
+// notify jobseekers 
+
 Route::middleware("auth:sanctum")->group(
+    
     function () {
         // auth
         Route::post('logout', [UserController::class, "logout"]);

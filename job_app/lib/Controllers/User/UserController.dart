@@ -127,6 +127,7 @@ class UserAuthenticationController extends GetxController {
   void logout() {
     logLoading.value = false;
     box.remove('token');
+    _profileController.clearProfile();
     _profileController.profiles.clear();
     token.value = '';
     userId.value = '';

@@ -1,25 +1,22 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
-
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
-import 'package:job_app/Controllers/Profile/ProfileController.dart';
+import 'package:job_app/Controllers/Company/company_controller.dart';
 
-class PrivateProfile extends StatefulWidget {
-  const PrivateProfile({super.key});
+class CompanyProfile extends StatefulWidget {
+  const CompanyProfile({super.key});
 
   @override
-  State<PrivateProfile> createState() => _PrivateProfileState();
+  State<CompanyProfile> createState() => _CompanyProfileState();
 }
 
-class _PrivateProfileState extends State<PrivateProfile> {
-  final ProfileController _profileController = Get.put(ProfileController());
-  final PrivateclientController _privateclientController = Get.put(PrivateclientController());
+class _CompanyProfileState extends State<CompanyProfile> {
+  final CompanyController _companyController = Get.put(CompanyController());
   @override
   void initState() {
     super.initState();
-    _profileController.fetchProfiles();
+    _companyController.fetchCompany();
   }
 
   @override
@@ -27,7 +24,7 @@ class _PrivateProfileState extends State<PrivateProfile> {
     return Scaffold(
         body: SafeArea(
             child: FutureBuilder(
-                future: _profileController.fetchProfiles(),
+                future: _companyController.fetchCompany(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
@@ -35,7 +32,7 @@ class _PrivateProfileState extends State<PrivateProfile> {
                   if (snapshot.hasError) {
                     return Center(child: Text("Error"));
                   }
-                  if (_profileController.profiles.isEmpty) {
+                  if (_companyController.company.isEmpty) {
                     return Center(
                       child: Text("No profile data found",
                           style: GoogleFonts.poppins()),
@@ -48,7 +45,7 @@ class _PrivateProfileState extends State<PrivateProfile> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Private Client",
+                            Text("Company Profile",
                                 style: GoogleFonts.poppins(fontSize: 24)),
                             SizedBox(height: 10),
                             Row(children: [
@@ -63,62 +60,58 @@ class _PrivateProfileState extends State<PrivateProfile> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                            _profileController
-                                                    .profiles["jobseeker"]
-                                                ["user"]["firstname"][0],
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 50)),
-                                        Text(
-                                            _profileController
-                                                    .profiles["jobseeker"]
-                                                ["user"]["lastname"][0],
+                                            _companyController
+                                                        .company["company_name"]
+                                                    [0] +
+                                                _companyController
+                                                    .company["company_name"][1],
                                             style: GoogleFonts.poppins(
                                                 fontSize: 50)),
                                       ])),
                               Column(
                                 children: [
-                                  _profileController.isloading.value
-                                      ? Text("loading...")
-                                      : Text(
-                                          _profileController
-                                                      .profiles["jobseeker"]
-                                                  ["user"]["firstname"] +
-                                              " " +
-                                              _profileController
-                                                      .profiles["jobseeker"]
-                                                  ["user"]["lastname"],
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 22)),
+                                  Text(
+                                      _companyController
+                                          .company["company_name"],
+                                      style: GoogleFonts.poppins(fontSize: 22)),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(Icons.location_on_outlined,
                                           size: 18),
-                                      _profileController.profiles["jobseeker"]
-                                                  ["user"]["address"] !=
-                                              null
-                                          ? Text(
-                                              _profileController
-                                                      .profiles["jobseeker"]
-                                                  ["user"]["address"],
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 22),
-                                            )
-                                          : Text("Null",
-                                              style: GoogleFonts.poppins()),
+                                      Text(
+                                        _companyController
+                                            .company["company_address"],
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 22),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.phone_android_outlined,
+                                          size: 18),
+                                      Text(
+                                        _companyController
+                                            .company["company_phone"],
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 22),
+                                      )
                                     ],
                                   ),
                                 ],
                               ),
                             ]),
                             Container(
-                              margin: EdgeInsets.only(top:30),
+                              margin: EdgeInsets.only(top: 30),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     children: [
-                                      Text(_privateclientController.privatejobs.length.toString(),
+                                      Text(_companyController.companyJobs.length.toString(),
                                           style: GoogleFonts.poppins(
                                               fontSize: 18)),
                                       Text("Jobs Posted",
@@ -126,11 +119,12 @@ class _PrivateProfileState extends State<PrivateProfile> {
                                               GoogleFonts.poppins(fontSize: 18))
                                     ],
                                   ),
-                                 Container(
-                                  padding: EdgeInsets.all(1),
-                                  height: 50,
-                                  decoration: BoxDecoration(color: Colors.grey),
-                                 ),
+                                  Container(
+                                    padding: EdgeInsets.all(1),
+                                    height: 50,
+                                    decoration:
+                                        BoxDecoration(color: Colors.grey),
+                                  ),
                                   Column(
                                     children: [
                                       Text("0",

@@ -116,10 +116,7 @@ class _JobSeekerCreateState extends State<JobSeekerCreate> {
               SizedBox(height: 160),
               GestureDetector(
                 onTap: () async {
-                  var jobSeekerData = await _jobSeekerController.getJobSeeker();
-                 
                   await _jobSeekerController.updatejobseeker(
-                  
                     category: selectedCategory!,
                     subCategory: selectedSubcategory!,
                   );

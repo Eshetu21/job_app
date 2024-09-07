@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
+import 'package:job_app/Screens/Company/add_company.dart';
+import 'package:job_app/Screens/Company/company_homepage.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
 import 'package:job_app/Screens/PrivateClient/private_client_homepage.dart';
 
@@ -113,7 +115,7 @@ class _ProfilesState extends State<Profiles> {
                                         ['user']['lastname']),
                                 subtitle: Text("Private Client"),
                                 trailing: Radio(
-                                    value: 'privateclient',
+                                    value: 'private',
                                     groupValue: selectedProfile,
                                     onChanged: (value) {
                                       setState(() {
@@ -128,7 +130,8 @@ class _ProfilesState extends State<Profiles> {
                                 leading: Image.asset("assets/icons/company.png",
                                     width: 28,
                                     color: Color(0xFFFF9228).withOpacity(0.4)),
-                                title: Text("company"),
+                                title: Text(_profileController
+                                    .profiles["company"]["company_name"]),
                                 subtitle: Text("Company"),
                                 trailing: Radio(
                                     value: 'company',
@@ -244,17 +247,30 @@ class _ProfilesState extends State<Profiles> {
                           ),
                         Spacer(),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             if (selectedProfile == 'jobseeker') {
                               Get.off(JobSeekerHomepage());
                             }
-                            if (_profileController.profiles['privateclient'] !=
-                                    null &&
-                                selectedProfile == "private") {
-                              _privateclientController.createprivateclient();
-                              print("Creating private client profile...");
-                              print("Navigating to PrivateClientHomepage...");
-                              Get.off(PrivateClientHomepage());
+                            if (selectedProfile == "private") {
+                              if (_profileController
+                                      .profiles['privateclient'] ==
+                                  null) {
+                                await _privateclientController
+                                    .createprivateclient();
+
+                                Get.off(PrivateClientHomepage());
+                              } else {
+                                Get.off(PrivateClientHomepage());
+                              }
+                            }
+                            if (selectedProfile == "company") {
+                              if (_profileController.profiles["company"] ==
+                                  null) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AddCompany()));
+                              } else {
+                                Get.offAll(CompanyHomepage());
+                              }
                             }
                           },
                           child: Center(

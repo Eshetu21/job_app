@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
-import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
+import 'package:job_app/Controllers/User/UserController.dart';
+import 'package:job_app/Screens/Company/company_homepage.dart';
 import 'package:job_app/Screens/Job/add_job.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
 import 'package:job_app/Screens/PrivateClient/Privateclient/private_applications.dart';
@@ -24,8 +25,8 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
   final JobSeekerController _jobSeekerController =
       Get.put(JobSeekerController());
   final ProfileController _profileController = Get.put(ProfileController());
-  final PrivateclientController _privateclientController =
-      Get.put(PrivateclientController());
+  final UserAuthenticationController _userAuthenticationController =
+      Get.put(UserAuthenticationController());
   String selectedProfile = 'privateclient';
   int currentindex = 0;
   final PageController _pageController = PageController();
@@ -52,8 +53,6 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                     style: GoogleFonts.poppins(
                         fontSize: 24, color: Color(0xFFFF9228))),
                 Spacer(),
-                Icon(Icons.settings_rounded),
-                SizedBox(width: 10),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: GestureDetector(
@@ -67,7 +66,7 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                 return Container(
                                   width: double.infinity,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.4,
+                                      MediaQuery.of(context).size.height * 0.45,
                                   child: Column(
                                     children: [
                                       if (_profileController.isloading.value)
@@ -83,7 +82,6 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                                   style: GoogleFonts.poppins(
                                                       fontSize: 22))),
                                         ),
-                                       
                                         if (_profileController
                                                 .profiles["jobseeker"] !=
                                             null)
@@ -174,7 +172,9 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                                   color: Color(0xFFFF9228)
                                                       .withOpacity(0.4),
                                                 ),
-                                                title: Text("company"),
+                                                title: Text(_profileController
+                                                        .profiles["company"]
+                                                    ["company_name"]),
                                                 subtitle: Text("Company"),
                                                 trailing: Radio(
                                                   value: 'company',
@@ -183,57 +183,86 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                                     setState(() {
                                                       selectedProfile =
                                                           value.toString();
+                                                      if (selectedProfile ==
+                                                          "company") {
+                                                        Get.offAll(
+                                                            CompanyHomepage());
+                                                      }
                                                     });
                                                   },
                                                 ),
                                               ),
-                                              "company",
-                                              () {}),
+                                              "company", () {
+                                            Get.offAll(CompanyHomepage());
+                                          }),
                                       ],
-                                       if (_profileController
-                                                    .profiles["jobseeker"] ==
-                                                null ||
-                                            _profileController
-                                                    .profiles["company"] ==
-                                                null)
-                                          Padding(
-                                            padding: EdgeInsets.all(20),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            Profiles()));
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.all(20),
-                                                child: Center(
-                                                  child: Container(
-                                                    padding: EdgeInsets
-                                                        .symmetric(
-                                                            horizontal: 80,
-                                                            vertical: 10),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    20),
-                                                        color: Colors.grey
-                                                            .withOpacity(
-                                                                0.2)),
-                                                    child: Text(
-                                                        "Add Account",
-                                                        style: GoogleFonts.poppins(
-                                                            color: Color(
-                                                                0xFF130160),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500)),
-                                                  ),
+                                      if (_profileController
+                                                  .profiles["jobseeker"] ==
+                                              null ||
+                                          _profileController
+                                                  .profiles["company"] ==
+                                              null)
+                                        Padding(
+                                          padding: EdgeInsets.all(20),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Profiles()));
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.all(20),
+                                              child: Center(
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 80,
+                                                      vertical: 10),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      color: Colors.grey
+                                                          .withOpacity(0.2)),
+                                                  child: Text("Add Account",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              color: Color(
+                                                                  0xFF130160),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
                                                 ),
                                               ),
                                             ),
                                           ),
+                                        ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _userAuthenticationController
+                                              .logout();
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.logout_outlined,
+                                              color: Color(0xFF130160),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Text("LOG OUT",
+                                                  style: GoogleFonts.poppins(
+                                                      color:
+                                                          Color(0xFF130160))),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 );
