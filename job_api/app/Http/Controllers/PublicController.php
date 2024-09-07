@@ -36,7 +36,7 @@ class PublicController extends Controller
                 $pin = rand(100000, 999999);
                 $pincode_expire = Carbon::now()->addMinutes(5)->timestamp;
     
-                $user->update(['email_verification_pincode' => $pin, "pincode_expire" => $pincode_expire]);
+                $user->update(['pincode' => $pin, "pincode_expire" => $pincode_expire]);
                 $user->save();
                
                 $username =  $user->firstname. " ".  $user->lastname;
@@ -70,7 +70,7 @@ public function resetpassword(Request $request){
  
         $pin = $request->pincode;
 
-        if ($user->email_verification_pincode == null) {
+        if ($user->pincode == null) {
             return response()->json([
                 "success" => false,
                 "message" => "Not requested",
@@ -85,9 +85,9 @@ public function resetpassword(Request $request){
 
             ], 400);
         }
-        if ((int)$pin === (int)$user->email_verification_pincode) {
+        if ((int)$pin === (int)$user->pincode) {
 
-            $user->update(["email_verification_pincode" => null, "pincode_expire" => Carbon::now()->format('Uu') - 1000, "email_verified" => true]);
+            $user->update(["pincode" => null, "pincode_expire" => Carbon::now()->format('Uu') - 1000, "email_verified" => true]);
 
           
            

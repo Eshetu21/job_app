@@ -30,7 +30,7 @@ class Job extends Model
 
     public function privateclient()
     {
-        return $this->belongsTo(PrivateClient::class);
+        return $this->belongsTo(PrivateClient::class,'private_client_id');
     }
 
     public function company()

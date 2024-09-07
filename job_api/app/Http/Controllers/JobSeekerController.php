@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\JobSeekerRequest\UpdateJobSeekerRequest;
+use App\Mail\ApplicationNotify;
 use App\Models\Application;
 use App\Models\Job;
 use App\Models\JobSeeker;
@@ -10,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 
@@ -259,7 +261,7 @@ class JobSeekerController extends Controller
                 ], 400);
             }
 
-            $job = Job::find($jobid);
+            $job = Job::find($jobid)->load(['privateclient','company']);
             if (!$job) {
                 return response()->json([
                     "success" => false,
@@ -289,8 +291,7 @@ class JobSeekerController extends Controller
             }
             $application = Application::where(["job_id" => $jobid, "user_id" => $user->id])->first();
            
-            
-           
+     
             if ($application) {
                 return response()->json([
                     "success" => false,
@@ -332,7 +333,18 @@ class JobSeekerController extends Controller
                 'cover_letter' => $cover_letter,
                 'cv' => $cv
             ]);
-
+       
+if($job->company){
+    $username =  $user->firstname. " ".  $user->lastname;
+    Mail::to($job->company->user->email)->send(new ApplicationNotify($username,$job->company->company_name,$job->title));
+}
+else if($job->privateclient){
+    $username =  $user->firstname. " ".  $user->lastname;
+    Mail::to($job->privateclient->user->email)->send(new ApplicationNotify($username,"Private Client",$job->title));
+}
+else {
+    dd("nooo");
+}
             if ($application) {
                 return response()->json([
                     "success" => true,
@@ -351,6 +363,7 @@ class JobSeekerController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
+                'line'=>$e->getLine()
 
             ], 400);
         }
