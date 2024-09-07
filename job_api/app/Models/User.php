@@ -40,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'manage_accounts',
         'add_admins',
         'manage_stats',
+        'pincode',
         'manage_jobs',
         'can_delete_admin'
     ];

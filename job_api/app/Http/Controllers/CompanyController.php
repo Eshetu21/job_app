@@ -6,6 +6,7 @@ use App\Mail\AcceptedMail;
 use App\Mail\RejectedMail;
 use App\Models\Company;
 use App\Models\Job;
+use App\Models\JobSeeker;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -23,7 +24,7 @@ class CompanyController extends Controller
             $user = $request->user();
             if ($user->Company) {
                 return response()->json([
-                    "success"=>false,
+                    "success" => false,
                     "message" => "Company already exists"
                 ], 400);
             }
@@ -46,7 +47,7 @@ class CompanyController extends Controller
                 $company = Company::create($validatedData);
             }
             return response()->json([
-                "success"=>true,
+                "success" => true,
                 'message' => 'Company profile created successfully.',
                 'company' => $company
             ], 201);
@@ -54,9 +55,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -64,19 +66,21 @@ class CompanyController extends Controller
             ], 400);
         }
     }
-    public function showcompany(Request $request){
+    public function showcompany(Request $request)
+    {
         $user = $request->user();
-        $company = Company::with('user')->where("user_id",$user->id)->first();
-            if (!$user->company) {
-                return response()->json([
-                    "success"=>false,
-                    "message" => "company doesn't exists"
-                ], 400);
-            }
+        $company = Company::with('user')->where("user_id", $user->id)->first();
+        if (!$user->company) {
             return response()->json([
-                "success"=>true,
-                "company"=>$company
-            ],200); }
+                "success" => false,
+                "message" => "company doesn't exists"
+            ], 400);
+        }
+        return response()->json([
+            "success" => true,
+            "company" => $company
+        ], 200);
+    }
     public function update(Request $request)
     {
         try {
@@ -124,7 +128,7 @@ class CompanyController extends Controller
             ]);
 
             return response()->json([
-                "success"=>true,
+                "success" => true,
                 "message" => "Data updated successfully",
                 "updatedCompany" => $company,
             ], 200);
@@ -132,9 +136,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -152,10 +157,10 @@ class CompanyController extends Controller
                     "message" => "company not registerd"
                 ], 400);
             }
-            
+
             $company = $user->company;
             $companyPath = public_path('uploads/company_logo/' . $company->company_logo);
-         
+
             if (File::exists($companyPath)) {
                 File::delete($companyPath);
             }
@@ -169,9 +174,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -185,7 +191,7 @@ class CompanyController extends Controller
             $user = $request->user();
             if (!$user->company) {
                 return response()->json([
-                    "success"=>false,
+                    "success" => false,
                     "message" => "company not registerd"
                 ], 400);
             }
@@ -207,6 +213,7 @@ class CompanyController extends Controller
             $job = $user->company->jobs()->create(
                 $validatedData
             );
+         
             $user->company->load('user');
             return response()->json([
                 "success" => true,
@@ -214,13 +221,15 @@ class CompanyController extends Controller
                 "job" => $job,
 
             ], 201);
+     
         } catch (ValidationException $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -256,9 +265,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -285,7 +295,7 @@ class CompanyController extends Controller
 
                 ], 400);
             }
-          
+
             $job->delete();
             return response()->json([
                 "success" => true,
@@ -296,9 +306,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -362,9 +373,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -372,7 +384,7 @@ class CompanyController extends Controller
             ], 400);
         }
     }
-    public function getJobbyId(Request $request,$companyid, $jobid)
+    public function getJobbyId(Request $request, $companyid, $jobid)
     {
         try {
             $company =   Company::find($companyid);
@@ -400,9 +412,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -438,12 +451,12 @@ class CompanyController extends Controller
 
                 ], 400);
             }
-            if($app->status=="Rejected"){
+            if ($app->status == "Rejected") {
                 return response()->json([
                     "success" => false,
                     "message" => "Already Rejected",
-                    
-                ], 400);  
+
+                ], 400);
             }
             $validatedData = $request->validate([
                 'statement' => 'string',
@@ -454,8 +467,8 @@ class CompanyController extends Controller
                 'statement' => isset($validatedData["statement"]) ? $validatedData["statement"] : null,
                 'status' => "Rejected"
             ]);
-            Mail::to($app->jobseeker->email)->send(new RejectedMail($app->jobseeker->firstname,$app->job->company->company_name,$app->job->title));
-   
+            Mail::to($app->jobseeker->email)->send(new RejectedMail($app->jobseeker->firstname, $app->job->company->company_name, $app->job->title));
+
             return response()->json([
                 "success" => true,
                 "message" => "Application Rejected",
@@ -466,9 +479,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -486,32 +500,32 @@ class CompanyController extends Controller
                     "message" => "company not registerd"
                 ], 400);
             }
-            
+
             $job = $user->company->jobs->find($jobid);
-          
+
             if (!$job) {
                 return response()->json([
                     "success" => false,
                     "message" => "Job not found",
-                    
+
                 ], 400);
             }
-            
+
             $app = $job->applications->find($appid);
-           
+
             if (!$app) {
                 return response()->json([
                     "success" => false,
                     "message" => "Application not found",
-                    
+
                 ], 400);
             }
-            if($app->status=="Accepted"){
+            if ($app->status == "Accepted") {
                 return response()->json([
                     "success" => false,
                     "message" => "Already Accepted",
-                    
-                ], 400);  
+
+                ], 400);
             }
             $validatedData = $request->validate([
                 'statement' => 'required|string',
@@ -522,8 +536,8 @@ class CompanyController extends Controller
                 'statement' => $validatedData["statement"],
                 'status' => "Accepted"
             ]);
-            
-            Mail::to($app->jobseeker->email)->send(new AcceptedMail($app->jobseeker->firstname,$app->job->company->company_name,$app->job->title));
+
+            Mail::to($app->jobseeker->email)->send(new AcceptedMail($app->jobseeker->firstname, $app->job->company->company_name, $app->job->title));
             return response()->json([
                 "success" => true,
                 "message" => "Application Accepted",
@@ -534,13 +548,14 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
-                "line"=>$e->getLine()
+                "line" => $e->getLine()
 
             ], 400);
         }
@@ -576,16 +591,17 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => true,
 
-                "applications" => $apps->load(['job','jobseeker'])
+                "applications" => $apps->load(['job', 'jobseeker'])
 
             ], 200);
         } catch (ValidationException $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -632,9 +648,10 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-              
 
-            ], 400);} catch (Exception $e) {
+
+            ], 400);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
