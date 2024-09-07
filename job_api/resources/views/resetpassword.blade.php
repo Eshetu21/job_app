@@ -1,4 +1,4 @@
-<pre style="font-size: 20px;">
+<pre style="font-size: 13px;">
 Hi <b style="color: gray;">{{ $username }}</b>,
 
 Your password reset code is: <b>{{ $pin }}</b>
