@@ -602,6 +602,11 @@ class PrivateClientController extends Controller
 
                 ], 400);
             }
+            $apps->transform(function ($a){
+                $a->cv = url($a->cv);
+                $a->cover_letter = url($a->cover_letter);
+                return $a;
+            });
             return response()->json([
                 "success" => true,
 
@@ -649,7 +654,11 @@ class PrivateClientController extends Controller
 
                 ], 400);
             }
-
+            $app->transform(function ($a){
+                $a->cv = url($a->cv);
+                $a->cover_letter = url($a->cover_letter);
+                return $a;
+            });
             return response()->json([
                 "success" => true,
 

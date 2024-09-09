@@ -195,14 +195,14 @@ class UserController extends Controller
             $updateData = [];
             if ($request->hasFile('profile_pic')) {
 
-                $profile_picLogoPath = public_path('uploads/users/profile_pic/' . $user->profile_pic);
+                $profile_picLogoPath = $user->profile_pic;
                 if (File::exists($profile_picLogoPath)) {
                     File::delete($profile_picLogoPath);
                 }
                 $profile_pic = $request->file('profile_pic');
                 $filenamep = time() . '_' . $profile_pic->getClientOriginalName();
                 $profile_pic->move(public_path('uploads/users/profile_pic'), $filenamep);
-                $updateData['profile_pic'] = public_path('uploads/users/profile_pic/').$filenamep;
+                $updateData['profile_pic'] = 'uploads/users/profile_pic/'.$filenamep;
             }
             if($user->email){
                 $updateData['email_verified'] = 0;

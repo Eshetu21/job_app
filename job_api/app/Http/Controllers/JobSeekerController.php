@@ -68,15 +68,7 @@ class JobSeekerController extends Controller
         }
 
         try {
-            $jobseeker = $user->jobseeker;
-            $jobseekerpicPath = public_path('uploads/job_seeker/profile_pic/' . $jobseeker->profile_pic);
-            if (File::exists($jobseekerpicPath)) {
-                File::delete($jobseekerpicPath);
-            }
-            // $cvLogoPath = public_path('uploads/job_seekers/cv/' . $jobseeker->cv);
-            // if (File::exists($cvLogoPath)) {
-            //     File::delete($cvLogoPath);
-            // }
+         
             $user->jobseeker->delete();
         } catch (ValidationException $e) {
             return response()->json([
@@ -147,30 +139,29 @@ class JobSeekerController extends Controller
                 'sub_category' => 'string|nullable',
                 'phone_number' => 'string|nullable',
                 'about_me' => 'string|nullable',
-                'profile_pic' => 'mimes:png,jpg,jpeg|max:2048|nullable',
-                'cv' => 'mimes:pdf,doc|max:2048|nullable',
+           
             ]);
 
-            $updateData= [];
-            if ($request->hasFile('profile_pic')) {
+            // $updateData= [];
+            // if ($request->hasFile('profile_pic')) {
 
-                $profile_picLogoPath = public_path('uploads/job_seekers/profile_pic/' . $jobseeker->profile_pic);
-                if (File::exists($profile_picLogoPath)) {
-                    File::delete($profile_picLogoPath);
-                }
-                $profile_pic = $request->file('profile_pic');
-                $filenamep = time() . '_' . $profile_pic->getClientOriginalName();
-                $profile_pic->move(public_path('uploads/job_seekers/profile_pic'), $filenamep);
-                $updateData['profile_pic'] = public_path('uploads/job_seekers/profile_pic/').$filenamep;
-            }
+            //     $profile_picLogoPath = public_path('uploads/job_seekers/profile_pic/' . $jobseeker->profile_pic);
+            //     if (File::exists($profile_picLogoPath)) {
+            //         File::delete($profile_picLogoPath);
+            //     }
+            //     $profile_pic = $request->file('profile_pic');
+            //     $filenamep = time() . '_' . $profile_pic->getClientOriginalName();
+            //     $profile_pic->move(public_path('uploads/job_seekers/profile_pic'), $filenamep);
+            //     $updateData['profile_pic'] = public_path('uploads/job_seekers/profile_pic/').$filenamep;
+            // }
 
-            $updateData = array_merge($updateData, [
-                'category' => $validatedData['category'] ?? $jobseeker->category,
-                'sub_category' => $validatedData['sub_category'] ?? $jobseeker->sub_category,
-                'phone_number' => $validatedData['phone_number'] ?? $jobseeker->phone_number,
-                'about_me' => $validatedData['about_me'] ?? $jobseeker->about_me,
-            ]);
-            $jobseeker->update($updateData);
+            // $updateData = array_merge($updateData, [
+            //     'category' => $validatedData['category'] ?? $jobseeker->category,
+            //     'sub_category' => $validatedData['sub_category'] ?? $jobseeker->sub_category,
+            //     'phone_number' => $validatedData['phone_number'] ?? $jobseeker->phone_number,
+            //     'about_me' => $validatedData['about_me'] ?? $jobseeker->about_me,
+            // ]);
+             $jobseeker->update($validatedData);
 
             return response()->json([
                 "success"=>true,
@@ -308,18 +299,18 @@ class JobSeekerController extends Controller
 
               
                     $cv = $request->file('cv');
-                    $extention = $cv->getClientOriginalExtension();
+                 
                     $originalfilename = $cv->getClientOriginalName();
-                    $filename = time() . $originalfilename . "." . $extention;
+                    $filename = time() . $originalfilename;
                     $cv->move(public_path('uploads/application/cv'), $filename);
-                    $cv =  public_path('uploads/application/cv/').$filename;
+                    $cv =  'uploads/application/cv/'.$filename;
               
                     $cover_letter = $request->file('cover_letter');
-                    $extention = $cover_letter->getClientOriginalExtension();
+              
                     $originalfilename = $cover_letter->getClientOriginalName();
-                    $filename = time() . $originalfilename . "." . $extention;
+                    $filename = time() . $originalfilename . "." . $originalfilename;
                     $cover_letter->move(public_path('uploads/application/cover_letter'), $filename);
-                    $cover_letter =  public_path('uploads/application/cover_letter/').$filename;
+                    $cover_letter =  'uploads/application/cover_letter/'.$filename;
             $application = Application::create([
                 'job_id' => $jobid,
                 'user_id' => $user->id,
@@ -335,9 +326,7 @@ else if($job->privateclient){
     $username =  $user->firstname. " ".  $user->lastname;
     Mail::to($job->privateclient->user->email)->send(new ApplicationNotify($username,"Private Client",$job->title));
 }
-else {
-    dd("nooo");
-}
+
             if ($application) {
                 return response()->json([
                     "success" => true,
@@ -373,7 +362,9 @@ else {
                 ], 400);
             }
 
-            $application = Application::where(["user_id" => $user->id])->get()->load(['job']);
+            $application = Application::where(["user_id" => $user->id])
+            ->with('job') 
+            ->get();
             if (!$application || $application->count() == 0) {
                 return response()->json([
                     "success" => false,
@@ -381,6 +372,11 @@ else {
 
                 ], 401);
             }
+            $application->transform(function ($app){
+                $app->cv = url($app->cv);
+                $app->cover_letter = url($app->cover_letter);
+                return $app;
+            });
             return response()->json([
                 "success" => true,
                 "applications" => $application,
@@ -415,6 +411,12 @@ else {
                     "message" => "No application found"
                 ], 404);
             }
+            if (File::exists($application->cv)) {
+                File::delete($application->cv);
+            }
+            if (File::exists($application->cover_letter)) {
+                File::delete($application->cover_letter);
+            }
             $application->delete();
             return response()->json([
                 "success" => true,
@@ -447,7 +449,11 @@ else {
                     "message" => "No application found"
                 ], 404);
             }
-           
+            $application->transform(function ($app){
+                $app->cv = url($app->cv);
+                $app->cover_letter = url($app->cover_letter);
+                return $app;
+            });
             return response()->json([
                 "success" => true,
                 "application" => $application
