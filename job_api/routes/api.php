@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ExperienceController;
@@ -35,9 +36,9 @@ Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatej
 Route::put('privatecreateupdate', [PrivateClientController::class, "update"]);
 Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"]);
 
-// table for categories and and cities
+
 // notify jobseekers 
-// admin control
+// admin job control
 
 
 Route::middleware("auth:sanctum")->group(
@@ -187,5 +188,7 @@ Route::prefix('p')->group(function () {
     Route::get('pc/{privateclient_id}', [PublicController::class, "getprivateclient"]);
     Route::get('pc/get/{privateclientId}', [PublicController::class, "getPCJobs"]);
     Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
+    Route::get('cities', [CityController::class, "getcities"]);
+//  php artisan DB:seed cityseeder
 });
     // --------------------------------------------------------------------------------------------------------
