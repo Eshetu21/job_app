@@ -202,7 +202,7 @@ class UserController extends Controller
                 $profile_pic = $request->file('profile_pic');
                 $filenamep = time() . '_' . $profile_pic->getClientOriginalName();
                 $profile_pic->move(public_path('uploads/users/profile_pic'), $filenamep);
-                $updateData['profile_pic'] = $filenamep;
+                $updateData['profile_pic'] = public_path('uploads/users/profile_pic/').$filenamep;
             }
             if($user->email){
                 $updateData['email_verified'] = 0;

@@ -73,10 +73,10 @@ class JobSeekerController extends Controller
             if (File::exists($jobseekerpicPath)) {
                 File::delete($jobseekerpicPath);
             }
-            $cvLogoPath = public_path('uploads/job_seekers/cv/' . $jobseeker->cv);
-            if (File::exists($cvLogoPath)) {
-                File::delete($cvLogoPath);
-            }
+            // $cvLogoPath = public_path('uploads/job_seekers/cv/' . $jobseeker->cv);
+            // if (File::exists($cvLogoPath)) {
+            //     File::delete($cvLogoPath);
+            // }
             $user->jobseeker->delete();
         } catch (ValidationException $e) {
             return response()->json([
@@ -161,7 +161,7 @@ class JobSeekerController extends Controller
                 $profile_pic = $request->file('profile_pic');
                 $filenamep = time() . '_' . $profile_pic->getClientOriginalName();
                 $profile_pic->move(public_path('uploads/job_seekers/profile_pic'), $filenamep);
-                $updateData['profile_pic'] = $filenamep;
+                $updateData['profile_pic'] = public_path('uploads/job_seekers/profile_pic/').$filenamep;
             }
 
             $updateData = array_merge($updateData, [
@@ -312,14 +312,14 @@ class JobSeekerController extends Controller
                     $originalfilename = $cv->getClientOriginalName();
                     $filename = time() . $originalfilename . "." . $extention;
                     $cv->move(public_path('uploads/application/cv'), $filename);
-                    $cv =  $filename;
+                    $cv =  public_path('uploads/application/cv/').$filename;
               
                     $cover_letter = $request->file('cover_letter');
                     $extention = $cover_letter->getClientOriginalExtension();
                     $originalfilename = $cover_letter->getClientOriginalName();
                     $filename = time() . $originalfilename . "." . $extention;
-                    $cover_letter->move(public_path('uploads//application/cover_letter'), $filename);
-                    $cover_letter =  $filename;
+                    $cover_letter->move(public_path('uploads/application/cover_letter'), $filename);
+                    $cover_letter =  public_path('uploads/application/cover_letter/').$filename;
             $application = Application::create([
                 'job_id' => $jobid,
                 'user_id' => $user->id,
