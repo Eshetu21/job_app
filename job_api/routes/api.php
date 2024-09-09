@@ -37,6 +37,8 @@ Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"])
 
 // table for categories and and cities
 // notify jobseekers 
+// admin control
+
 
 Route::middleware("auth:sanctum")->group(
     
