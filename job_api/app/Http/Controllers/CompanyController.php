@@ -38,14 +38,14 @@ class CompanyController extends Controller
 
             if ($request->has('company_logo')) {
                 $company_logo = $request->file('company_logo');
-                $extention = $company_logo->getClientOriginalExtension();
+              
                 $originalfilename = $company_logo->getClientOriginalName();
-                $filename = time() . $originalfilename . "." . $extention;
+                $filename = time() . $originalfilename;
                 $company_logo->move(public_path('uploads/company_logo'), $filename);
                 $validatedData["user_id"] = $user->id;
-                $validatedData["company_logo"] = $filename;
+                $validatedData["company_logo"] = public_path('uploads/company_logo/').$filename;
                 $company = Company::create($validatedData);
-                $company->company_logo = public_path('uploads/company_logo/'). $filename;
+         
             }
             return response()->json([
                 "success" => true,
@@ -111,14 +111,15 @@ class CompanyController extends Controller
 
             if ($request->hasFile('company_logo')) {
 
-                $companyLogoPath = public_path('uploads/company_logo/' . $company->company_logo);
+                $companyLogoPath = $company->company_logo;
+           
                 if (File::exists($companyLogoPath)) {
                     File::delete($companyLogoPath);
                 }
                 $companyLogo = $request->file('company_logo');
                 $filename = time() . '_' . $companyLogo->getClientOriginalName();
                 $companyLogo->move(public_path('uploads/company_logo'), $filename);
-                $company->update(['company_logo' =>public_path('uploads/company_logo/').$filename]);
+                $company->update(['company_logo' => public_path('uploads/company_logo/').$filename]);
             }
             $company->update([
                 "company_name" => $validatedData->getData()["company_name"] ?? $company->company_name,
