@@ -96,7 +96,7 @@ Route::middleware("auth:sanctum")->group(
             Route::post('createadmin', [AdminController::class, 'createadmin'])->middleware('canAddAdmins');;
             Route::delete('deleteadmin', [AdminController::class, 'deleteadmin'])->middleware('canDeleteAdmin');;
         });
-        Route::middleware('verifiedemail')->group(function () {
+        Route::middleware('auth:sanctum')->group(function () {
             // jobseeker
             Route::prefix('js')->group(function () {
                 Route::post('create', [JobSeekerController::class, "createjobseeker"]);

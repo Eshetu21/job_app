@@ -30,7 +30,9 @@ class _SkillState extends State<JobSeekerSkill> {
     loadSkills();
     fetchSkills();
   }
-
+  Future refreshSkills()async{
+    
+  }
   Future<void> fetchSkills() async {
     await _skillController.showskills();
     setState(() {

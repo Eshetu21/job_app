@@ -46,14 +46,13 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.all(25),
+            margin: EdgeInsets.only(right: 25, left: 25, bottom: 25, top: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40),
                 Text(
                   "Add work experience",
                   style: GoogleFonts.poppins(

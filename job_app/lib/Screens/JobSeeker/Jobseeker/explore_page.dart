@@ -146,8 +146,8 @@ class _ExplorePageState extends State<ExplorePage> {
                         fontSize: 22, fontWeight: FontWeight.bold)),
                 Column(
                   children: [
-                    if (companyName != null) ...[Text(companyName)],
-                    companyLogo != null?Image.asset("uploads/company_logo/$companyLogo"):Container(),
+                   /*  if (companyName != null) ...[Text(companyName)],
+                    companyLogo != null?Image.asset("uploads/company_logo/$companyLogo"):Container(), */
                   ],
                 ),
                 Text(title,
