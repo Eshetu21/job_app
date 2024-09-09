@@ -14,7 +14,7 @@ class Jobcontroller extends GetxController {
   Jobcontroller() {
     token = box.read('token');
   }
-  Future<void> createjob({
+  Future<void> createPrivateJob({
     required String title,
     required String city,
     required String type,
@@ -55,7 +55,47 @@ class Jobcontroller extends GetxController {
       print($e.toString());
     }
   }
-
+ Future<void> createCompanyJob({
+    required String title,
+    required String city,
+    required String type,
+    required String sector,
+    required String gender,
+    required String deadline,
+    required String description,
+    double? salary,
+  }) async {
+    var data = {
+      "title": title,
+      "city": city,
+      "type": type,
+      "sector": sector,
+      "gender": gender,
+      "deadline": deadline,
+      "description": description
+    };
+    try {
+      var encodedData = data.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join("&");
+      var response = await http.post(Uri.parse('${url}c/job/create'),
+          headers: {
+            "Accept": "application/json",
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: encodedData);
+      if (response.statusCode == 201) {
+        sucess.value = true;
+        print("Successfully posted a job");
+        print(response.body);
+      }
+    } catch ($e) {
+      print("Failed");
+      print($e.toString());
+    }
+  }
   Future<void> getJobs() async {
     final response = await http.get(Uri.parse("${url}p/job/get"), headers: {
       "Accept": "application/json",

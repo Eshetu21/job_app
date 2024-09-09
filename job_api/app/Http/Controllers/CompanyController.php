@@ -38,14 +38,13 @@ class CompanyController extends Controller
 
             if ($request->has('company_logo')) {
                 $company_logo = $request->file('company_logo');
-              
+
                 $originalfilename = $company_logo->getClientOriginalName();
                 $filename = time() . $originalfilename;
                 $company_logo->move(public_path('uploads/company_logo'), $filename);
                 $validatedData["user_id"] = $user->id;
-                $validatedData["company_logo"] = public_path('uploads/company_logo/').$filename;
+                $validatedData["company_logo"] = 'uploads/company_logo/' . $filename;
                 $company = Company::create($validatedData);
-         
             }
             return response()->json([
                 "success" => true,
@@ -70,17 +69,24 @@ class CompanyController extends Controller
     public function showcompany(Request $request)
     {
         $user = $request->user();
-        $company = Company::with('user')->where("user_id",$user->id)->first();
-            if (!$user->company) {
-                return response()->json([
-                    "success"=>false,
-                    "message" => "company doesn't exists"
-                ], 400);
-            }
+        $company = Company::with('user')->where("user_id", $user->id)->first();
+        if (!$user->company) {
             return response()->json([
-                "success"=>true,
-                "company"=>$company
-            ],200); }
+                "success" => false,
+                "message" => "company doesn't exists"
+            ], 400);
+        }
+        return response()->json([
+            "success" => true,
+            "company" => [
+                "company_name" => $company->company_name,
+                "company_logo" => url($company->company_logo),
+                "company_phone" => $company->company_phone,
+                "company_address" => $company->company_address,
+                "company_description" => $company->company_description,
+            ]
+        ], 200);
+    }
     public function update(Request $request)
     {
         try {
@@ -112,14 +118,14 @@ class CompanyController extends Controller
             if ($request->hasFile('company_logo')) {
 
                 $companyLogoPath = $company->company_logo;
-           
+
                 if (File::exists($companyLogoPath)) {
                     File::delete($companyLogoPath);
                 }
                 $companyLogo = $request->file('company_logo');
                 $filename = time() . '_' . $companyLogo->getClientOriginalName();
                 $companyLogo->move(public_path('uploads/company_logo'), $filename);
-                $company->update(['company_logo' => public_path('uploads/company_logo/').$filename]);
+                $company->update(['company_logo' => public_path('uploads/company_logo/') . $filename]);
             }
             $company->update([
                 "company_name" => $validatedData->getData()["company_name"] ?? $company->company_name,
@@ -212,7 +218,7 @@ class CompanyController extends Controller
             $job = $user->company->jobs()->create(
                 $validatedData
             );
-         
+
             $user->company->load('user');
             return response()->json([
                 "success" => true,
@@ -220,7 +226,6 @@ class CompanyController extends Controller
                 "job" => $job,
 
             ], 201);
-     
         } catch (ValidationException $e) {
             return response()->json([
                 "success" => false,
@@ -258,7 +263,7 @@ class CompanyController extends Controller
             return response()->json([
                 "success" => true,
                 "jobs" => $jobs,
-                
+
 
             ], 200);
         } catch (ValidationException $e) {

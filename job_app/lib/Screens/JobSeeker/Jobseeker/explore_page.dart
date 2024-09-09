@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,8 +47,10 @@ class _ExplorePageState extends State<ExplorePage> {
                         var poster = jobs["company_id"] != null
                             ? "Company Job"
                             : "PrivateClient Job";
-                        var companyName = _companyController.company["company_name"];
-                        var companyLogo = _companyController.company["company_logo"];
+                        var companyName =
+                            _companyController.company["company_name"];
+                        var companyLogo =
+                            _companyController.company["company_logo"];
                         var id = jobs["id"];
                         return Column(
                           children: [
@@ -146,8 +150,10 @@ class _ExplorePageState extends State<ExplorePage> {
                         fontSize: 22, fontWeight: FontWeight.bold)),
                 Column(
                   children: [
-                   /*  if (companyName != null) ...[Text(companyName)],
-                    companyLogo != null?Image.asset("uploads/company_logo/$companyLogo"):Container(), */
+                    if (companyName != null) ...[Text(companyName)],
+                    companyLogo != null
+                        ? Image.network(companyLogo, width: 40,)
+                        : Container(),
                   ],
                 ),
                 Text(title,

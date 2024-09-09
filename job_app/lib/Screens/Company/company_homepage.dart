@@ -294,8 +294,10 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                       backgroundColor: Color(0xFFFF9228),
                       child: Icon(Icons.add, color: Colors.white),
                       onPressed: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => AddJob()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AddJob(
+                                  profileType: selectedProfile,
+                                )));
                       })),
             ),
             BottomNavigationBar(

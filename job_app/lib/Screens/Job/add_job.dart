@@ -10,7 +10,8 @@ import 'package:job_app/Controllers/Job/JobController.dart';
 import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class AddJob extends StatefulWidget {
-  const AddJob({super.key});
+  final String profileType;
+  const AddJob({super.key, required this.profileType});
 
   @override
   State<AddJob> createState() => _AddJobState();
@@ -78,7 +79,7 @@ class _AddJobState extends State<AddJob> {
                           labelText: "Job Type", border: OutlineInputBorder()),
                       items: type
                           .map((type) => DropdownMenuItem(
-                            value: type,
+                              value: type,
                               child: Text(type, style: GoogleFonts.poppins())))
                           .toList(),
                       onChanged: (value) {
@@ -141,14 +142,25 @@ class _AddJobState extends State<AddJob> {
                     child: GestureDetector(
                       onTap: () async {
                         print(_title.text);
-                        await _jobcontroller.createjob(
-                            title: _title.text.trim(),
-                            city: _city.text.trim(),
-                            type: _type.text.trim(),
-                            sector: _sector.text.trim(),
-                            gender: _gender.text.trim(),
-                            deadline: _deadline.text.trim(),
-                            description: _description.text.trim());
+                        if (widget.profileType == 'privateclient') {
+                          await _jobcontroller.createPrivateJob(
+                              title: _title.text.trim(),
+                              city: _city.text.trim(),
+                              type: _type.text.trim(),
+                              sector: _sector.text.trim(),
+                              gender: _gender.text.trim(),
+                              deadline: _deadline.text.trim(),
+                              description: _description.text.trim());
+                        } else if (widget.profileType == 'company') {
+                          await _jobcontroller.createCompanyJob(
+                              title: _title.text.trim(),
+                              city: _city.text.trim(),
+                              type: _type.text.trim(),
+                              sector: _sector.text.trim(),
+                              gender: _gender.text.trim(),
+                              deadline: _deadline.text.trim(),
+                              description: _description.text.trim());
+                        }
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 30, bottom: 20),
@@ -166,16 +178,15 @@ class _AddJobState extends State<AddJob> {
                         ),
                       ),
                     ),
-
                   ),
-              Obx((){
-                if(_jobcontroller.sucess.value==true){
-                  Future.delayed(Duration.zero,(){
-                   sucessfullyUpdated(context);
-                  });
-                }
-                return SizedBox.shrink();
-              }),
+                  Obx(() {
+                    if (_jobcontroller.sucess.value == true) {
+                      Future.delayed(Duration.zero, () {
+                        sucessfullyUpdated(context);
+                      });
+                    }
+                    return SizedBox.shrink();
+                  }),
                 ],
               ),
             ),
@@ -190,14 +201,14 @@ class _AddJobState extends State<AddJob> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Success", style: GoogleFonts.poppins()),
-              content: Text("Job added sucessfully",
-                  style: GoogleFonts.poppins()),
+              content:
+                  Text("Job added sucessfully", style: GoogleFonts.poppins()),
               actions: [
                 TextButton(
                     onPressed: () {
-                      Navigator.pop(context);  
-                      Navigator.pop(context); 
-                      _jobcontroller.sucess.value=false; 
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      _jobcontroller.sucess.value = false;
                     },
                     child: Text(
                       "Ok",
