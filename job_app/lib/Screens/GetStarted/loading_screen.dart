@@ -24,7 +24,7 @@ class LoadingScreen extends StatelessWidget {
                   Image.asset("assets/images/logo.png"),
                   SizedBox(height: 12),
                   Text(
-                    "AddisJobs",
+                    "yeHagerJobs",
                     style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 20,

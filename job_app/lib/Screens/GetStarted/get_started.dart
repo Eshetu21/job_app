@@ -20,7 +20,7 @@ class GetStarted extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      "Addis",
+                      "yeHager",
                       style: GoogleFonts.poppins(
                           fontSize: 24, color: Color(0xFFFCA34D)),
                     ),

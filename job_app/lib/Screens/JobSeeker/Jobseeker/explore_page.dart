@@ -56,9 +56,6 @@ class _ExplorePageState extends State<ExplorePage> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                print("company: ${_companyController.company}");
-                                print("logo ${companyLogo}");
-                                print(companyName);
                                 _showApplyModal(
                                     context,
                                     id,
@@ -148,12 +145,18 @@ class _ExplorePageState extends State<ExplorePage> {
                 Text(poster,
                     style: GoogleFonts.poppins(
                         fontSize: 22, fontWeight: FontWeight.bold)),
-                Column(
+                Row(
                   children: [
-                    if (companyName != null) ...[Text(companyName)],
                     companyLogo != null
-                        ? Image.network(companyLogo, width: 40,)
+                        ? ClipOval(
+                            child: Image.network(
+                            companyLogo,
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.cover,
+                          ))
                         : Container(),
+                    if (companyName != null) ...[Text(companyName)],
                   ],
                 ),
                 Text(title,
