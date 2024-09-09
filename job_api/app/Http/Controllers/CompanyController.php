@@ -125,7 +125,7 @@ class CompanyController extends Controller
                 $companyLogo = $request->file('company_logo');
                 $filename = time() . '_' . $companyLogo->getClientOriginalName();
                 $companyLogo->move(public_path('uploads/company_logo'), $filename);
-                $company->update(['company_logo' => public_path('uploads/company_logo/') . $filename]);
+                $company->update(['company_logo' => 'uploads/company_logo/' . $filename]);
             }
             $company->update([
                 "company_name" => $validatedData->getData()["company_name"] ?? $company->company_name,
@@ -589,6 +589,11 @@ class CompanyController extends Controller
 
                 ], 400);
             }
+            $apps->transform(function ($a){
+                $a->cv = url($a->cv);
+                $a->cover_letter = url($a->cover_letter);
+                return $a;
+            });
             return response()->json([
                 "success" => true,
 
@@ -638,7 +643,11 @@ class CompanyController extends Controller
 
                 ], 400);
             }
-
+            $app->transform(function ($a){
+                $a->cv = url($a->cv);
+                $a->cover_letter = url($a->cover_letter);
+                return $a;
+            });
             return response()->json([
                 "success" => true,
 
