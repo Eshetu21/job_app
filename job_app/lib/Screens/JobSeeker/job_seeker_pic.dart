@@ -17,64 +17,68 @@ class _JobSeekerPictureState extends State<JobSeekerPicture> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Container(
-        margin: EdgeInsets.all(40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(),
-              child: Icon(
-                Icons.account_circle_outlined,
-                size: 300,
-                color: Colors.grey,
-              ),
-            ),
-            Text(
-                "Upload a profile picture to create a strong first impression and make your profile stand out to potential employers.",
-                style: GoogleFonts.poppins()),
-            SizedBox(height: 180),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                margin: EdgeInsets.only(bottom: 20),
-                width: 266,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color(0xFF130160).withOpacity(0.7),
-                ),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(Icons.upload_outlined, color: Colors.white),
-                  SizedBox(width: 5),
-                  Text("Upload a profile picture",
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold, color: Colors.white)),
-                ]),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-             Get.offAll(()=>JobSeekerHomepage());
-              },
-              child: Container(
-                margin: EdgeInsets.only(bottom: 80),
-                width: 266,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color(0xFF130160).withOpacity(0.7),
-                ),
-                child: Center(
-                  child: Text("NOT NOW",
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold, color: Colors.white)),
+          child: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(),
+                child: Icon(
+                  Icons.account_circle_outlined,
+                  size: 300,
+                  color: Colors.grey,
                 ),
               ),
-            ),
-          ],
+              Text(
+                  "Upload a profile picture to create a strong first impression and make your profile stand out to potential employers.",
+                  style: GoogleFonts.poppins()),
+              SizedBox(height: 180),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  width: 266,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Color(0xFF130160).withOpacity(0.7),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.upload_outlined, color: Colors.white),
+                        SizedBox(width: 5),
+                        Text("Upload a profile picture",
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ]),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Get.offAll(() => JobSeekerHomepage());
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 80),
+                  width: 266,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Color(0xFF130160).withOpacity(0.7),
+                  ),
+                  child: Center(
+                    child: Text("NOT NOW",
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold, color: Colors.white)),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       )),
     );

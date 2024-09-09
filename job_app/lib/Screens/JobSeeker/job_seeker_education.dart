@@ -46,10 +46,10 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(right: 25, left: 25, bottom: 25, top: 50),
+            margin: EdgeInsets.only(right: 25, left: 25, bottom: 25, top: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
