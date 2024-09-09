@@ -105,7 +105,7 @@ class UserController extends Controller
         $user = $request->user();
         $pin = $request->pincode;
 
-        if ($user->email_verification_pincode == null) {
+        if ($user->pincode == null) {
             return response()->json([
                 "success" => false,
                 "message" => "Not requested",
@@ -120,9 +120,9 @@ class UserController extends Controller
 
             ], 400);
         }
-        if ((int)$pin === (int)$user->email_verification_pincode) {
+        if ((int)$pin === (int)$user->pincode) {
 
-            $user->update(["email_verification_pincode" => null, "pincode_expire" => Carbon::now()->format('Uu') - 1000, "email_verified" => true]);
+            $user->update(["pincode" => null, "pincode_expire" => Carbon::now()->format('Uu') - 1000, "email_verified" => true]);
 
             return response()->json([
                 "success" => true,
@@ -170,9 +170,12 @@ class UserController extends Controller
             $pin = rand(100000, 999999);
             $pincode_expire = Carbon::now()->addMinutes(5)->timestamp;
 
-            $user->update(['email_verification_pincode' => $pin, "pincode_expire" => $pincode_expire]);
+            $user->update(['pincode' => $pin, "pincode_expire" => $pincode_expire]);
             $user->save();
-            Mail::to($user->email)->send(new SendPin($pin));
+           
+            $username =  $user->firstname. " ".  $user->lastname;
+          
+            Mail::to($user->email)->send(new SendPin($pin,$username));
             return response()->json(["success" => true, "messasge" => "Pincode send"]);
         } catch (Exception $e) {
             return response()->json([
@@ -210,6 +213,10 @@ class UserController extends Controller
                 "email" => $validatedData["email"] ?? $user->email,
                 "age" => $validatedData["age"] ?? $user->age,
                 "gender" => $validatedData["gender"] ?? $user->gender,
+                'facebook_profile_link'=>$validatedData["facebook_profile_link"]??$user->facebook_profile_link,
+                'linkedin_profile_link'=>$validatedData["linkedin_profile_link"]??$user->linkedin_profile_link,
+                'github_profile_link'=>$validatedData["github_profile_link"]??$user->github_profile_link,
+                'other_profile_link'=>$validatedData["other_profile_link"]??$user->other_profile_link,
 
                 "about_me" => $validatedData["about_me"] ?? $user->about_me,
 

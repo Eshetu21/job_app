@@ -31,6 +31,10 @@ class UpdateRequest extends FormRequest
             'about_me' => 'nullable|string',
             'profile_pic'=> 'mimes:png,jpg,jpeg|max:2046',
            'address'=>'string',
+           'facebook_profile_link'=>'nullable|string',
+           'linkedin_profile_link'=>'nullable|string',
+           'github_profile_link'=>'nullable|string',
+           'other_profile_link'=>'nullable|string',
         ];
     }
 }

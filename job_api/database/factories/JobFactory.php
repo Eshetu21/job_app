@@ -16,16 +16,24 @@ class JobFactory extends Factory
      */
     public function definition(): array
     {
-
+        static $k=1;
+        $k++;
+        if($k>=5){
+            $k = 1;
+        }
         return [
        
        
-        'job_title'=>fake()->jobTitle(),
-        'job_location'=>fake()->address(),
-        'job_salary'=>fake()->numberBetween(1000,50000),
-        'job_start_date'=>fake()->date(),
-        'job_end_date'=>fake()->date(),
-        'job_description'=>fake()->text()
+        'title'=>fake()->jobTitle(),
+        'city'=>fake()->address(),
+        'salary'=>fake()->numberBetween(1000,50000),
+        'deadline'=>fake()->date(),
+        'description'=>fake()->text(),
+        'sector'=>fake()->jobTitle(),
+        'gender'=>"male",
+        'type'=>"type",
+        'company_id'=>$k%2==0? $k : null,
+        'private_client_id'=>$k%2!=0? $k : null,
     
         ];
     }

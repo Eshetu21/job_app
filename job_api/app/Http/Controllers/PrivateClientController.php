@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AcceptedMail;
+use App\Mail\RejectedMail;
 use App\Models\PrivateClient;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -465,6 +468,13 @@ class PrivateClientController extends Controller
 
                 ], 400);
             }
+            if($app->status=="Rejected"){
+                return response()->json([
+                    "success" => false,
+                    "message" => "Already Rejected",
+                    
+                ], 400);  
+            }
             $validatedData = $request->validate([
                 'statement' => 'string',
 
@@ -474,6 +484,7 @@ class PrivateClientController extends Controller
                 'statement' => isset($validatedData["statement"]) ? $validatedData["statement"] : null,
                 'status' => "Rejected"
             ]);
+            Mail::to($app->jobseeker->email)->send(new RejectedMail($app->jobseeker->firstname,"Private Client",$app->job->title));
             return response()->json([
                 "success" => true,
                 "message" => "Application Rejected",
@@ -484,8 +495,9 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-            ], 400);
-        } catch (Exception $e) {
+              
+
+            ], 400);} catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
@@ -503,23 +515,32 @@ class PrivateClientController extends Controller
                     "message" => "privateclient not registerd"
                 ], 400);
             }
-
+            
             $job = $user->privateclient->jobs->find($jobid);
+          
             if (!$job) {
                 return response()->json([
                     "success" => false,
                     "message" => "Job not found",
-
+                    
                 ], 400);
             }
-
+            
             $app = $job->applications->find($appid);
+           
             if (!$app) {
                 return response()->json([
                     "success" => false,
                     "message" => "Application not found",
-
+                    
                 ], 400);
+            }
+            if($app->status=="Accepted"){
+                return response()->json([
+                    "success" => false,
+                    "message" => "Already Accepted",
+                    
+                ], 400);  
             }
             $validatedData = $request->validate([
                 'statement' => 'required|string',
@@ -530,6 +551,8 @@ class PrivateClientController extends Controller
                 'statement' => $validatedData["statement"],
                 'status' => "Accepted"
             ]);
+            
+            Mail::to($app->jobseeker->email)->send(new AcceptedMail($app->jobseeker->firstname,"Private Client",$app->job->title));
             return response()->json([
                 "success" => true,
                 "message" => "Application Accepted",
@@ -540,11 +563,13 @@ class PrivateClientController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $e->errors(),
-            ], 400);
-        } catch (Exception $e) {
+              
+
+            ], 400);} catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
+                "line"=>$e->getLine()
 
             ], 400);
         }

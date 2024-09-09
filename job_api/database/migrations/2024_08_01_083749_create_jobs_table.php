@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('sector');
             $table->string('city');
+            $table->boolean('status')->default(false);
             $table->string('gender');
             $table->double('salary')->nullable();
             $table->string('deadline');

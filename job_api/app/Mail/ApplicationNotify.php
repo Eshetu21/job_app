@@ -9,19 +9,21 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendPin extends Mailable
+class ApplicationNotify extends Mailable
 {
     use Queueable, SerializesModels;
-    public $pin;
+    public $jobtitle;
+    public $companyname;
     public $username;
     /**
      * Create a new message instance.
      */
-    public function __construct($pin, $username)
+    public function __construct($username,$companyname,$jobtitle)
     {
-        $this->pin = $pin;
+        $this->jobtitle = $jobtitle;
+        $this->companyname = $companyname;
         $this->username = $username;
-      
+
     }
 
     /**
@@ -30,7 +32,8 @@ class SendPin extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Verify Your Email for Addis Jobs',
+        
+            subject: "New application submitted",
         );
     }
 
@@ -40,9 +43,8 @@ class SendPin extends Mailable
     public function content(): Content
     {
         return new Content(
-           view: 'sendpin',
-      
-        );
+            view: 'apply',
+               );
     }
 
     /**
@@ -52,8 +54,6 @@ class SendPin extends Mailable
      */
     public function attachments(): array
     {
-        return [
-          
-        ];
+        return [];
     }
 }

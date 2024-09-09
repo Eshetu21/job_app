@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendPin extends Mailable
+class ForgetPasswordReset extends Mailable
 {
     use Queueable, SerializesModels;
     public $pin;
@@ -21,7 +21,7 @@ class SendPin extends Mailable
     {
         $this->pin = $pin;
         $this->username = $username;
-      
+     
     }
 
     /**
@@ -30,7 +30,7 @@ class SendPin extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Verify Your Email for Addis Jobs',
+            subject: 'Reset your password',
         );
     }
 
@@ -39,8 +39,13 @@ class SendPin extends Mailable
      */
     public function content(): Content
     {
+    
         return new Content(
-           view: 'sendpin',
+           view: 'resetpassword',
+           with: [
+            'pin' => $this->pin,
+            'username' => $this->username,
+        ]
       
         );
     }

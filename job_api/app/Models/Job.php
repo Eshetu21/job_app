@@ -17,7 +17,8 @@ class Job extends Model
         'sector',
         'city',
         'gender',
-        'salary',    
+        'salary',
+          
         'deadline',
         'description'
     ];
@@ -29,7 +30,7 @@ class Job extends Model
 
     public function privateclient()
     {
-        return $this->belongsTo(PrivateClient::class);
+        return $this->belongsTo(PrivateClient::class,'private_client_id');
     }
 
     public function company()
