@@ -1,13 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Screens/Auth/email_sucess.dart';
-import 'package:job_app/Screens/Auth/login_page.dart';
 
 class CheckEmail extends StatefulWidget {
-  const CheckEmail({super.key});
+  final String email;
+  CheckEmail({super.key, required this.email});
 
   @override
   State<CheckEmail> createState() => _CheckEmailState();
@@ -30,17 +31,23 @@ class _CheckEmailState extends State<CheckEmail> {
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF0D0140))),
                 SizedBox(height: 35),
-                Text(
-                    "We have sent the rest code to the email address eshetutesema2@gmail.com",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(color: Color(0xFF524B6B))),
-                SizedBox(height: 60),
+                Column(
+                  children: [
+                    Text("We have sent the reset code to the email address",
+                        style: GoogleFonts.poppins(color: Color(0xFF524B6B))),
+                    Text(widget.email,
+                        style: GoogleFonts.poppins(
+                            color: Color(0xFF524B6B),
+                            fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                SizedBox(height: 20),
                 Image.asset(
                   "assets/images/email_sent.png",
                   width: 130,
                   height: 100,
                 ),
-                SizedBox(height: 70),
+                SizedBox(height: 20),
                 Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,22 +59,20 @@ class _CheckEmailState extends State<CheckEmail> {
                         child: Container(
                           width: 266,
                           height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color(0xFF130160)),
                           child: Center(
-                            child: Text("OPEN YOUR EMAIL",
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white)),
-                          ),
+                              child: TextFormField(
+                            decoration: InputDecoration(
+                                labelText: "Enter OTP",
+                                contentPadding: EdgeInsets.all(20),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                )),
+                          )),
                         ),
                       ),
                       SizedBox(height: 30),
                       GestureDetector(
-                        onTap: () {
-                          Get.offAll(LoginPage());
-                        },
+                        onTap: () {},
                         child: Container(
                           width: 266,
                           height: 50,
@@ -75,7 +80,7 @@ class _CheckEmailState extends State<CheckEmail> {
                               borderRadius: BorderRadius.circular(20),
                               color: Color(0xFFD6CDFE)),
                           child: Center(
-                            child: Text("BACK TO LOGIN",
+                            child: Text("Submit",
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF130160))),
@@ -94,9 +99,7 @@ class _CheckEmailState extends State<CheckEmail> {
                       style: GoogleFonts.poppins(color: Color(0xFF524B6B)),
                     ),
                     TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () {},
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,

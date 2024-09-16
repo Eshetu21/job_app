@@ -8,8 +8,9 @@ import 'package:job_app/Constants/constants.dart';
 class CompanyController extends GetxController {
   final box = GetStorage();
   late final String? token;
-  RxMap<String,dynamic> company = <String,dynamic>{}.obs;
+  RxMap<String, dynamic> company = <String, dynamic>{}.obs;
   RxList<dynamic> companyJobs = <dynamic>[].obs;
+  RxBool sucessfullyAdded = false.obs;
   CompanyController() {
     token = box.read("token");
   }
@@ -40,6 +41,7 @@ class CompanyController extends GetxController {
       if (response.statusCode == 201) {
         print("Sucessfully created company");
         var responsebody = await http.Response.fromStream(response);
+        sucessfullyAdded.value = true;
         print(responsebody);
       } else {
         print("Failed to create company");
