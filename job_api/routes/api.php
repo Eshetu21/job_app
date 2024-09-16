@@ -93,7 +93,7 @@ Route::middleware("auth:sanctum")->group(
             Route::delete('u/deleteu/{userId}', [AdminController::class, 'deleteuserA'])->middleware('canManageAccounts');
 
             // job and app 
-            Route::prefix('job')->middleware('verifiedemail')->group(function () {
+            Route::prefix('job')->middleware('auth:sanctum')->group(function () {
 
 
                 Route::delete('delete/{jobid}', [AdminController::class, "deleteJob"])->middleware('canManageJobs');
@@ -132,7 +132,7 @@ Route::middleware("auth:sanctum")->group(
                 Route::put('update', [PrivateClientController::class, "update"])->middleware("auth:sanctum");
                 Route::delete('delete', [PrivateClientController::class, "delete"])->middleware("auth:sanctum");
                 Route::prefix('job')->group(function () {
-                    Route::get('get', [PrivateClientController::class, "getMyJobs"]);
+                    Route::get('get', [PrivateClientController::class, "getMyJFobs"]);
                     Route::get('get/{jobid}', [PrivateClientController::class, "getJobbyId"]);
                     Route::post('create', [PrivateClientController::class, 'privateclientcreatejob']);
                     Route::delete('delete/{jobid}', [PrivateClientController::class, "deleteJob"]);
