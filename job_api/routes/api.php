@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\AdminController;
@@ -88,7 +89,8 @@ Route::middleware("auth:sanctum")->group(
 
             Route::delete('pc/deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA'])->middleware('canManageAccounts');
 
-            // jobseeker
+
+// jobseeker
             Route::delete('deletejs/{jobseekerId}', [AdminController::class, 'deleteJobSeekerA'])->middleware('canManageAccounts');
 
             // user
@@ -96,7 +98,7 @@ Route::middleware("auth:sanctum")->group(
             Route::delete('u/deleteu/{userId}', [AdminController::class, 'deleteuserA'])->middleware('canManageAccounts');
 
             // job and app 
-            Route::prefix('job')->middleware('verifiedemail')->group(function () {
+            Route::prefix('job')->middleware('auth:sanctum')->group(function () {
 
 
                 Route::delete('delete/{jobid}', [AdminController::class, "deleteJob"])->middleware('canManageJobs');
@@ -147,7 +149,9 @@ Route::middleware("auth:sanctum")->group(
                     Route::get('get/{jobid}/{appid}', [PrivateClientController::class, "getAppById"]);
                     Route::get('get/{jobid}', [PrivateClientController::class, "getAllApp"]);
                 });
-            });        //Company
+
+
+});        //Company
             Route::prefix('c')->group(function () {
                 Route::post('create', [CompanyController::class, 'createcompany']);
                 Route::get('get', [CompanyController::class, "showcompany"])->middleware("auth:sanctum");
@@ -190,8 +194,7 @@ Route::middleware("auth:sanctum")->group(
             Route::post("updatelanguage/{id}", [LanguageController::class, "updatelanguage"]);
         });
         // --------------------------------------------------------------------------------------------------------
-
-    }
+}
 ); // public
 // --------------------------------------------------------------------------------------------------------
 Route::prefix('p')->group(function () {
@@ -207,8 +210,8 @@ Route::prefix('p')->group(function () {
     Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
     Route::get('cities', [CityController::class, "getcities"]);
     // forgot password 
-    Route::post('u/forget_password', [PublicController::class, "forgetpassword"])->middleware('throttle:1,1');;
-    Route::post('u/verify_pincode', [PublicController::class, "resetpassword"]);
+    Route::post('u/forgetpassword', [PublicController::class, "forgetpassword"])->middleware('throttle:50,1');;
+    Route::post('u/verifypincode', [PublicController::class, "verifypincode"]);
     Route::post('u/changepassword', [PublicController::class, "setpassword"]);
     //  php artisan DB:seed cityseeder
 });

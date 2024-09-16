@@ -142,6 +142,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 Text(poster,
                     style: GoogleFonts.poppins(
                         fontSize: 22, fontWeight: FontWeight.bold)),
+                if(poster=="Company Job")
                 Row(
                   children: [
                     companyLogo != null
@@ -153,6 +154,7 @@ class _ExplorePageState extends State<ExplorePage> {
                             fit: BoxFit.cover,
                           ))
                         : Container(),
+                        SizedBox(width: 10),
                     if (companyName != null) ...[Text(companyName)],
                   ],
                 ),

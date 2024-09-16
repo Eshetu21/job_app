@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Mail\ForgetPasswordReset;
@@ -29,7 +28,7 @@ class PublicController extends Controller
         if (!$user) {
             return response()->json([
                 "success" => false,
-                "message" => "User doesn't exists"
+                "error" => "User doesn't exists"
             ], 400);
         }
         try {
@@ -143,9 +142,7 @@ class PublicController extends Controller
     }
     public function getPrivateclient($privateclient_id)
     {
-
-
-        $privateclient = Privateclient::findorfail($privateclient_id);
+$privateclient = Privateclient::findorfail($privateclient_id);
         if (!$privateclient) {
             return response()->json([
                 "success" => false,
@@ -229,7 +226,7 @@ class PublicController extends Controller
 
             $job = Job::findorfail($id);
 
-            return response()->json(["success" => true, "jobs" => $job], 200);
+return response()->json(["success" => true, "jobs" => $job], 200);
         } catch (ModelNotFoundException $m) {
             return response()->json(["success" => false, "message" => "Job not found"], 404);
         } catch (Exception $e) {
