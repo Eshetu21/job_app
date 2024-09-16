@@ -26,10 +26,6 @@ return Application::configure(basePath: dirname(__DIR__))
        'canManageAccounts'=> canmanageaccounts::class,
        'canManageJobs'=> canmanagejobs::class,
        'canDeleteAdmin'=> CanDeleteAdmin::class,
-<<<<<<< HEAD
-=======
-       
->>>>>>> 46e4e00db72cc57fac650d5c21371b8e46d08ba4
         //
     ]);})
     ->withExceptions(function (Exceptions $exceptions) {
