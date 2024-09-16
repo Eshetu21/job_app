@@ -30,7 +30,7 @@ class SendPin extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Verify Your Email for Addis Jobs',
+            subject: 'Verify Your Email',
         );
     }
 

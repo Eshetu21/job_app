@@ -37,6 +37,7 @@ class UserController extends Controller
 
     public function register(RegisterRequest $request)
     {
+        
         $validatedData = $request->validated();
         try {
             $user = User::create([
@@ -140,7 +141,8 @@ class UserController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $validatedData = $request->validated();
+       
+      
         $user = User::whereemail($request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
