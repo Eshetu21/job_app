@@ -7,6 +7,7 @@ use App\Http\Middleware\cangetstat;
 use App\Http\Middleware\canmanageaccounts;
 use App\Http\Middleware\canmanagejobs;
 use App\Http\Middleware\EmailVerified;
+use App\Http\Middleware\VerifyPincode;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -26,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
        'canManageAccounts'=> canmanageaccounts::class,
        'canManageJobs'=> canmanagejobs::class,
        'canDeleteAdmin'=> CanDeleteAdmin::class,
+       'otp_verified'=> VerifyPincode::class,
         //
     ]);})
     ->withExceptions(function (Exceptions $exceptions) {

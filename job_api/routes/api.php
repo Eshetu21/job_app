@@ -44,34 +44,37 @@ Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"])
 
 
 Route::middleware("auth:sanctum")->group(
-    
+
     function () {
         // auth
         Route::post('logout', [UserController::class, "logout"]);
         // user
-        Route::get("profile", [UserController::class, "getuserprofile"]);
-        Route::post('checkpincode', [UserController::class, "checkpincode"]);
-        Route::get('user', function (Request $request) {
-            return response()->json(["success" => true, "user" => [
-                'firstname'=>$request->user()->firstname,
-                'lastname'=>$request->user()->lastname,
-                'email'=>$request->user()->email,
-                'age'=>$request->user()->age,
-                'gender'=>$request->user()->gender,
-                'address'=>$request->user()->address,
-                'profile_pic'=>url($request->user()->profile_pic),
-                'role'=>$request->user()->role,
-               'facebook_profile_link'=>$request->user()->facebook_profile_link,
-               'other_profile_link'=>$request->user()->other_profile_link,
-                'linkedin_profile_link'=>$request->user()->linkedin_profile_link,
-                'github_profile_link'=>$request->user()->github_profile_link,
-    
-            ]]);
-        });
+
         Route::put('update', [UserController::class, "update"]);
         Route::delete('delete', [UserController::class, "delete"]);
-        Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
+        Route::get("profile", [UserController::class, "getuserprofile"]);
+        Route::get('user', function (Request $request) {
+            return response()->json(["success" => true, "user" => [
+                'firstname' => $request->user()->firstname,
+                'lastname' => $request->user()->lastname,
+                'email' => $request->user()->email,
+                'age' => $request->user()->age,
+                'gender' => $request->user()->gender,
+                'address' => $request->user()->address,
+                'profile_pic' => url($request->user()->profile_pic),
+                'role' => $request->user()->role,
+                'facebook_profile_link' => $request->user()->facebook_profile_link,
+                'other_profile_link' => $request->user()->other_profile_link,
+                'linkedin_profile_link' => $request->user()->linkedin_profile_link,
+                'github_profile_link' => $request->user()->github_profile_link,
+
+            ]]);
+        });
+        // change password
         Route::post('changepassword', [UserController::class, "changepassword"]);
+        // verify email
+        Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,1');
+        Route::post('checkpincode', [UserController::class, "checkpincode"]);
 
         // admin 
         // --------------------------------------------------------------------------------------------------------
@@ -197,14 +200,16 @@ Route::prefix('p')->group(function () {
         Route::get('get/{id}', [PublicController::class, 'fetchjob']);
     });
     Route::get('u/{user_id}', [PublicController::class, "getuser"]);
-    Route::post('u/forget_password', [PublicController::class, "forgetpassword"])->middleware('throttle:1,20');;
-    Route::post('u/reset_password', [PublicController::class, "resetpassword"]);
     Route::get('c/{company_id}', [PublicController::class, "getcompany"]);
     Route::get('c/get/{$companyid}', [PublicController::class, "getCJobs"]);
     Route::get('pc/{privateclient_id}', [PublicController::class, "getprivateclient"]);
     Route::get('pc/get/{privateclientId}', [PublicController::class, "getPCJobs"]);
     Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
     Route::get('cities', [CityController::class, "getcities"]);
-//  php artisan DB:seed cityseeder
+    // forgot password 
+    Route::post('u/forget_password', [PublicController::class, "forgetpassword"])->middleware('throttle:1,1');;
+    Route::post('u/verify_pincode', [PublicController::class, "resetpassword"]);
+    Route::post('u/changepassword', [PublicController::class, "setpassword"]);
+    //  php artisan DB:seed cityseeder
 });
     // --------------------------------------------------------------------------------------------------------
