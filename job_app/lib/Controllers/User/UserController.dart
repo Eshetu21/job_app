@@ -137,4 +137,7 @@ class UserAuthenticationController extends GetxController {
   RxString getUserId() {
     return userId;
   }
+  Future resetPassword()async{
+    
+  }
 }

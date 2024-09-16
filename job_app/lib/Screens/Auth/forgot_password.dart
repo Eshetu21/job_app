@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Screens/Auth/check_email.dart';
 
@@ -13,6 +12,7 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  final TextEditingController _emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +40,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 SizedBox(height: 40),
                 TextFormField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                       hintText: "Email",
                       hintStyle: TextStyle(
@@ -58,7 +59,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.off(() => CheckEmail());
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckEmail(email: _emailController.text.trim())));
                         },
                         child: Container(
                           width: 266,

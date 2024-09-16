@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/Company/company_controller.dart';
+import 'package:job_app/Screens/Profiles/profiles.dart';
 import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class AddCompany extends StatefulWidget {
@@ -28,7 +29,7 @@ class _AddCompanyState extends State<AddCompany> {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
       setState(() {
-        logo = result.files.single.path??'';
+        logo = result.files.single.path ?? '';
       });
     }
   }
@@ -43,11 +44,20 @@ class _AddCompanyState extends State<AddCompany> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back_outlined)),
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back_outlined)),
+                    Text("Add Company",
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF130160)))
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(
@@ -114,11 +124,41 @@ class _AddCompanyState extends State<AddCompany> {
                     ),
                   ),
                 ),
+                Obx(() {
+                  if (_companyController.sucessfullyAdded.value == true) {
+                    Future.delayed(Duration.zero, () {
+                      sucessfullyUpdated(context);
+                    });
+                  }
+                  return SizedBox.shrink();
+                }),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void sucessfullyUpdated(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Success", style: GoogleFonts.poppins()),
+              content: Text("Company added sucessfully",
+                  style: GoogleFonts.poppins()),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Get.offAll(Profiles());
+                      _companyController.sucessfullyAdded.value = false;
+                    },
+                    child: Text(
+                      "Ok",
+                      style: GoogleFonts.poppins(),
+                    ))
+              ],
+            ));
   }
 }
