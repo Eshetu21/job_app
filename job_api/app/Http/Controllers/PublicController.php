@@ -28,7 +28,7 @@ class PublicController extends Controller
         if (!$user) {
             return response()->json([
                 "success" => false,
-                "message" => "User doesn't exists"
+                "error" => "User doesn't exists"
             ], 400);
         }
         try {
