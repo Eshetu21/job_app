@@ -385,31 +385,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               );
                       }),
                       SizedBox(height: 22),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: 266,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color(0xFFD6CDFE)),
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset("assets/icons/google_logo.png",
-                                    width: 25),
-                                SizedBox(width: 10),
-                                Text("SIGN UP WITH GOOGLE",
-                                    style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF130160))),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

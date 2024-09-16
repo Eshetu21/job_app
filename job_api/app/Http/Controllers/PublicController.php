@@ -43,12 +43,17 @@ class PublicController extends Controller
             $username =  $user->firstname . " " .  $user->lastname;
 
             Mail::to($user->email)->send(new ForgetPasswordReset($pin, $username));
+<<<<<<< HEAD
             return response()->json(["success" => true, "messasge" => "Pincode send"]);
+=======
+            return response()->json(["success" => true, "messasge" => "Pincode send"], 200);
+>>>>>>> 69f723abb862fbb825eccf155d425395f5ea0a7c
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
 
+<<<<<<< HEAD
             ], 500);
         }
     }
@@ -82,8 +87,20 @@ class PublicController extends Controller
                 "message" => $e->getMessage(),
 
             ], 500);
+=======
+            ], 400);
+>>>>>>> 69f723abb862fbb825eccf155d425395f5ea0a7c
         }
     }
+    public function resetpassword(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "User doesn't exists"
+            ], 400);
+        }
 
     public function resetpassword(Request $request)
     {
@@ -93,6 +110,7 @@ class PublicController extends Controller
 
         $request->validate([
 
+<<<<<<< HEAD
 
             'pincode' => 'required|integer',
             'email' => 'required'
@@ -104,6 +122,12 @@ class PublicController extends Controller
                 "message" => "User doesn't exists"
             ], 400);
         }
+=======
+            'newpassword' => 'required|min:6',
+            'pincode' => 'required|integer',
+            'email' => 'required'
+        ]);
+>>>>>>> 69f723abb862fbb825eccf155d425395f5ea0a7c
 
         $pin = $request->pincode;
 
@@ -127,10 +151,19 @@ class PublicController extends Controller
             $user->update(["pincode" => null, "pincode_expire" => Carbon::now()->format('Uu') - 1000, "resetpin_verified" => true]);
 
 
+<<<<<<< HEAD
             $user->save();
             return response()->json([
                 "success" => true,
                 "message" => "Otp Verified",
+=======
+
+            $user->update(['password' => Hash::make($request->newpassword)]);
+            $user->save();
+            return response()->json([
+                "success" => true,
+                "message" => "Password Updated",
+>>>>>>> 69f723abb862fbb825eccf155d425395f5ea0a7c
 
             ], 200);
         }

@@ -27,7 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
        'canManageAccounts'=> canmanageaccounts::class,
        'canManageJobs'=> canmanagejobs::class,
        'canDeleteAdmin'=> CanDeleteAdmin::class,
-       'otp_verified'=> VerifyPincode::class,
+       
         //
     ]);})
     ->withExceptions(function (Exceptions $exceptions) {
