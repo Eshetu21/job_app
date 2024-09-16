@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\AdminController;
@@ -44,34 +45,37 @@ Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"])
 
 
 Route::middleware("auth:sanctum")->group(
-    
+
     function () {
         // auth
         Route::post('logout', [UserController::class, "logout"]);
         // user
-        Route::get("profile", [UserController::class, "getuserprofile"]);
-        Route::post('checkpincode', [UserController::class, "checkpincode"]);
-        Route::get('user', function (Request $request) {
-            return response()->json(["success" => true, "user" => [
-                'firstname'=>$request->user()->firstname,
-                'lastname'=>$request->user()->lastname,
-                'email'=>$request->user()->email,
-                'age'=>$request->user()->age,
-                'gender'=>$request->user()->gender,
-                'address'=>$request->user()->address,
-                'profile_pic'=>url($request->user()->profile_pic),
-                'role'=>$request->user()->role,
-               'facebook_profile_link'=>$request->user()->facebook_profile_link,
-               'other_profile_link'=>$request->user()->other_profile_link,
-                'linkedin_profile_link'=>$request->user()->linkedin_profile_link,
-                'github_profile_link'=>$request->user()->github_profile_link,
-    
-            ]]);
-        });
+
         Route::put('update', [UserController::class, "update"]);
         Route::delete('delete', [UserController::class, "delete"]);
-        Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,20');
+        Route::get("profile", [UserController::class, "getuserprofile"]);
+        Route::get('user', function (Request $request) {
+            return response()->json(["success" => true, "user" => [
+                'firstname' => $request->user()->firstname,
+                'lastname' => $request->user()->lastname,
+                'email' => $request->user()->email,
+                'age' => $request->user()->age,
+                'gender' => $request->user()->gender,
+                'address' => $request->user()->address,
+                'profile_pic' => url($request->user()->profile_pic),
+                'role' => $request->user()->role,
+                'facebook_profile_link' => $request->user()->facebook_profile_link,
+                'other_profile_link' => $request->user()->other_profile_link,
+                'linkedin_profile_link' => $request->user()->linkedin_profile_link,
+                'github_profile_link' => $request->user()->github_profile_link,
+
+            ]]);
+        });
+        // change password
         Route::post('changepassword', [UserController::class, "changepassword"]);
+        // verify email
+        Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,1');
+        Route::post('checkpincode', [UserController::class, "checkpincode"]);
 
         // admin 
         // --------------------------------------------------------------------------------------------------------
@@ -85,7 +89,8 @@ Route::middleware("auth:sanctum")->group(
 
             Route::delete('pc/deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA'])->middleware('canManageAccounts');
 
-            // jobseeker
+
+// jobseeker
             Route::delete('deletejs/{jobseekerId}', [AdminController::class, 'deleteJobSeekerA'])->middleware('canManageAccounts');
 
             // user
@@ -132,7 +137,7 @@ Route::middleware("auth:sanctum")->group(
                 Route::put('update', [PrivateClientController::class, "update"])->middleware("auth:sanctum");
                 Route::delete('delete', [PrivateClientController::class, "delete"])->middleware("auth:sanctum");
                 Route::prefix('job')->group(function () {
-                    Route::get('get', [PrivateClientController::class, "getMyJFobs"]);
+                    Route::get('get', [PrivateClientController::class, "getMyJobs"]);
                     Route::get('get/{jobid}', [PrivateClientController::class, "getJobbyId"]);
                     Route::post('create', [PrivateClientController::class, 'privateclientcreatejob']);
                     Route::delete('delete/{jobid}', [PrivateClientController::class, "deleteJob"]);
@@ -144,7 +149,9 @@ Route::middleware("auth:sanctum")->group(
                     Route::get('get/{jobid}/{appid}', [PrivateClientController::class, "getAppById"]);
                     Route::get('get/{jobid}', [PrivateClientController::class, "getAllApp"]);
                 });
-            });        //Company
+
+
+});        //Company
             Route::prefix('c')->group(function () {
                 Route::post('create', [CompanyController::class, 'createcompany']);
                 Route::get('get', [CompanyController::class, "showcompany"])->middleware("auth:sanctum");
@@ -187,8 +194,7 @@ Route::middleware("auth:sanctum")->group(
             Route::post("updatelanguage/{id}", [LanguageController::class, "updatelanguage"]);
         });
         // --------------------------------------------------------------------------------------------------------
-
-    }
+}
 ); // public
 // --------------------------------------------------------------------------------------------------------
 Route::prefix('p')->group(function () {
@@ -197,14 +203,16 @@ Route::prefix('p')->group(function () {
         Route::get('get/{id}', [PublicController::class, 'fetchjob']);
     });
     Route::get('u/{user_id}', [PublicController::class, "getuser"]);
-    Route::post('u/forget_password', [PublicController::class, "forgetpassword"])->middleware('throttle:1,20');;
-    Route::post('u/reset_password', [PublicController::class, "resetpassword"]);
     Route::get('c/{company_id}', [PublicController::class, "getcompany"]);
     Route::get('c/get/{$companyid}', [PublicController::class, "getCJobs"]);
     Route::get('pc/{privateclient_id}', [PublicController::class, "getprivateclient"]);
     Route::get('pc/get/{privateclientId}', [PublicController::class, "getPCJobs"]);
     Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
     Route::get('cities', [CityController::class, "getcities"]);
-//  php artisan DB:seed cityseeder
+    // forgot password 
+    Route::post('u/forgetpassword', [PublicController::class, "forgetpassword"])->middleware('throttle:50,1');;
+    Route::post('u/verifypincode', [PublicController::class, "verifypincode"]);
+    Route::post('u/changepassword', [PublicController::class, "setpassword"]);
+    //  php artisan DB:seed cityseeder
 });
     // --------------------------------------------------------------------------------------------------------

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->string('address')->nullable();
             $table->boolean('email_verified')->default(false);
+            $table->boolean("resetpin_verified")->default(false);
             $table->string('password');
             $table->string('facebook_profile_link')->nullable();
             $table->string('linkedin_profile_link')->nullable();

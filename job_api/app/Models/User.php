@@ -37,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'github_profile_link',
         'pincode_expire',
         "email_verified",
+        "resetpin_verified",
         'manage_accounts',
         'add_admins',
         'manage_stats',

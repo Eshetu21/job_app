@@ -13,8 +13,10 @@ class UserAuthenticationController extends GetxController {
   final ProfileController _profileController = Get.put(ProfileController());
   final regLoading = false.obs;
   final logLoading = false.obs;
+  final otpLoading = false.obs;
   final regError = {}.obs;
   final logError = {}.obs;
+  final verifyEmailError = {}.obs;
 
   final token = ''.obs;
   final userId = ''.obs;
@@ -101,7 +103,7 @@ class UserAuthenticationController extends GetxController {
             "Content-Type": "application/json",
           },
           body: data);
-          print(response);
+      print(response);
       if (response.statusCode == 200) {
         token.value = json.decode(response.body)["token"];
         box.write("token", token.value);
@@ -137,7 +139,36 @@ class UserAuthenticationController extends GetxController {
   RxString getUserId() {
     return userId;
   }
-  Future resetPassword()async{
-    
+
+  Future<void> resetPassword({required String email}) async {
+    try {
+      otpLoading.value = true;
+      var data = jsonEncode({"email": email});
+      final response = await http.post(Uri.parse("${url}p/u/forgetpassword"),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: data);
+      if (response.statusCode == 200) {
+        print("Successfully sent OTP code");
+        otpLoading.value=false;
+      } 
+      else {
+         print(response.body);
+        var errors = json.decode(response.body)['errors'];
+         verifyEmailError.value = errors.map((key, value) {
+          print(verifyEmailError);
+          return MapEntry(key, (value as List<dynamic>).join(' '));
+        
+        });
+        print("Failed to send OTP code: ${response.body}");
+        otpLoading.value=false;
+      }
+    } catch ($e) {
+      otpLoading.value =false;
+      print($e.toString());
+    }
   }
+  
 }
