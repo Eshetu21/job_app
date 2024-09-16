@@ -300,15 +300,15 @@ class JobSeekerController extends Controller
               
                     $cv = $request->file('cv');
                  
-                    $originalfilename = $cv->getClientOriginalName();
-                    $filename = time() . $originalfilename;
+                    $originalfilenamecv = $cv->getClientOriginalName();
+                    $filename = time()."-".$user->id."-".$job->id. $originalfilenamecv;
                     $cv->move(public_path('uploads/application/cv'), $filename);
                     $cv =  'uploads/application/cv/'.$filename;
               
                     $cover_letter = $request->file('cover_letter');
               
-                    $originalfilename = $cover_letter->getClientOriginalName();
-                    $filename = time() . $originalfilename . "." . $originalfilename;
+                    $originalfilenamecl = $cover_letter->getClientOriginalName();
+                    $filename = time()."-".$user->id."-".$job->id. $originalfilenamecl;
                     $cover_letter->move(public_path('uploads/application/cover_letter'), $filename);
                     $cover_letter =  'uploads/application/cover_letter/'.$filename;
             $application = Application::create([

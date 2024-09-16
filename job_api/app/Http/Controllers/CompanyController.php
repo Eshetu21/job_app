@@ -40,7 +40,7 @@ class CompanyController extends Controller
                 $company_logo = $request->file('company_logo');
 
                 $originalfilename = $company_logo->getClientOriginalName();
-                $filename = time() . $originalfilename;
+                $filename = time()."-".$user->id."-".$originalfilename;
                 $company_logo->move(public_path('uploads/company_logo'), $filename);
                 $validatedData["user_id"] = $user->id;
                 $validatedData["company_logo"] = 'uploads/company_logo/' . $filename;
@@ -123,7 +123,7 @@ class CompanyController extends Controller
                     File::delete($companyLogoPath);
                 }
                 $companyLogo = $request->file('company_logo');
-                $filename = time() . '_' . $companyLogo->getClientOriginalName();
+                $filename = time()."-".$user->id."-".$companyLogo->getClientOriginalName();
                 $companyLogo->move(public_path('uploads/company_logo'), $filename);
                 $company->update(['company_logo' => 'uploads/company_logo/' . $filename]);
             }

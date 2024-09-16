@@ -200,7 +200,7 @@ class UserController extends Controller
                     File::delete($profile_picLogoPath);
                 }
                 $profile_pic = $request->file('profile_pic');
-                $filenamep = time() . '_' . $profile_pic->getClientOriginalName();
+                $filenamep = time()."-".$user->id."-".$profile_pic->getClientOriginalName();
                 $profile_pic->move(public_path('uploads/users/profile_pic'), $filenamep);
                 $updateData['profile_pic'] = 'uploads/users/profile_pic/'.$filenamep;
             }
