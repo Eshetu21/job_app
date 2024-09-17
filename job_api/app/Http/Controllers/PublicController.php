@@ -55,6 +55,7 @@ class PublicController extends Controller
     public function changepassword(Request $request)
     {
         try {
+            $request->validate(["newpassword" => 'required|string|min:6',"email"=>"required|email"]);
             $user = User::where('email', $request->email)->first();
             if (!$user) {
                 return response()->json([
@@ -62,7 +63,7 @@ class PublicController extends Controller
                     "message" => "User doesn't exists"
                 ], 400);
             }
-            $request->validate(["newpassword" => 'required|string|min:6']);
+           
             if (!$user->resetpin_verified) {
                 return response()->json(["success" => false, "message" => "First verify Otp"], 401);
             }
