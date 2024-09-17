@@ -37,20 +37,30 @@ class UserController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        
+
         $validatedData = $request->validated();
         try {
+            $pin = rand(100000, 999999);
+            $pincode_expire = Carbon::now()->addMinutes(5)->timestamp;
+
+
+
+            return response()->json(["success" => true, "messasge" => "Pincode send"]);
             $user = User::create([
                 "firstname" => $validatedData["firstname"],
                 "lastname" => $validatedData["lastname"],
                 "email" => $validatedData["email"],
                 "address" => $validatedData["address"],
+                'pincode' => $pin,
+                "pincode_expire" => $pincode_expire,
                 "password" => Hash::make($validatedData["password"])
             ]);
-            $token = $user->createToken("job_portal")->plainTextToken;
+            $username =  $user->firstname . " " .  $user->lastname;
+
+            Mail::to($user->email)->send(new SendPin($pin, $username));
             return response()->json([
-                "name" => $user->firstname . " " . $user->lastname,
-                "token" => $token
+                "success" => true,
+                "message" => "Pincode sent"
             ], 201);
         } catch (ValidationException $e) {
             return response()->json([
@@ -141,8 +151,8 @@ class UserController extends Controller
 
     public function login(LoginRequest $request)
     {
-       
-      
+
+
         $user = User::whereemail($request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
@@ -174,10 +184,10 @@ class UserController extends Controller
 
             $user->update(['pincode' => $pin, "pincode_expire" => $pincode_expire]);
             $user->save();
-           
-            $username =  $user->firstname. " ".  $user->lastname;
-          
-            Mail::to($user->email)->send(new SendPin($pin,$username));
+
+            $username =  $user->firstname . " " .  $user->lastname;
+
+            Mail::to($user->email)->send(new SendPin($pin, $username));
             return response()->json(["success" => true, "messasge" => "Pincode send"]);
         } catch (Exception $e) {
             return response()->json([
@@ -202,11 +212,11 @@ class UserController extends Controller
                     File::delete($profile_picLogoPath);
                 }
                 $profile_pic = $request->file('profile_pic');
-                $filenamep = time()."-".$user->id."-".$profile_pic->getClientOriginalName();
+                $filenamep = time() . "-" . $user->id . "-" . $profile_pic->getClientOriginalName();
                 $profile_pic->move(public_path('uploads/users/profile_pic'), $filenamep);
-                $updateData['profile_pic'] = 'uploads/users/profile_pic/'.$filenamep;
+                $updateData['profile_pic'] = 'uploads/users/profile_pic/' . $filenamep;
             }
-            if($user->email){
+            if ($user->email) {
                 $updateData['email_verified'] = 0;
             }
             $user->update(array_merge($updateData, [
@@ -215,10 +225,10 @@ class UserController extends Controller
                 "email" => $validatedData["email"] ?? $user->email,
                 "age" => $validatedData["age"] ?? $user->age,
                 "gender" => $validatedData["gender"] ?? $user->gender,
-                'facebook_profile_link'=>$validatedData["facebook_profile_link"]??$user->facebook_profile_link,
-                'linkedin_profile_link'=>$validatedData["linkedin_profile_link"]??$user->linkedin_profile_link,
-                'github_profile_link'=>$validatedData["github_profile_link"]??$user->github_profile_link,
-                'other_profile_link'=>$validatedData["other_profile_link"]??$user->other_profile_link,
+                'facebook_profile_link' => $validatedData["facebook_profile_link"] ?? $user->facebook_profile_link,
+                'linkedin_profile_link' => $validatedData["linkedin_profile_link"] ?? $user->linkedin_profile_link,
+                'github_profile_link' => $validatedData["github_profile_link"] ?? $user->github_profile_link,
+                'other_profile_link' => $validatedData["other_profile_link"] ?? $user->other_profile_link,
 
                 "about_me" => $validatedData["about_me"] ?? $user->about_me,
 
@@ -244,11 +254,12 @@ class UserController extends Controller
             $request->user()->delete();
 
             $user = $request->user();
-            if($user->profile_pic){
-            $profile_picLogoPath = public_path('uploads/users/profile_pic/' . $user->profile_pic);
-            if (File::exists($profile_picLogoPath)) {
-                File::delete($profile_picLogoPath);
-            }}
+            if ($user->profile_pic) {
+                $profile_picLogoPath = public_path('uploads/users/profile_pic/' . $user->profile_pic);
+                if (File::exists($profile_picLogoPath)) {
+                    File::delete($profile_picLogoPath);
+                }
+            }
             $user->delete();
 
             return response()->json([
@@ -263,18 +274,18 @@ class UserController extends Controller
             ], 500);
         }
     }
-    public function logout(Request $request) {
-        try{
+    public function logout(Request $request)
+    {
+        try {
             $user = $request->user();
             $user->tokens()->delete();
-            return response()->json(['sucess'=>true,'message' => 'Logged out'], 200);
-        }
-        catch (Exception $e) {
+            return response()->json(['sucess' => true, 'message' => 'Logged out'], 200);
+        } catch (Exception $e) {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
 
-            ], 500); 
+            ], 500);
         }
     }
 }
