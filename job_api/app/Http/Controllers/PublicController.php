@@ -28,7 +28,7 @@ class PublicController extends Controller
         if (!$user) {
             return response()->json([
                 "success" => false,
-                "error" => "User doesn't exists"
+                "message" => "We couldn't find your account"
             ], 400);
         }
         try {
@@ -52,9 +52,10 @@ class PublicController extends Controller
         }
     }
 
-    public function setpassword(Request $request)
+    public function changepassword(Request $request)
     {
         try {
+            $request->validate(["newpassword" => 'required|string|min:6',"email"=>"required|email"]);
             $user = User::where('email', $request->email)->first();
             if (!$user) {
                 return response()->json([
@@ -62,7 +63,7 @@ class PublicController extends Controller
                     "message" => "User doesn't exists"
                 ], 400);
             }
-            $request->validate(["newpassword" => 'required|string|min:6']);
+           
             if (!$user->resetpin_verified) {
                 return response()->json(["success" => false, "message" => "First verify Otp"], 401);
             }
@@ -84,15 +85,9 @@ class PublicController extends Controller
         }
     }
 
-    public function resetpassword(Request $request)
+    public function verifypincode(Request $request)
     {
-
-
-
-
         $request->validate([
-
-
             'pincode' => 'required|integer',
             'email' => 'required'
         ]);
@@ -109,7 +104,7 @@ class PublicController extends Controller
         if ($user->pincode == null) {
             return response()->json([
                 "success" => false,
-                "message" => "Not requested",
+                "message" => "Otp not requested",
 
             ], 400);
         }

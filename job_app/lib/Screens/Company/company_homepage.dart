@@ -62,7 +62,7 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                             return StatefulBuilder(
                               builder:
                                   (BuildContext context, StateSetter setState) {
-                                return Container(
+                                return SizedBox(
                                   width: double.infinity,
                                   height:
                                       MediaQuery.of(context).size.height * 0.45,

@@ -1,20 +1,44 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Screens/Auth/email_sucess.dart';
+import 'package:job_app/Controllers/User/UserController.dart';
+import 'package:job_app/Screens/Auth/reset_password.dart';
 
 class CheckEmail extends StatefulWidget {
   final String email;
-  CheckEmail({super.key, required this.email});
+  const CheckEmail({super.key, required this.email});
 
   @override
   State<CheckEmail> createState() => _CheckEmailState();
 }
 
 class _CheckEmailState extends State<CheckEmail> {
+  final UserAuthenticationController _userAuthenticationController =
+      UserAuthenticationController();
+  final TextEditingController _otpController = TextEditingController();
+  void validateOTP() async {
+    bool hasError = false;
+    if (_otpController.text.trim().isEmpty) {
+      hasError = true;
+      _userAuthenticationController.verifyOTPError["otp"] =
+          "OTP can't be empty";
+    }
+    if (!hasError) {
+      int otpcode;
+      _userAuthenticationController.otpVerifyLoading.value = true;
+      otpcode = int.parse(_otpController.text.trim());
+      bool verifiedOTP = await _userAuthenticationController.verifyOTP(
+          email: widget.email, pin: otpcode);
+      _userAuthenticationController.otpVerifyLoading.value = false;
+      if (verifiedOTP) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ResetPassword()));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,48 +72,59 @@ class _CheckEmailState extends State<CheckEmail> {
                   height: 100,
                 ),
                 SizedBox(height: 20),
-                Container(
-                  child: Column(
+                Obx(() {
+                  String? errorText =
+                      _userAuthenticationController.verifyOTPError["otp"];
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.off(() => EmailSucess());
-                        },
-                        child: Container(
-                          width: 266,
-                          height: 50,
-                          child: Center(
-                              child: TextFormField(
-                            decoration: InputDecoration(
-                                labelText: "Enter OTP",
-                                contentPadding: EdgeInsets.all(20),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                )),
-                          )),
-                        ),
+                      SizedBox(
+                        width: 266,
+                        height: 50,
+                        child: Center(
+                            child: TextFormField(
+                          controller: _otpController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              labelText: "Enter OTP",
+                              contentPadding: EdgeInsets.all(20),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              )),
+                        )),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 10),
+                      errorText != null
+                          ? Text(
+                              errorText,
+                              style: GoogleFonts.poppins(color: Colors.red),
+                            )
+                          : Container(),
+                      SizedBox(height: 25),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          validateOTP();
+                        },
                         child: Container(
                           width: 266,
                           height: 50,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Color(0xFFD6CDFE)),
-                          child: Center(
-                            child: Text("Submit",
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF130160))),
-                          ),
+                          child: _userAuthenticationController
+                                  .otpVerifyLoading.value
+                              ? Center(child: CircularProgressIndicator())
+                              : Center(
+                                  child: Text("Submit",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF130160))),
+                                ),
                         ),
                       ),
                     ],
-                  ),
-                ),
+                  );
+                }),
                 SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

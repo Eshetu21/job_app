@@ -5,14 +5,14 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Screens/Auth/login_page.dart';
 
-class EmailSucess extends StatefulWidget {
-  const EmailSucess({super.key});
+class ResetPasswordSucess extends StatefulWidget {
+  const ResetPasswordSucess({super.key});
 
   @override
-  State<EmailSucess> createState() => _EmailSucessState();
+  State<ResetPasswordSucess> createState() => _ResetPasswordSucessState();
 }
 
-class _EmailSucessState extends State<EmailSucess> {
+class _ResetPasswordSucessState extends State<ResetPasswordSucess> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

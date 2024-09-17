@@ -10,6 +10,6 @@ class CompanyApplications extends StatefulWidget {
 class _CompanyApplicationsState extends State<CompanyApplications> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("Application page"));
+    return Container(child: const Text("Application page"));
   }
 }

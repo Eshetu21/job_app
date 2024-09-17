@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       hasError = true;
       _userAuthenticationController.logError["email"] = "*email is required";
     }
-    if (_passwordController.text.trim().isEmpty) {
+    if (_passwordController.text.isEmpty) {
       hasError = true;
       _userAuthenticationController.logError["password"] = "*password is required";
     }
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!hasError) {
       _userAuthenticationController.login(
           email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
+          password: _passwordController.text);
     }
   }
 

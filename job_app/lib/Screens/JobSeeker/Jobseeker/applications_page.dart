@@ -11,7 +11,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Application Page"),
+      child: const Text("Application Page"),
     );
   }
 }

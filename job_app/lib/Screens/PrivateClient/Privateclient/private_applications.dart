@@ -10,6 +10,6 @@ class PrivateApplications extends StatefulWidget {
 class _PrivateApplicationsState extends State<PrivateApplications> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("My Applications"));
+    return Container(child: const Text("My Applications"));
   }
 }

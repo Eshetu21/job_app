@@ -14,9 +14,13 @@ class UserAuthenticationController extends GetxController {
   final regLoading = false.obs;
   final logLoading = false.obs;
   final otpLoading = false.obs;
+  final otpVerifyLoading = false.obs;
+  final passwordResetLoading = false.obs;
   final regError = {}.obs;
   final logError = {}.obs;
   final verifyEmailError = {}.obs;
+  final verifyOTPError = {}.obs;
+  final passwordResetError = {}.obs;
 
   final token = ''.obs;
   final userId = ''.obs;
@@ -61,6 +65,7 @@ class UserAuthenticationController extends GetxController {
         regLoading.value = false;
         return true;
       } else if (response.statusCode == 422) {
+        print(response.body);
         var errors = json.decode(response.body)['errors'];
         regError.value = errors.map((key, value) {
           return MapEntry(key, (value as List<dynamic>).join(' '));
@@ -69,6 +74,7 @@ class UserAuthenticationController extends GetxController {
         regLoading.value = false;
         return false;
       } else {
+        print(response.body);
         var responseData = json.decode(response.body);
         regError.clear();
         responseData['errors'].forEach((key, value) {
@@ -140,7 +146,7 @@ class UserAuthenticationController extends GetxController {
     return userId;
   }
 
-  Future<void> resetPassword({required String email}) async {
+  Future<bool> forgotPassword({required String email}) async {
     try {
       otpLoading.value = true;
       var data = jsonEncode({"email": email});
@@ -152,23 +158,73 @@ class UserAuthenticationController extends GetxController {
           body: data);
       if (response.statusCode == 200) {
         print("Successfully sent OTP code");
-        otpLoading.value=false;
-      } 
-      else {
-         print(response.body);
-        var errors = json.decode(response.body)['errors'];
-         verifyEmailError.value = errors.map((key, value) {
-          print(verifyEmailError);
-          return MapEntry(key, (value as List<dynamic>).join(' '));
-        
-        });
-        print("Failed to send OTP code: ${response.body}");
-        otpLoading.value=false;
+        otpLoading.value = false;
+        return true;
+      } else {
+        var jsonResponse = json.decode(response.body);
+        String errorMessage = jsonResponse['message'];
+        verifyEmailError['email'] = errorMessage;
+        otpLoading.value = false;
+        return false;
       }
     } catch ($e) {
-      otpLoading.value =false;
+      otpLoading.value = false;
       print($e.toString());
+      return false;
     }
   }
-  
+
+  Future<bool> verifyOTP({required String email, required int pin}) async {
+    try {
+      otpVerifyLoading.value = true;
+      var data = json.encode({"email": email, "pincode": pin});
+      var response = await http.post(Uri.parse('${url}p/u/verifypincode'),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: data);
+      if (response.statusCode == 200) {
+        print("Sucessfully verified OTP");
+        otpVerifyLoading.value = false;
+        return true;
+      } else {
+        var jsonResponse = json.decode(response.body);
+        String errorMessage = jsonResponse["message"];
+        verifyOTPError["otp"] = errorMessage;
+        return false;
+      }
+    } catch ($e) {
+      print($e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> resetpassword({required String newPassword}) async {
+    try {
+      passwordResetLoading.value = true;
+      var data = jsonEncode({"newpassword": newPassword});
+      var response = await http.post(Uri.parse('${url}p/u/changepassword'),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: data);
+      if (response.statusCode == 200) {
+        passwordResetLoading.value = false;
+        print("Sucessfully updated password");
+        return true;
+      } else {
+        var jsonResponse = json.decode(response.body);
+        String errorMessage = jsonResponse["message"];
+        passwordResetError["passwordreset"] = errorMessage;
+        print(response.body);
+        passwordResetLoading.value = false;
+        return false;
+      }
+    } catch ($e) {
+      print($e.toString());
+      return false;
+    }
+  }
 }

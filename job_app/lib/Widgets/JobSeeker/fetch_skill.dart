@@ -60,7 +60,7 @@ class _FetchSkillState extends State<FetchSkill> {
         ),
         _skillController.skills.isEmpty
             ? Center(
-                child: Container(
+                child: SizedBox(
                 height: 100,
                 child: Column(
                   children: [

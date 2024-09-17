@@ -210,9 +210,9 @@ Route::prefix('p')->group(function () {
     Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
     Route::get('cities', [CityController::class, "getcities"]);
     // forgot password 
-    Route::post('u/forgetpassword', [PublicController::class, "forgetpassword"])->middleware('throttle:50,1');;
+    Route::post('u/forgetpassword', [PublicController::class, "forgetpassword"])->middleware('throttle:1,1');;
     Route::post('u/verifypincode', [PublicController::class, "verifypincode"]);
-    Route::post('u/changepassword', [PublicController::class, "setpassword"]);
+    Route::post('u/changepassword', [PublicController::class, "changepassword"]);
     //  php artisan DB:seed cityseeder
 });
     // --------------------------------------------------------------------------------------------------------
