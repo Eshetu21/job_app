@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:job_app/Screens/GetStarted/loading_screen.dart';
-import 'package:job_app/Screens/Profiles/profiles.dart';
 
 void main() async {
   await GetStorage.init();

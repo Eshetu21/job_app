@@ -47,7 +47,7 @@ class _FetchExperienceState extends State<FetchExperience> {
                   ],
                 ),
                 Center(
-                    child: Container(
+                    child: SizedBox(
                   height: 100,
                   child: Column(
                     children: [

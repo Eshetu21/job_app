@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
-import 'package:job_app/Widgets/cities.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -63,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
       hasError = true;
       _userAuthenticationController.regError["email"] = "*email required";
     }
-    if (_passwordController.text.trim().isEmpty) {
+    if (_passwordController.text.isEmpty) {
       hasError = true;
       _userAuthenticationController.regError["password"] = "*password required";
     }

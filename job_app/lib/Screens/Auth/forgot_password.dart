@@ -29,13 +29,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
     if (!hasError) {
       _authenticationController.otpLoading.value == true;
-      await _authenticationController.resetPassword(email: email);
+      bool emailExists =
+          await _authenticationController.forgotPassword(email: email);
       _authenticationController.otpLoading.value == false;
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  CheckEmail(email: _emailController.text.trim())));
+      if (emailExists) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    CheckEmail(email: _emailController.text.trim())));
+      } else {
+        print("Failed to send OTP UI");
+      }
     }
   }
 
@@ -73,10 +78,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                            hintText: "Email",
-                            hintStyle: TextStyle(
-                                color: Color(0xFF0D0140),
-                                fontFamily: GoogleFonts.poppins().fontFamily),
+                            labelText: "Email",
                             prefixIcon: Icon(Icons.email_outlined),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(18))),
@@ -94,57 +96,55 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 SizedBox(
                   height: 25,
                 ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          print(_authenticationController
-                              .verifyEmailError["email"]);
-                          validateEmail();
-                        },
-                        child: Container(
-                          width: 266,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color(0xFF130160)),
-                          child: Obx(() {
-                            return _authenticationController.otpLoading.value
-                                ? Center(
-                                    child: CircularProgressIndicator(
-                                        color: Colors.white))
-                                : Center(
-                                    child: Text("RESET PASSWORD",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white)),
-                                  );
-                          }),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        print(_authenticationController
+                            .verifyEmailError["email"]);
+                        validateEmail();
+                      },
+                      child: Container(
+                        width: 266,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Color(0xFF130160)),
+                        child: Obx(() {
+                          return _authenticationController.otpLoading.value
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                      color: Colors.white))
+                              : Center(
+                                  child: Text("RESET PASSWORD",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white)),
+                                );
+                        }),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 266,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Color(0xFFD6CDFE)),
+                        child: Center(
+                          child: Text("BACK TO LOGIN",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF130160))),
                         ),
                       ),
-                      SizedBox(height: 30),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: 266,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color(0xFFD6CDFE)),
-                          child: Center(
-                            child: Text("BACK TO LOGIN",
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF130160))),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
