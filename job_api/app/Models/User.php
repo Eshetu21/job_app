@@ -43,7 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'manage_stats',
         'pincode',
         'manage_jobs',
-        'pincode',
+       
         'can_delete_admin'
     ];
 
@@ -62,7 +62,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'add_admins',
         'manage_stats',
         'manage_jobs',
-        'can_delete_admin'
+        'can_delete_admin',
+        'pincode',
+        "resetpin_verified",
+
     ];
 
     /*
