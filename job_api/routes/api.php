@@ -77,46 +77,6 @@ Route::middleware("auth:sanctum")->group(
         Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,1');
         Route::post('checkpincode', [UserController::class, "checkpincode"]);
 
-        // admin 
-        // --------------------------------------------------------------------------------------------------------
-        Route::prefix('admin')->middleware('isadmin')->group(function () {
-
-            // company
-
-            Route::delete('c/delete/{companyId}', [AdminController::class, 'deletecompanyA'])->middleware('canManageAccounts');
-
-            // private client 
-
-            Route::delete('pc/deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA'])->middleware('canManageAccounts');
-
-
-// jobseeker
-            Route::delete('deletejs/{jobseekerId}', [AdminController::class, 'deleteJobSeekerA'])->middleware('canManageAccounts');
-
-            // user
-            Route::get("u/profile/{id}", [AdminController::class, "getuserprofile"])->middleware('canManageAccounts');
-            Route::delete('u/deleteu/{userId}', [AdminController::class, 'deleteuserA'])->middleware('canManageAccounts');
-
-            // job and app 
-            Route::prefix('job')->middleware('auth:sanctum')->group(function () {
-
-
-                Route::delete('delete/{jobid}', [AdminController::class, "deleteJob"])->middleware('canManageJobs');
-                Route::get('getstat/{jobid}', [AdminController::class, "jobstat"])->middleware('canGetStat');
-                Route::put('postjob/{jobid}', [AdminController::class, "postjob"])->middleware('canManageJobs');
-                Route::put('ignorejob/{jobid}', [AdminController::class, "ignorejob"])->middleware('canManageJobs');
-            });
-            Route::prefix('app')->group(function () {
-
-
-                Route::delete('delete/{appid}', [AdminController::class, "deleteAppadmin"])->middleware('canManageJobs');;
-            });
-
-
-            Route::get('statistic', [AdminController::class, 'statistic'])->middleware('canGetStat');;
-            Route::post('createadmin', [AdminController::class, 'createadmin'])->middleware('canAddAdmins');;
-            Route::delete('deleteadmin', [AdminController::class, 'deleteadmin'])->middleware('canDeleteAdmin');;
-        });
         Route::middleware('auth:sanctum')->group(function () {
             // jobseeker
             Route::prefix('js')->group(function () {

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
-            $table->enum('role',['user','admin'])->default('user');
             $table->string('email')->unique();
             $table->integer('age')->nullable();
             $table->integer('pincode')->nullable();
@@ -30,11 +29,6 @@ return new class extends Migration
             $table->string('github_profile_link')->nullable();
             $table->string('other_profile_link')->nullable();
             $table->string('profile_pic')->nullable();
-            $table->boolean('manage_accounts')->default(false);
-            $table->boolean('add_admins')->default(false);
-            $table->boolean('manage_stats')->default(false);
-            $table->boolean('manage_jobs')->default(false);  
-            $table->boolean('can_delete_admin')->default(false);  
             $table->rememberToken();
             
             $table->timestamps();

@@ -28,8 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender',
         'address',
         'profile_pic',
-        'role',
-        'password',
+  'password',
         'email_verification_pincode',
        'facebook_profile_link',
        'other_profile_link',
@@ -38,13 +37,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'pincode_expire',
         "email_verified",
         "resetpin_verified",
-        'manage_accounts',
-        'add_admins',
-        'manage_stats',
         'pincode',
-        'manage_jobs',
-       
-        'can_delete_admin'
+
     ];
 
     /**
@@ -58,11 +52,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verification_pincode',
         'pincode_expire',
         "email_verified",
-        'manage_accounts',
-        'add_admins',
-        'manage_stats',
-        'manage_jobs',
-        'can_delete_admin',
         'pincode',
         "resetpin_verified",
 
