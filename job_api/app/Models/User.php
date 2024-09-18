@@ -15,7 +15,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens;
 
-    /**
+    /
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -45,7 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
          'can_delete_admin'
     ];
 
-    /**
+    /
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
