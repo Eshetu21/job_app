@@ -90,7 +90,7 @@ Route::middleware("auth:sanctum")->group(
             Route::delete('pc/deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA'])->middleware('canManageAccounts');
 
 
-// jobseeker
+            // jobseeker
             Route::delete('deletejs/{jobseekerId}', [AdminController::class, 'deleteJobSeekerA'])->middleware('canManageAccounts');
 
             // user
@@ -149,9 +149,7 @@ Route::middleware("auth:sanctum")->group(
                     Route::get('get/{jobid}/{appid}', [PrivateClientController::class, "getAppById"]);
                     Route::get('get/{jobid}', [PrivateClientController::class, "getAllApp"]);
                 });
-
-
-});        //Company
+            });        //Company
             Route::prefix('c')->group(function () {
                 Route::post('create', [CompanyController::class, 'createcompany']);
                 Route::get('get', [CompanyController::class, "showcompany"])->middleware("auth:sanctum");
@@ -194,7 +192,7 @@ Route::middleware("auth:sanctum")->group(
             Route::post("updatelanguage/{id}", [LanguageController::class, "updatelanguage"]);
         });
         // --------------------------------------------------------------------------------------------------------
-}
+    }
 ); // public
 // --------------------------------------------------------------------------------------------------------
 Route::prefix('p')->group(function () {
