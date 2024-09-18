@@ -34,7 +34,7 @@ class _CheckEmailState extends State<CheckEmail> {
       _userAuthenticationController.otpVerifyLoading.value = false;
       if (verifiedOTP) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ResetPassword()));
+            context, MaterialPageRoute(builder: (context) => ResetPassword(email: widget.email)));
       }
     }
   }
@@ -115,7 +115,7 @@ class _CheckEmailState extends State<CheckEmail> {
                                   .otpVerifyLoading.value
                               ? Center(child: CircularProgressIndicator())
                               : Center(
-                                  child: Text("Submit",
+                                  child: Text("Verify",
                                       style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF130160))),

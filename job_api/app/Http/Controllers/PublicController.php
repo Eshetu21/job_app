@@ -19,7 +19,7 @@ class PublicController extends Controller
 {
     public function forgetpassword(Request $request)
     {
-
+        try {
         $request->validate([
             'email' => 'required|email'
         ]);
@@ -31,7 +31,7 @@ class PublicController extends Controller
                 "message" => "We couldn't find your account"
             ], 400);
         }
-        try {
+       
 
             $pin = rand(100000, 999999);
             $pincode_expire = Carbon::now()->addMinutes(5)->timestamp;
@@ -46,7 +46,7 @@ class PublicController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
-                "message" => $e->getMessage(),
+                "message" => 'Internal server error',
 
             ], 500);
         }

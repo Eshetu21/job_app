@@ -32,7 +32,8 @@ class _LoginPageState extends State<LoginPage> {
     }
     if (_passwordController.text.isEmpty) {
       hasError = true;
-      _userAuthenticationController.logError["password"] = "*password is required";
+      _userAuthenticationController.logError["password"] =
+          "*password is required";
     }
 
     if (!hasError) {
@@ -48,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(top: 60, left: 25, right: 25),
+            margin: EdgeInsets.only(top: 90, left: 25, right: 25),
             child: Column(
               children: [
                 Text("Welcome Back",
@@ -69,9 +70,11 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(
                       hintText: errorText == null ? "Email" : errorText,
                       hintStyle: TextStyle(
-                         color:errorText==null? Color(0xFF0D0140): Colors.red,
-                        fontFamily: GoogleFonts.poppins().fontFamily,fontSize: errorText==null?16:12
-                      ),
+                          color: errorText == null
+                              ? Color(0xFF0D0140)
+                              : Colors.red,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          fontSize: errorText == null ? 16 : 12),
                       prefixIcon: Icon(Icons.email_outlined),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(18),
@@ -89,9 +92,11 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(
                       hintText: errorText == null ? "Password" : errorText,
                       hintStyle: TextStyle(
-                        color:errorText==null? Color(0xFF0D0140): Colors.red,
-                        fontFamily: GoogleFonts.poppins().fontFamily,fontSize: errorText==null?16:12
-                      ),
+                          color: errorText == null
+                              ? Color(0xFF0D0140)
+                              : Colors.red,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          fontSize: errorText == null ? 16 : 12),
                       prefixIcon: Icon(Icons.lock_outline),
                       suffixIcon: GestureDetector(
                         onTap: () {
@@ -120,7 +125,6 @@ class _LoginPageState extends State<LoginPage> {
                       _userAuthenticationController.logError['general']!,
                       style: GoogleFonts.poppins(color: Colors.red),
                     );
-                
                   }
                   return Container();
                 }),
@@ -199,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => RegisterPage()));
-                                _userAuthenticationController.clearLogErrorMsg();
+                        _userAuthenticationController.clearLogErrorMsg();
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,

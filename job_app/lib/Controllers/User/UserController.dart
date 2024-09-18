@@ -200,10 +200,10 @@ class UserAuthenticationController extends GetxController {
     }
   }
 
-  Future<bool> resetpassword({required String newPassword}) async {
+  Future<bool> resetpassword({required String email,required String newPassword}) async {
     try {
       passwordResetLoading.value = true;
-      var data = jsonEncode({"newpassword": newPassword});
+      var data = jsonEncode({"email":email,"newpassword": newPassword});
       var response = await http.post(Uri.parse('${url}p/u/changepassword'),
           headers: {
             "Accept": "application/json",
@@ -227,4 +227,5 @@ class UserAuthenticationController extends GetxController {
       return false;
     }
   }
+  
 }
