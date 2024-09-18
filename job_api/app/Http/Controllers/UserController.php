@@ -69,8 +69,7 @@ public function getUser(Request $request){
 
 
 
-            return response()->json(["success" => true, "messasge" => "Pincode send"]);
-            $user = User::create([
+              $user = User::create([
                 "firstname" => $validatedData["firstname"],
                 "lastname" => $validatedData["lastname"],
                 "email" => $validatedData["email"],

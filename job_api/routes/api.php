@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Sanctum;
 // auth
 Route::post('register', [UserController::class, "register"]);
-Route::post('login', [UserController::class, "login"]);
+Route::post('login', [UserController::class, "login"])->middleware('throttle:3,1');
+// verify email
+Route::post('checkpincode', [UserController::class, "checkpincode"]);
 // eshetu
 Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"]);
 Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"]);
@@ -37,13 +39,6 @@ Route::post('privatecreatejob', [PrivateClientController::class, "privatecreatej
 Route::put('privatecreateupdate', [PrivateClientController::class, "update"]);
 Route::delete('privatecreatedelete', [PrivateClientController::class, "delete"]);
 
-
-
-// notify jobseeker
-
-// admin job control
-
-
 Route::middleware("auth:sanctum")->group(
 
     function () {
@@ -57,10 +52,8 @@ Route::middleware("auth:sanctum")->group(
         Route::get('user', [UserController::class, "getuser"]);
         // change password
         Route::post('changepassword', [UserController::class, "changepassword"]);
-        // verify email
-        Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,1');
-        Route::post('checkpincode', [UserController::class, "checkpincode"]);
 
+        // Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,1');       
         // admin 
         // --------------------------------------------------------------------------------------------------------
         Route::prefix('admin')->middleware('isadmin')->group(function () {
@@ -71,10 +64,7 @@ Route::middleware("auth:sanctum")->group(
 
             // private client 
 
-            Route::delete('pc/deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA'])->middleware('canManageAccounts');
-
-
-            // jobseeker
+            Route::delete('pc/deletepc/{privateclientId}', [AdminController::class, 'deletePrivateClientA'])->middleware('canManageAccounts');            // jobseeker
             Route::delete('deletejs/{jobseekerId}', [AdminController::class, 'deleteJobSeekerA'])->middleware('canManageAccounts');
 
             // user
@@ -82,22 +72,13 @@ Route::middleware("auth:sanctum")->group(
             Route::delete('u/deleteu/{userId}', [AdminController::class, 'deleteuserA'])->middleware('canManageAccounts');
 
             // job and app 
-            Route::prefix('job')->middleware('auth:sanctum')->group(function () {
-
-
-                Route::delete('delete/{jobid}', [AdminController::class, "deleteJob"])->middleware('canManageJobs');
+            Route::prefix('job')->middleware('auth:sanctum')->group(function () {                Route::delete('delete/{jobid}', [AdminController::class, "deleteJob"])->middleware('canManageJobs');
                 Route::get('getstat/{jobid}', [AdminController::class, "jobstat"])->middleware('canGetStat');
                 Route::put('postjob/{jobid}', [AdminController::class, "postjob"])->middleware('canManageJobs');
                 Route::put('ignorejob/{jobid}', [AdminController::class, "ignorejob"])->middleware('canManageJobs');
             });
-            Route::prefix('app')->group(function () {
-
-
-                Route::delete('delete/{appid}', [AdminController::class, "deleteAppadmin"])->middleware('canManageJobs');;
-            });
-
-
-            Route::get('statistic', [AdminController::class, 'statistic'])->middleware('canGetStat');;
+            Route::prefix('app')->group(function () {                Route::delete('delete/{appid}', [AdminController::class, "deleteAppadmin"])->middleware('canManageJobs');;
+            });            Route::get('statistic', [AdminController::class, 'statistic'])->middleware('canGetStat');;
             Route::post('createadmin', [AdminController::class, 'createadmin'])->middleware('canAddAdmins');;
             Route::delete('deleteadmin', [AdminController::class, 'deleteadmin'])->middleware('canDeleteAdmin');;
         });
