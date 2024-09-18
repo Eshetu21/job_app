@@ -15,8 +15,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens;
 
-    /**
-     * The attributes that are mass assignable.
+    /* The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
@@ -28,17 +27,24 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender',
         'address',
         'profile_pic',
+        'role',
         'password',
         'email_verification_pincode',
         'facebook_profile_link',
         'other_profile_link',
         'linkedin_profile_link',
         'github_profile_link',
+        'pincode_expire',
         "email_verified",
+        "resetpin_verified",
+        'manage_accounts',
+        'add_admins',
+        'manage_stats',
+        'pincode',
+        'can_delete_admin'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
+    /* The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
