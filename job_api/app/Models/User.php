@@ -28,13 +28,21 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender',
         'address',
         'profile_pic',
+        'role',
         'password',
         'email_verification_pincode',
-        'facebook_profile_link',
-        'other_profile_link',
+       'facebook_profile_link',
+       'other_profile_link',
         'linkedin_profile_link',
         'github_profile_link',
+        'pincode_expire',
         "email_verified",
+        "resetpin_verified",
+        'manage_accounts',
+        'add_admins',
+        'manage_stats',
+        'pincode',
+         'can_delete_admin'
     ];
 
     /**
@@ -47,6 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
         'email_verification_pincode',
         'pincode_expire',
+ 
         'manage_accounts',
         'add_admins',
         'manage_stats',
@@ -82,4 +91,5 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(PrivateClient::class);
     }
+   
 }

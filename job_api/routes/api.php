@@ -54,23 +54,7 @@ Route::middleware("auth:sanctum")->group(
         Route::put('update', [UserController::class, "update"]);
         Route::delete('delete', [UserController::class, "delete"]);
         Route::get("profile", [UserController::class, "getuserprofile"]);
-        Route::get('user', function (Request $request) {
-            return response()->json(["success" => true, "user" => [
-                'firstname' => $request->user()->firstname,
-                'lastname' => $request->user()->lastname,
-                'email' => $request->user()->email,
-                'age' => $request->user()->age,
-                'gender' => $request->user()->gender,
-                'address' => $request->user()->address,
-                'profile_pic' => url($request->user()->profile_pic),
-                'role' => $request->user()->role,
-                'facebook_profile_link' => $request->user()->facebook_profile_link,
-                'other_profile_link' => $request->user()->other_profile_link,
-                'linkedin_profile_link' => $request->user()->linkedin_profile_link,
-                'github_profile_link' => $request->user()->github_profile_link,
-
-            ]]);
-        });
+        Route::get('user', [UserController::class, "getuser"]);
         // change password
         Route::post('changepassword', [UserController::class, "changepassword"]);
         // verify email

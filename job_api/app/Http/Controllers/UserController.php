@@ -34,7 +34,31 @@ class UserController extends Controller
 
         return response()->json(['profiles' => $profiles], 200);
     }
+public function getUser(Request $request){
+    try{
+        return response()->json(["success" => true, "user" => [
+            'firstname' => $request->user()->firstname,
+            'lastname' => $request->user()->lastname,
+            'email' => $request->user()->email,
+            'age' => $request->user()->age,
+            'gender' => $request->user()->gender,
+            'address' => $request->user()->address,
+            'profile_pic' => url($request->user()->profile_pic),
+            'role' => $request->user()->role,
+            'facebook_profile_link' => $request->user()->facebook_profile_link,
+            'other_profile_link' => $request->user()->other_profile_link,
+            'linkedin_profile_link' => $request->user()->linkedin_profile_link,
+            'github_profile_link' => $request->user()->github_profile_link,
 
+        ]]);
+    }
+    catch (ValidationException $e) {
+        return response()->json([
+            "message" => "Validation Failed",
+            "errors" => $e->errors()
+        ], 422);
+    }
+}
     public function register(RegisterRequest $request)
     {
 
