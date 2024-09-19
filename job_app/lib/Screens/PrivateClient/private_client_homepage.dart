@@ -80,7 +80,9 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                               alignment: Alignment.topLeft,
                                               child: Text("My Accounts",
                                                   style: GoogleFonts.poppins(
-                                                      fontSize: 22))),
+                                                      fontSize: 22,
+                                                      fontWeight:
+                                                          FontWeight.w600))),
                                         ),
                                         if (_profileController
                                                 .profiles["jobseeker"] !=
@@ -88,22 +90,22 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                           _profileContainer(
                                               ListTile(
                                                 leading: Image.asset(
-                                                  "assets/icons/job_seeker.png",
-                                                  width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
-                                                ),
+                                                    "assets/icons/job_seeker.png",
+                                                    width: 28,
+                                                    color: Color(0xFFFF9228)),
                                                 title: Text(
-                                                  _profileController.profiles[
-                                                                  'jobseeker']
-                                                              ['user']
-                                                          ['firstname'] +
-                                                      " " +
-                                                      _profileController
-                                                                  .profiles[
-                                                              'jobseeker']
-                                                          ['user']['lastname'],
-                                                ),
+                                                    _profileController.profiles[
+                                                                    'jobseeker']
+                                                                ['user']
+                                                            ['firstname'] +
+                                                        " " +
+                                                        _profileController
+                                                                    .profiles[
+                                                                'jobseeker'][
+                                                            'user']['lastname'],
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
                                                 subtitle: Text("Job Seeker"),
                                                 trailing: Radio(
                                                   value: 'jobseeker',
@@ -132,20 +134,21 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                                 leading: Image.asset(
                                                   "assets/icons/private.png",
                                                   width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
+                                                  color: Color(0xFFFF9228),
                                                 ),
                                                 title: Text(
-                                                  _profileController.profiles[
-                                                                  'jobseeker']
-                                                              ['user']
-                                                          ['firstname'] +
-                                                      " " +
-                                                      _profileController
-                                                                  .profiles[
-                                                              'jobseeker']
-                                                          ['user']['lastname'],
-                                                ),
+                                                    _profileController.profiles[
+                                                                    'jobseeker']
+                                                                ['user']
+                                                            ['firstname'] +
+                                                        " " +
+                                                        _profileController
+                                                                    .profiles[
+                                                                'jobseeker'][
+                                                            'user']['lastname'],
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
                                                 subtitle:
                                                     Text("Private Client"),
                                                 trailing: Radio(
@@ -167,14 +170,16 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                           _profileContainer(
                                               ListTile(
                                                 leading: Image.asset(
-                                                  "assets/icons/company.png",
-                                                  width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
-                                                ),
-                                                title: Text(_profileController
-                                                        .profiles["company"]
-                                                    ["company_name"]),
+                                                    "assets/icons/company.png",
+                                                    width: 28,
+                                                    color: Color(0xFFFF9228)),
+                                                title: Text(
+                                                    _profileController
+                                                            .profiles["company"]
+                                                        ["company_name"],
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
                                                 subtitle: Text("Company"),
                                                 trailing: Radio(
                                                   value: 'company',

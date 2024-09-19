@@ -79,7 +79,7 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                                               alignment: Alignment.topLeft,
                                               child: Text("My Accounts",
                                                   style: GoogleFonts.poppins(
-                                                      fontSize: 22))),
+                                                      fontSize: 22,fontWeight: FontWeight.bold))),
                                         ),
                                         if (_profileController
                                                 .profiles["jobseeker"] !=
@@ -89,20 +89,21 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                                                 leading: Image.asset(
                                                   "assets/icons/job_seeker.png",
                                                   width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
+                                                  color: Color(0xFFFF9228),
                                                 ),
                                                 title: Text(
-                                                  _profileController.profiles[
-                                                                  'jobseeker']
-                                                              ['user']
-                                                          ['firstname'] +
-                                                      " " +
-                                                      _profileController
-                                                                  .profiles[
-                                                              'jobseeker']
-                                                          ['user']['lastname'],
-                                                ),
+                                                    _profileController.profiles[
+                                                                    'jobseeker']
+                                                                ['user']
+                                                            ['firstname'] +
+                                                        " " +
+                                                        _profileController
+                                                                    .profiles[
+                                                                'jobseeker'][
+                                                            'user']['lastname'],
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
                                                 subtitle: Text("Job Seeker"),
                                                 trailing: Radio(
                                                   value: 'jobseeker',
@@ -129,22 +130,22 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                                           _profileContainer(
                                               ListTile(
                                                 leading: Image.asset(
-                                                  "assets/icons/private.png",
-                                                  width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
-                                                ),
+                                                    "assets/icons/private.png",
+                                                    width: 28,
+                                                    color: Color(0xFFFF9228)),
                                                 title: Text(
-                                                  _profileController.profiles[
-                                                                  'jobseeker']
-                                                              ['user']
-                                                          ['firstname'] +
-                                                      " " +
-                                                      _profileController
-                                                                  .profiles[
-                                                              'jobseeker']
-                                                          ['user']['lastname'],
-                                                ),
+                                                    _profileController.profiles[
+                                                                    'jobseeker']
+                                                                ['user']
+                                                            ['firstname'] +
+                                                        " " +
+                                                        _profileController
+                                                                    .profiles[
+                                                                'jobseeker'][
+                                                            'user']['lastname'],
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
                                                 subtitle:
                                                     Text("Private Client"),
                                                 trailing: Radio(
@@ -172,14 +173,12 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                                           _profileContainer(
                                               ListTile(
                                                 leading: Image.asset(
-                                                  "assets/icons/company.png",
-                                                  width: 28,
-                                                  color: Color(0xFFFF9228)
-                                                      .withOpacity(0.4),
-                                                ),
+                                                    "assets/icons/company.png",
+                                                    width: 28,
+                                                    color: Color(0xFFFF9228)),
                                                 title: Text(_profileController
                                                         .profiles['company']
-                                                    ['company_name']),
+                                                    ['company_name'],style: GoogleFonts.poppins(fontWeight:FontWeight.w500)),
                                                 subtitle: Text("Company"),
                                                 trailing: Radio(
                                                   value: 'company',

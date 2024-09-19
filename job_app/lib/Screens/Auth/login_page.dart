@@ -23,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _userAuthenticationController.clearLogErrorMsg();
     _passwordController.clear();
   }
 

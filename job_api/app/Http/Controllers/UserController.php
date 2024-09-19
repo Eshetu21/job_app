@@ -66,9 +66,6 @@ class UserController extends Controller
         try {
             $pin = rand(100000, 999999);
             $pincode_expire = Carbon::now()->addMinutes(5)->timestamp;
-
-
-
             $user = User::create([
                 "firstname" => $validatedData["firstname"],
                 "lastname" => $validatedData["lastname"],
@@ -95,7 +92,7 @@ class UserController extends Controller
             ], 422);
         }
     }
-    public function newpassword(Request $request)
+    public function changepassword(Request $request)
     {
         try {
             $user = $request->user();

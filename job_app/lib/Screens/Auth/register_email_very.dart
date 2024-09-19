@@ -24,12 +24,10 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
       Get.put(UserAuthenticationController());
   final ProfileController _profileController = Get.put(ProfileController());
 
-  bool showOtpField = false;
   bool isCountdownActive = false;
   String verifyText = "Resend";
   Timer? _countdownTimer;
   int _start = 60;
-  bool hasPressedVerifyBefore = false;
 
   void startCountdown() {
     setState(() {
@@ -99,8 +97,14 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF0D0140))),
                 SizedBox(height: 25),
-                Text("You need to verify your email in order to use the app",
-                    style: GoogleFonts.poppins(color: Color(0xFF524B6B))),
+                Column(
+                  children: [
+                    Text(
+                      textAlign:TextAlign.center,
+                      "You need to verify your email in order to use the app. We have sent a code to your email",
+                        style: GoogleFonts.poppins(color: Color(0xFF524B6B))),Text(widget.email,style: GoogleFonts.poppins(fontWeight: FontWeight.bold),),
+                  ],
+                ),
                 SizedBox(height: 20),
                 Image.asset(
                   "assets/images/email_sent.png",
@@ -128,82 +132,52 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                   String? errorText =
                       _userAuthenticationController.verifyOTPError["otp"];
                   return Column(children: [
-                    showOtpField
-                        ? Column(
-                            children: [
-                              _userAuthenticationController
-                                          .otpVerifyLoading.value ==
-                                      false
-                                  ? Column(
-                                      children: [
-                                        SizedBox(
-                                          width: 266,
-                                          height: 50,
-                                          child: TextFormField(
-                                            controller: _otpController,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                hintText: "Enter OTP",
-                                                contentPadding:
-                                                    EdgeInsets.all(20),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                )),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        /* Text(
-                                            "Check your email, we have sent a code"), */
-                                      ],
-                                    )
-                                  : Container(),
-                              SizedBox(height: 10),
-                              errorText != null
-                                  ? Text(
-                                      errorText,
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.red),
-                                    )
-                                  : Container(),
-                              SizedBox(height: 10),
-                            ],
-                          )
-                        : Container(),
+                    Column(
+                      children: [
+                        _userAuthenticationController.otpVerifyLoading.value ==
+                                false
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    width: 266,
+                                    height: 50,
+                                    child: TextFormField(
+                                      controller: _otpController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                          hintText: "Enter OTP",
+                                          contentPadding: EdgeInsets.all(20),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          )),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                ],
+                              )
+                            : Container(),
+                        SizedBox(height: 10),
+                        errorText != null
+                            ? Text(
+                                errorText,
+                                style: GoogleFonts.poppins(color: Colors.red),
+                              )
+                            : Container(),
+                        SizedBox(height: 10),
+                      ],
+                    ),
                     GestureDetector(
                       onTap: () async {
-                        if (!showOtpField) {
-                          setState(() {
-                            showOtpField = true;
-                            hasPressedVerifyBefore = true;
-                          });
-                          bool testSendpin =
-                              await _userAuthenticationController.sendpin();
-                          if (testSendpin) {
-                            Fluttertoast.showToast(
-                              msg: "Check your email, we have sent a code",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.TOP,
-                              timeInSecForIosWeb: 4,
-                              backgroundColor: Color(0xFF130160),
-                              textColor: Colors.white,
-                              fontSize: 16.0,
-                            );
-                          }
-                          startCountdown();
-                        } else {
-                          if (_otpController.text.trim().isEmpty &&
-                              hasPressedVerifyBefore) {
-                            _userAuthenticationController.verifyEmailError
-                                .clear();
-                            validateOTP();
-                          }
-                          if (_otpController.text.trim().isNotEmpty &&
-                              hasPressedVerifyBefore) {
-                            _userAuthenticationController.verifyEmailError
-                                .clear();
-                            validateOTP();
-                          }
+                        if (_otpController.text.trim().isEmpty) {
+                          _userAuthenticationController.verifyEmailError
+                              .clear();
+                          validateOTP();
+                        }
+                        if (_otpController.text.trim().isNotEmpty) {
+                          _userAuthenticationController.verifyEmailError
+                              .clear();
+                          validateOTP();
                         }
                       },
                       child: Container(
@@ -215,7 +189,9 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                         child: Center(
                           child: _userAuthenticationController
                                   .otpVerifyLoading.value
-                              ? CircularProgressIndicator(color: Colors.white,)
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
                               : Text("Verify",
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,
@@ -223,10 +199,8 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                         ),
                       ),
                     ),
-                    showOtpField &&
-                            _userAuthenticationController
-                                    .otpVerifyLoading.value ==
-                                false
+                    _userAuthenticationController.otpVerifyLoading.value ==
+                            false
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -236,10 +210,24 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                                     color: Color(0xFF524B6B)),
                               ),
                               TextButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (!isCountdownActive) {
                                       startCountdown();
-                                      _userAuthenticationController.sendpin();
+                                      bool sendPinSucess =
+                                          await _userAuthenticationController
+                                              .sendpin();
+                                      if (sendPinSucess) {
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              "Check your email, we have sent a code",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.TOP,
+                                          timeInSecForIosWeb: 4,
+                                          backgroundColor: Color(0xFF130160),
+                                          textColor: Colors.white,
+                                          fontSize: 16.0,
+                                        );
+                                      }
                                     }
                                   },
                                   style: TextButton.styleFrom(

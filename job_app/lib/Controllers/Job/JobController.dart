@@ -55,7 +55,8 @@ class Jobcontroller extends GetxController {
       print($e.toString());
     }
   }
- Future<void> createCompanyJob({
+
+  Future<void> createCompanyJob({
     required String title,
     required String city,
     required String type,
@@ -96,6 +97,7 @@ class Jobcontroller extends GetxController {
       print($e.toString());
     }
   }
+
   Future<void> getJobs() async {
     final response = await http.get(Uri.parse("${url}p/job/get"), headers: {
       "Accept": "application/json",
@@ -103,18 +105,9 @@ class Jobcontroller extends GetxController {
     });
     if (response.statusCode == 200) {
       alljobs.value = json.decode(response.body)["jobs"];
-      print(alljobs);
     } else {
       print(response.statusCode);
       print("failed to fetch all jobs");
     }
-  }
-
-  Future<void> applyJob({required int jobId}) async {
-    final response = await http.post(Uri.parse("${url}js/apply/$jobId"),
-        headers: {
-          "Accept": "application/json",
-          "Authorization": "Bearer $token"
-        });
   }
 }

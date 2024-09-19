@@ -56,7 +56,6 @@ class UserAuthenticationController extends GetxController {
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Authorization": "Bearer $token"
-
           },
           body: data);
 
@@ -190,8 +189,6 @@ class UserAuthenticationController extends GetxController {
     }
   }
 
-  
-
   Future<bool> verifyOTP({required String email, required int pin}) async {
     try {
       otpVerifyLoading.value = true;
@@ -257,7 +254,6 @@ class UserAuthenticationController extends GetxController {
           },
           body: data);
       if (response.statusCode == 200) {
-        passwordResetLoading.value = false;
         print("Sucessfully updated password");
         return true;
       } else {
@@ -265,7 +261,6 @@ class UserAuthenticationController extends GetxController {
         String errorMessage = jsonResponse["message"];
         passwordResetError["passwordreset"] = errorMessage;
         print(response.body);
-        passwordResetLoading.value = false;
         return false;
       }
     } catch ($e) {
