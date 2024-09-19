@@ -47,7 +47,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 4,
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFF130160),
           textColor: Colors.white,
           fontSize: 16.0,
         );

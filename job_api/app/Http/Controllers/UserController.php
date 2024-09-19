@@ -34,31 +34,31 @@ class UserController extends Controller
 
         return response()->json(['profiles' => $profiles], 200);
     }
-public function getUser(Request $request){
-    try{
-        return response()->json(["success" => true, "user" => [
-            'firstname' => $request->user()->firstname,
-            'lastname' => $request->user()->lastname,
-            'email' => $request->user()->email,
-            'age' => $request->user()->age,
-            'gender' => $request->user()->gender,
-            'address' => $request->user()->address,
-            'profile_pic' => url($request->user()->profile_pic),
-            'role' => $request->user()->role,
-            'facebook_profile_link' => $request->user()->facebook_profile_link,
-            'other_profile_link' => $request->user()->other_profile_link,
-            'linkedin_profile_link' => $request->user()->linkedin_profile_link,
-            'github_profile_link' => $request->user()->github_profile_link,
+    public function getUser(Request $request)
+    {
+        try {
+            return response()->json(["success" => true, "user" => [
+                'firstname' => $request->user()->firstname,
+                'lastname' => $request->user()->lastname,
+                'email' => $request->user()->email,
+                'age' => $request->user()->age,
+                'gender' => $request->user()->gender,
+                'address' => $request->user()->address,
+                'profile_pic' => url($request->user()->profile_pic),
+                'role' => $request->user()->role,
+                'facebook_profile_link' => $request->user()->facebook_profile_link,
+                'other_profile_link' => $request->user()->other_profile_link,
+                'linkedin_profile_link' => $request->user()->linkedin_profile_link,
+                'github_profile_link' => $request->user()->github_profile_link,
 
-        ]]);
+            ]]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                "message" => "Validation Failed",
+                "errors" => $e->errors()
+            ], 422);
+        }
     }
-    catch (ValidationException $e) {
-        return response()->json([
-            "message" => "Validation Failed",
-            "errors" => $e->errors()
-        ], 422);
-    }
-}
     public function register(RegisterRequest $request)
     {
 
@@ -69,7 +69,7 @@ public function getUser(Request $request){
 
 
 
-              $user = User::create([
+            $user = User::create([
                 "firstname" => $validatedData["firstname"],
                 "lastname" => $validatedData["lastname"],
                 "email" => $validatedData["email"],
@@ -78,11 +78,14 @@ public function getUser(Request $request){
                 "pincode_expire" => $pincode_expire,
                 "password" => Hash::make($validatedData["password"])
             ]);
+            $token = $user->createToken("job_portal")->plainTextToken;
             $username =  $user->firstname . " " .  $user->lastname;
 
             Mail::to($user->email)->send(new SendPin($pin, $username));
             return response()->json([
                 "success" => true,
+                "email" => $user->email,
+                "token" => $token,
                 "message" => "Pincode sent"
             ], 201);
         } catch (ValidationException $e) {
@@ -92,7 +95,7 @@ public function getUser(Request $request){
             ], 422);
         }
     }
-    public function changepassword(Request $request)
+    public function newpassword(Request $request)
     {
         try {
             $user = $request->user();

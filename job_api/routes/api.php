@@ -22,9 +22,9 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Sanctum;
 // auth
 Route::post('register', [UserController::class, "register"]);
-Route::post('login', [UserController::class, "login"])->middleware('throttle:3,1');
+Route::post('login', [UserController::class, "login"])->middleware('throttle:30,1');
 // verify email
-Route::post('checkpincode', [UserController::class, "checkpincode"]);
+
 // eshetu
 Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"]);
 Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"]);
@@ -52,8 +52,8 @@ Route::middleware("auth:sanctum")->group(
         Route::get('user', [UserController::class, "getuser"]);
         // change password
         Route::post('changepassword', [UserController::class, "changepassword"]);
-
-        // Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,1');       
+        Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:30,1');
+        Route::post('checkpincode', [UserController::class, "checkpincode"]);
         // admin 
         // --------------------------------------------------------------------------------------------------------
         Route::prefix('admin')->middleware('isadmin')->group(function () {
@@ -72,13 +72,16 @@ Route::middleware("auth:sanctum")->group(
             Route::delete('u/deleteu/{userId}', [AdminController::class, 'deleteuserA'])->middleware('canManageAccounts');
 
             // job and app 
-            Route::prefix('job')->middleware('auth:sanctum')->group(function () {                Route::delete('delete/{jobid}', [AdminController::class, "deleteJob"])->middleware('canManageJobs');
+            Route::prefix('job')->middleware('auth:sanctum')->group(function () {
+                Route::delete('delete/{jobid}', [AdminController::class, "deleteJob"])->middleware('canManageJobs');
                 Route::get('getstat/{jobid}', [AdminController::class, "jobstat"])->middleware('canGetStat');
                 Route::put('postjob/{jobid}', [AdminController::class, "postjob"])->middleware('canManageJobs');
                 Route::put('ignorejob/{jobid}', [AdminController::class, "ignorejob"])->middleware('canManageJobs');
             });
-            Route::prefix('app')->group(function () {                Route::delete('delete/{appid}', [AdminController::class, "deleteAppadmin"])->middleware('canManageJobs');;
-            });            Route::get('statistic', [AdminController::class, 'statistic'])->middleware('canGetStat');;
+            Route::prefix('app')->group(function () {
+                Route::delete('delete/{appid}', [AdminController::class, "deleteAppadmin"])->middleware('canManageJobs');;
+            });
+            Route::get('statistic', [AdminController::class, 'statistic'])->middleware('canGetStat');;
             Route::post('createadmin', [AdminController::class, 'createadmin'])->middleware('canAddAdmins');;
             Route::delete('deleteadmin', [AdminController::class, 'deleteadmin'])->middleware('canDeleteAdmin');;
         });
@@ -173,7 +176,7 @@ Route::prefix('p')->group(function () {
     Route::get('js/{jobseeker_id}', [PublicController::class, "getjobseeker"]);
     Route::get('cities', [CityController::class, "getcities"]);
     // forgot password 
-    Route::post('u/forgetpassword', [PublicController::class, "forgetpassword"])->middleware('throttle:1,1');;
+    Route::post('u/forgetpassword', [PublicController::class, "forgetpassword"])->middleware('throttle:30,1');;
     Route::post('u/verifypincode', [PublicController::class, "verifypincode"]);
     Route::post('u/changepassword', [PublicController::class, "changepassword"]);
     //  php artisan DB:seed cityseeder
