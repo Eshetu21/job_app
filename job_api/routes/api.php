@@ -22,9 +22,9 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Sanctum;
 // auth
 Route::post('register', [UserController::class, "register"]);
-Route::post('login', [UserController::class, "login"])->middleware('throttle:3,1');
+Route::post('login', [UserController::class, "login"])->middleware('throttle:30,1');
 // verify email
-Route::post('checkpincode', [UserController::class, "checkpincode"]);
+
 // eshetu
 Route::post('createjobseeker', [JobSeekerController::class, "createjobseeker"]);
 Route::get('showjobseeker', [JobSeekerController::class, "showjobseeker"]);
@@ -45,7 +45,7 @@ Route::middleware("auth:sanctum")->group(
         // auth
         Route::post('logout', [UserController::class, "logout"]);
         // user
-
+        Route::post('checkpincode', [UserController::class, "checkpincode"]);
         Route::put('update', [UserController::class, "update"]);
         Route::delete('delete', [UserController::class, "delete"]);
         Route::get("profile", [UserController::class, "getuserprofile"]);
@@ -53,7 +53,7 @@ Route::middleware("auth:sanctum")->group(
         // change password
         Route::post('changepassword', [UserController::class, "changepassword"]);
 
-        // Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:1,1');       
+         Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:10,1');       
         // admin 
         // --------------------------------------------------------------------------------------------------------
         Route::prefix('admin')->middleware('isadmin')->group(function () {

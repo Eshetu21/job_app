@@ -154,6 +154,7 @@ public function getUser(Request $request){
 
             ], 400);
         }
+      
         if ((int)$pin === (int)$user->pincode) {
 
             $user->update(["pincode" => null, "pincode_expire" => Carbon::now()->format('Uu') - 1000, "email_verified" => true]);
