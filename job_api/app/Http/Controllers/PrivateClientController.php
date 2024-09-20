@@ -648,13 +648,14 @@ class PrivateClientController extends Controller
        
             foreach ($privateclient->jobs as $job) {
                 foreach ($job->applications as $application) {
+                    
                     $allApplications[] = [
                         'application_id' => $application->id,
                         'job_title' => $job->title,
                         'jobseeker' => $application->jobseeker,
                         'status' => $application->status,
-                        'cover_letter' => $application->cover_letter,
-                        'cv' => $application->cv,
+                        'cover_letter' => url($application->cover_letter),
+                        'cv' => url($application->cv),
                         'statement' => $application->statement,
                         'job' => $application->job,
                         'created_at' => $application->created_at,
