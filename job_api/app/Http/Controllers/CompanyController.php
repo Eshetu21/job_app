@@ -599,7 +599,7 @@ class CompanyController extends Controller
             }
     
        
-            return response()->json($allApplications);
+          
             return response()->json([
                 "success" => true,
 
