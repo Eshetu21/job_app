@@ -11,6 +11,7 @@ class CompanyController extends GetxController {
   RxMap<String, dynamic> company = <String, dynamic>{}.obs;
   RxList<dynamic> companyJobs = <dynamic>[].obs;
   RxBool sucessfullyAdded = false.obs;
+  final companyCreateError ={}.obs;
   CompanyController() {
     token = box.read("token");
   }
@@ -42,11 +43,11 @@ class CompanyController extends GetxController {
         print("Sucessfully created company");
         var responsebody = await http.Response.fromStream(response);
         sucessfullyAdded.value = true;
-        print(responsebody);
+        print(responsebody.body);
       } else {
         print("Failed to create company");
         var responsebody = await http.Response.fromStream(response);
-        print(responsebody);
+        print(responsebody.body);
       }
     } catch ($e) {
       print($e);

@@ -89,10 +89,11 @@ class _JobSeekerApplyState extends State<JobSeekerApply> {
             children: [
               Form(
                   key: _formKey,
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "To apply for a job, you need to upload your CV and Cover letter",
+                          "To apply for a job, you need to upload your cv and cover letter",
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
                               color: Color(0xFF524B6B),

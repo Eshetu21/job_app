@@ -25,11 +25,13 @@ class _AddCompanyState extends State<AddCompany> {
   final TextEditingController _description = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String logo = '';
+  String logo1 = '';
   Future<void> pickCompanyLogo() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
       setState(() {
         logo = result.files.single.path ?? '';
+        logo1 = result.files.single.name ?? '';
       });
     }
   }
@@ -53,7 +55,7 @@ class _AddCompanyState extends State<AddCompany> {
                         icon: Icon(Icons.arrow_back_outlined)),
                     Text("Add Company",
                         style: GoogleFonts.poppins(
-                          fontSize: 18,
+                            fontSize: 18,
                             fontWeight: FontWeight.w500,
                             color: Color(0xFF130160)))
                   ],
@@ -80,7 +82,7 @@ class _AddCompanyState extends State<AddCompany> {
                                   pickCompanyLogo();
                                 },
                                 icon: Icon(Icons.file_upload))),
-                        controller: TextEditingController(text: logo),
+                        controller: TextEditingController(text: logo1),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Company logo is required";
@@ -97,6 +99,18 @@ class _AddCompanyState extends State<AddCompany> {
                 buildTextFormField("Address", _address),
                 SizedBox(height: 8),
                 buildTextFormField("Description", _description),
+               /*  Obx(
+                  (){
+                    return SizedBox(
+                      child: _companyController.companyCreateError.isNotEmpty
+                          ? Text(
+                              _companyController.companyCreateError["message"],
+                              style: GoogleFonts.poppins(color: Colors.red),
+                            )
+                          : Container(),
+                    );
+                  }
+                ), */
                 Center(
                   child: GestureDetector(
                     onTap: () {

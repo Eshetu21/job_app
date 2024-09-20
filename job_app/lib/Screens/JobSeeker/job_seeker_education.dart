@@ -119,7 +119,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Color(0xFF130160).withOpacity(0.7),
+                        color: Color(0xFF130160),
                       ),
                       child: Center(
                         child: Text("SAVE",
@@ -153,7 +153,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Color(0xFF130160).withOpacity(0.7),
+                          color: Color(0xFF130160),
                         ),
                         child: Center(
                           child: Text("NOT NOW",

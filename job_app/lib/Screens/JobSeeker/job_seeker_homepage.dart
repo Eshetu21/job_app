@@ -348,18 +348,6 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                   }
                 }),
                 SizedBox(height: 15),
-                TextField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none),
-                      hintText: "Search for jobs...",
-                      hintStyle: GoogleFonts.poppins(),
-                      prefixIcon: Icon(Icons.search_outlined),
-                      fillColor: Colors.white.withOpacity(0.7),
-                      filled: true),
-                ),
-                SizedBox(height: 10),
                 Expanded(
                   child: PageView(
                     controller: _pageController,

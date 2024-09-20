@@ -74,7 +74,7 @@ class _AddAccountState extends State<AddAccount> {
               _profileContainer(
                   ListTile(
                     leading: Image.asset("assets/icons/job_seeker.png",
-                        width: 23, color: Color(0xFFFF9228).withOpacity(0.4)),
+                        width: 23, color: Color(0xFFFF9228)),
                     title: Text("Job Seeker",
                         style: GoogleFonts.poppins(
                           color: Color(0xFF0D0140),
@@ -92,7 +92,7 @@ class _AddAccountState extends State<AddAccount> {
               _profileContainer(
                   ListTile(
                     leading: Image.asset("assets/icons/private.png",
-                        width: 23, color: Color(0xFFFF9228).withOpacity(0.4)),
+                        width: 23, color: Color(0xFFFF9228)),
                     title: Text("Private Client",
                         style: GoogleFonts.poppins(
                           color: Color(0xFF0D0140),
@@ -110,7 +110,7 @@ class _AddAccountState extends State<AddAccount> {
               _profileContainer(
                   ListTile(
                     leading: Image.asset("assets/icons/company.png",
-                        width: 23, color: Color(0xFFFF9228).withOpacity(0.4)),
+                        width: 23, color: Color(0xFFFF9228)),
                     title: Text("Company",
                         style: GoogleFonts.poppins(
                           color: Color(0xFF0D0140),
@@ -141,7 +141,7 @@ class _AddAccountState extends State<AddAccount> {
                     height: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Color(0xFF130160).withOpacity(0.7),
+                      color: Color(0xFF130160),
                     ),
                     child: Center(
                       child: Text("Continue",

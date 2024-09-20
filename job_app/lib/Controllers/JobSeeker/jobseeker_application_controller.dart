@@ -22,7 +22,6 @@ class ApplicationController extends GetxController {
       if(response.statusCode==200){
         var responseData = json.decode(response.body);
         myApplications.value = responseData["applications"];
-        print(myApplications);
       }
     } catch ($e) {
       print($e.toString());

@@ -22,7 +22,7 @@ class Jobcontroller extends GetxController {
     required String gender,
     required String deadline,
     required String description,
-    double? salary,
+    String? salary,
   }) async {
     var data = {
       "title": title,
@@ -64,7 +64,7 @@ class Jobcontroller extends GetxController {
     required String gender,
     required String deadline,
     required String description,
-    double? salary,
+    String? salary,
   }) async {
     var data = {
       "title": title,

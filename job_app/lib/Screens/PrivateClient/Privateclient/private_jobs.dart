@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PrivateJobs extends StatefulWidget {
   const PrivateJobs({super.key});
@@ -17,6 +18,12 @@ class _PrivateJobsState extends State<PrivateJobs> {
   void initState() {
     super.initState();
     _privateclientController.getPrivateJobs();
+  }
+
+  String formatRelativeTime(String dateTimeString) {
+    DateTime utcDateTime = DateTime.parse(dateTimeString);
+    DateTime localDateTime = utcDateTime.toLocal();
+    return timeago.format(localDateTime);
   }
 
   final PrivateclientController _privateclientController =
@@ -60,10 +67,26 @@ class _PrivateJobsState extends State<PrivateJobs> {
                                     ),
                                   ),
                                   Spacer(),
-                                  Icon(Icons.timer,color: Colors.red,size: 20),
-                                  Text(
-                                      "${jobs["deadline"] ?? "Not Provided"}",
-                                      style: GoogleFonts.poppins()),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text("Posted "),
+                                          Text(formatRelativeTime(
+                                              jobs["created_at"])),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.timer,
+                                              color: Colors.red, size: 20),
+                                          Text(
+                                              "${jobs["deadline"] ?? "Not Provided"}",
+                                              style: GoogleFonts.poppins()),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                               SizedBox(height: 4),

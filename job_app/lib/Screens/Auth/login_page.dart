@@ -25,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _passwordController.clear();
   }
-
   bool _passVisible = false;
   bool _isChecked = false;
 
