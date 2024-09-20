@@ -20,6 +20,12 @@ class _LoginPageState extends State<LoginPage> {
   final UserAuthenticationController _userAuthenticationController =
       Get.put(UserAuthenticationController());
 
+  @override
+  void initState() {
+    super.initState();
+    _passwordController.clear();
+  }
+
   bool _passVisible = false;
   bool _isChecked = false;
 
@@ -159,6 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (content) => ForgotPassword()));
+                                _passwordController.clear();
                       },
                       child: Text(
                         "Forgot password?",
@@ -204,6 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                             MaterialPageRoute(
                                 builder: (context) => RegisterPage()));
                         _userAuthenticationController.clearLogErrorMsg();
+                        _passwordController.clear();
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,

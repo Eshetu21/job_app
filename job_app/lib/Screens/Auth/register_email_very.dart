@@ -9,27 +9,25 @@ import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Widgets/navigateprofile.dart';
 
-class VerifyEmail extends StatefulWidget {
+class RegisterVerifyEmail extends StatefulWidget {
   final String email;
-  const VerifyEmail({super.key, required this.email});
+  const RegisterVerifyEmail({super.key, required this.email});
 
   @override
-  State<VerifyEmail> createState() => _VerifyEmailState();
+  State<RegisterVerifyEmail> createState() => _RegisterVerifyEmailState();
 }
 
-class _VerifyEmailState extends State<VerifyEmail> {
+class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   final UserAuthenticationController _userAuthenticationController =
       Get.put(UserAuthenticationController());
   final ProfileController _profileController = Get.put(ProfileController());
 
-  bool showOtpField = false;
   bool isCountdownActive = false;
   String verifyText = "Resend";
   Timer? _countdownTimer;
   int _start = 60;
-  bool hasPressedVerifyBefore = false;
 
   void startCountdown() {
     setState(() {
@@ -70,15 +68,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
           await _userAuthenticationController.checkPIN(pin: otpcode);
       _userAuthenticationController.otpVerifyLoading.value = false;
       if (verifiedOTP) {
-        Fluttertoast.showToast(
-          msg: "Sucessfully verified",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 4,
-          backgroundColor: Color(0xFF130160),
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
         await _profileController.fetchProfiles();
         navigateBasedOnProfile();
       }
@@ -98,18 +87,24 @@ class _VerifyEmailState extends State<VerifyEmail> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(top: 60, left: 20, right: 20),
+            margin: EdgeInsets.only(top: 90, left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Email not verified",
+                Text("Email Verification",
                     style: GoogleFonts.poppins(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF0D0140))),
                 SizedBox(height: 25),
-                Text("You need to verify your email in order to use the app",
-                    style: GoogleFonts.poppins(color: Color(0xFF524B6B))),
+                Column(
+                  children: [
+                    Text(
+                      textAlign:TextAlign.center,
+                      "You need to verify your email in order to use the app. We have sent a code to your email",
+                        style: GoogleFonts.poppins(color: Color(0xFF524B6B))),Text(widget.email,style: GoogleFonts.poppins(fontWeight: FontWeight.bold),),
+                  ],
+                ),
                 SizedBox(height: 20),
                 Image.asset(
                   "assets/images/email_sent.png",
@@ -137,70 +132,52 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   String? errorText =
                       _userAuthenticationController.verifyOTPError["otp"];
                   return Column(children: [
-                    showOtpField
-                        ? Column(
-                            children: [
-                              _userAuthenticationController
-                                          .otpVerifyLoading.value ==
-                                      false
-                                  ? Column(
-                                      children: [
-                                        SizedBox(
-                                          width: 266,
-                                          height: 50,
-                                          child: TextFormField(
-                                            controller: _otpController,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                hintText: "Enter OTP",
-                                                contentPadding:
-                                                    EdgeInsets.all(20),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                )),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                            "Check your email, we have sent a code"),
-                                      ],
-                                    )
-                                  : Container(),
-                              SizedBox(height: 10),
-                              errorText != null
-                                  ? Text(
-                                      errorText,
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.red),
-                                    )
-                                  : Container(),
-                              SizedBox(height: 10),
-                            ],
-                          )
-                        : Container(),
+                    Column(
+                      children: [
+                        _userAuthenticationController.otpVerifyLoading.value ==
+                                false
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    width: 266,
+                                    height: 50,
+                                    child: TextFormField(
+                                      controller: _otpController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                          hintText: "Enter OTP",
+                                          contentPadding: EdgeInsets.all(20),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          )),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                ],
+                              )
+                            : Container(),
+                        SizedBox(height: 10),
+                        errorText != null
+                            ? Text(
+                                errorText,
+                                style: GoogleFonts.poppins(color: Colors.red),
+                              )
+                            : Container(),
+                        SizedBox(height: 10),
+                      ],
+                    ),
                     GestureDetector(
                       onTap: () async {
-                        if (!showOtpField) {
-                          setState(() {
-                            showOtpField = true;
-                            hasPressedVerifyBefore = true;
-                          });
-                          await _userAuthenticationController.sendpin();
-                          startCountdown();
-                        } else {
-                          if (_otpController.text.trim().isEmpty &&
-                              hasPressedVerifyBefore) {
-                            _userAuthenticationController.verifyEmailError
-                                .clear();
-                            validateOTP();
-                          }
-                          if (_otpController.text.trim().isNotEmpty &&
-                              hasPressedVerifyBefore) {
-                            _userAuthenticationController.verifyEmailError
-                                .clear();
-                            validateOTP();
-                          }
+                        if (_otpController.text.trim().isEmpty) {
+                          _userAuthenticationController.verifyEmailError
+                              .clear();
+                          validateOTP();
+                        }
+                        if (_otpController.text.trim().isNotEmpty) {
+                          _userAuthenticationController.verifyEmailError
+                              .clear();
+                          validateOTP();
                         }
                       },
                       child: Container(
@@ -208,22 +185,22 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         height: 50,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Color(0xFFD6CDFE)),
+                            color: Color(0xFF130160)),
                         child: Center(
                           child: _userAuthenticationController
                                   .otpVerifyLoading.value
-                              ? CircularProgressIndicator()
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
                               : Text("Verify",
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF130160))),
+                                      color: Colors.white)),
                         ),
                       ),
                     ),
-                    showOtpField &&
-                            _userAuthenticationController
-                                    .otpVerifyLoading.value ==
-                                false
+                    _userAuthenticationController.otpVerifyLoading.value ==
+                            false
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -233,10 +210,24 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                     color: Color(0xFF524B6B)),
                               ),
                               TextButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (!isCountdownActive) {
                                       startCountdown();
-                                      _userAuthenticationController.sendpin();
+                                      bool sendPinSucess =
+                                          await _userAuthenticationController
+                                              .sendpin();
+                                      if (sendPinSucess) {
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              "Check your email, we have sent a code",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.TOP,
+                                          timeInSecForIosWeb: 4,
+                                          backgroundColor: Color(0xFF130160),
+                                          textColor: Colors.white,
+                                          fontSize: 16.0,
+                                        );
+                                      }
                                     }
                                   },
                                   style: TextButton.styleFrom(

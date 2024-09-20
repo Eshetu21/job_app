@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:job_app/Constants/constants.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
 import 'package:job_app/Screens/Auth/login_page.dart';
+import 'package:job_app/Screens/Auth/register_email_very.dart';
+import 'package:job_app/Screens/Auth/verify_email.dart';
 import 'package:job_app/Widgets/navigateprofile.dart';
 
 class UserAuthenticationController extends GetxController {
@@ -52,7 +54,8 @@ class UserAuthenticationController extends GetxController {
       var response = await http.post(Uri.parse("${url}register"),
           headers: {
             "Accept": "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token"
           },
           body: data);
 
@@ -63,6 +66,8 @@ class UserAuthenticationController extends GetxController {
         print('Registration successful');
         await Future.delayed(Duration(seconds: 1));
         regLoading.value = false;
+        Get.to(RegisterVerifyEmail(email: email));
+        print(response.body);
         return true;
       } else if (response.statusCode == 422) {
         print(response.body);
@@ -74,19 +79,20 @@ class UserAuthenticationController extends GetxController {
         regLoading.value = false;
         return false;
       } else {
-        print(response.body);
         var responseData = json.decode(response.body);
         regError.clear();
         responseData['errors'].forEach((key, value) {
           regError[key] = value[0];
+          print(" backend $regError");
         });
         regLoading.value = false;
-        print({response.body});
+        print("${response.body}");
         await Future.delayed(Duration(seconds: 2));
         regLoading.value = false;
         return false;
       }
     } catch (e) {
+      print("error");
       regLoading.value = false;
       print(e.toString());
       return false;
@@ -115,8 +121,17 @@ class UserAuthenticationController extends GetxController {
         box.write("token", token.value);
         userId.value = json.decode(response.body)["message"]["id"].toString();
         logError.clear();
-        await _profileController.fetchProfiles();
-        navigateBasedOnProfile();
+        if (json.decode(response.body)["message"]["email_verified"] == 1) {
+          await _profileController.fetchProfiles();
+          navigateBasedOnProfile();
+          logLoading.value = false;
+        }
+        if (json.decode(response.body)["message"]["email_verified"] == 0) {
+          String email = json.decode(response.body)["message"]["email"];
+          Get.to(VerifyEmail(email: email));
+          logLoading.value = false;
+        }
+
         print(token);
         print('Login successful');
         print(userId);
@@ -200,26 +215,25 @@ class UserAuthenticationController extends GetxController {
     }
   }
 
-  Future<bool> resetpassword({required String email,required String newPassword}) async {
+  Future<bool> checkPIN({required int pin}) async {
     try {
-      passwordResetLoading.value = true;
-      var data = jsonEncode({"email":email,"newpassword": newPassword});
-      var response = await http.post(Uri.parse('${url}p/u/changepassword'),
+      otpVerifyLoading.value = true;
+      var data = jsonEncode({"pincode": pin});
+      var response = await http.post(Uri.parse('${url}checkpincode'),
           headers: {
             "Accept": "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token"
           },
           body: data);
       if (response.statusCode == 200) {
-        passwordResetLoading.value = false;
-        print("Sucessfully updated password");
+        print("Sucessfully verified OTP");
+        otpVerifyLoading.value = false;
         return true;
       } else {
         var jsonResponse = json.decode(response.body);
         String errorMessage = jsonResponse["message"];
-        passwordResetError["passwordreset"] = errorMessage;
-        print(response.body);
-        passwordResetLoading.value = false;
+        verifyOTPError["otp"] = errorMessage;
         return false;
       }
     } catch ($e) {
@@ -227,5 +241,54 @@ class UserAuthenticationController extends GetxController {
       return false;
     }
   }
-  
+
+  Future<bool> resetpassword(
+      {required String email, required String newPassword}) async {
+    try {
+      passwordResetLoading.value = true;
+      var data = jsonEncode({"email": email, "newpassword": newPassword});
+      var response = await http.post(Uri.parse('${url}p/u/changepassword'),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: data);
+      if (response.statusCode == 200) {
+        print("Sucessfully updated password");
+        return true;
+      } else {
+        var jsonResponse = json.decode(response.body);
+        String errorMessage = jsonResponse["message"];
+        passwordResetError["passwordreset"] = errorMessage;
+        print(response.body);
+        return false;
+      }
+    } catch ($e) {
+      print($e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> sendpin() async {
+    try {
+      otpVerifyLoading.value = true;
+      var response = await http.post(Uri.parse('${url}sendpincode'), headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token"
+      });
+      if (response.statusCode == 200) {
+        print("sucessfully sent pincode");
+        otpVerifyLoading.value = false;
+        return true;
+      } else {
+        print("failed to send pincode");
+        print(response.body);
+        otpVerifyLoading.value = false;
+        return false;
+      }
+    } catch ($e) {
+      print($e.toString());
+      return false;
+    }
+  }
 }

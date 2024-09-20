@@ -43,73 +43,95 @@ class _ExplorePageState extends State<ExplorePage> {
                         var jobs = _jobcontroller.alljobs[index];
                         var poster = jobs["company_id"] != null
                             ? "Company Job"
-                            : "PrivateClient Job";
+                            : "Private Client Job";
                         var companyName =
                             _companyController.company["company_name"];
                         var companyLogo =
                             _companyController.company["company_logo"];
                         var id = jobs["id"];
-                        return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _showApplyModal(
-                                    context,
-                                    id,
-                                    poster,
-                                    jobs["title"],
-                                    jobs["type"],
-                                    jobs["salary"] ?? "Negotiable",
-                                    jobs["description"] ?? "Null",
-                                    companyLogo,
-                                    companyName);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(20)),
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.all(8.0),
-                                margin: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          jobs["title"] ?? "Not Provided",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
+                        return GestureDetector(
+                          onTap: () {
+                            _showApplyModal(
+                                context,
+                                id,
+                                poster,
+                                jobs["title"],
+                                jobs["type"],
+                                jobs["salary"] ?? "Negotiable",
+                                jobs["city"],
+                                jobs["description"] ?? "No Description",
+                                companyLogo,
+                                companyName);
+                          },
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        jobs["title"] ?? "Not Provided",
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
                                         ),
-                                        Spacer(),
-                                        Icon(Icons.timer,
-                                            color: Colors.red, size: 20),
-                                        Text(
-                                            "${jobs["deadline"] ?? "Not Provided"}",
-                                            style: GoogleFonts.poppins()),
-                                      ],
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      "Sector: ${jobs["sector"] ?? "Not Provided"}",
-                                      style: GoogleFonts.poppins(),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      "City: ${jobs["city"] ?? "Not Provided"}",
-                                      style: GoogleFonts.poppins(),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                        "Gender: ${jobs["gender"] ?? "Not Provided"}",
-                                        style: GoogleFonts.poppins()),
-                                  ],
-                                ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.timer,
+                                              color: Colors.red, size: 15),
+                                          SizedBox(width: 5),
+                                          Text(
+                                              "${jobs["deadline"] ?? "Not Provided"}",
+                                              style: GoogleFonts.poppins()),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.business_center, size: 16),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "${jobs["sector"] ?? "Not Provided"}",
+                                        style: GoogleFonts.poppins(),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.location_on, size: 16),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "${jobs["city"] ?? "Not Provided"}",
+                                        style: GoogleFonts.poppins(),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.person, size: 16),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "${jobs["gender"] ?? "Not Provided"}",
+                                        style: GoogleFonts.poppins(),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
+                          ),
                         );
                       },
                       separatorBuilder: (_, index) => SizedBox(height: 10),
@@ -126,69 +148,102 @@ class _ExplorePageState extends State<ExplorePage> {
       String title,
       String type,
       String salary,
+      String city,
       String description,
       String? companyLogo,
       String? companyName) {
     showModalBottomSheet(
         context: context,
-        builder: (context) {
-          return Container(
-            margin: EdgeInsets.all(20),
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.45,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(poster,
-                    style: GoogleFonts.poppins(
-                        fontSize: 22, fontWeight: FontWeight.bold)),
-                if(poster=="Company Job")
-                Row(
-                  children: [
-                    companyLogo != null
-                        ? ClipOval(
-                            child: Image.network(
-                            companyLogo,
-                            width: 40,
-                            height: 40,
-                            fit: BoxFit.cover,
-                          ))
-                        : Container(),
-                        SizedBox(width: 10),
-                    if (companyName != null) ...[Text(companyName)],
-                  ],
-                ),
-                Text(title,
-                    style: GoogleFonts.poppins(
-                        fontSize: 20, fontWeight: FontWeight.w500)),
-                Text(type),
-                Text(salary),
-                Text(description),
-                Spacer(),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => JobSeekerApply()));
-                    },
-                    child: Container(
-                      width: 266,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color(0xFF130160),
-                      ),
-                      child: Center(
-                        child: Text("Apply",
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+        builder: (context) {     
+          return DraggableScrollableSheet(
+            expand: false,
+            maxChildSize: 0.9,
+            builder: (_, controller) {
+              return SingleChildScrollView(
+                controller: controller,
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(poster,
                             style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                      ),
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 10),
+                        if (poster == "Company Job")
+                          Row(
+                            children: [
+                              companyLogo != null
+                                  ? ClipOval(
+                                      child: Image.network(
+                                      companyLogo,
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover,
+                                    ))
+                                  : Container(),
+                              SizedBox(width: 10),
+                              if (companyName != null)
+                                Text(companyName,
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500)),
+                            ],
+                          ),
+                        SizedBox(height: 5),
+                        Text(title,
+                            style: GoogleFonts.poppins(
+                                fontSize: 20, fontWeight: FontWeight.w500)),
+                        SizedBox(height: 5),
+                        Text(type,
+                            style: GoogleFonts.poppins(
+                                color: Colors.grey, fontSize: 16)),
+                        SizedBox(height: 5),
+                        Text(city,
+                            style: GoogleFonts.poppins(
+                                color: Colors.black, fontSize: 16)),
+                        SizedBox(height: 5),
+                        Text(salary,
+                            style: GoogleFonts.poppins(
+                                color: Colors.green, fontSize: 16)),
+                        SizedBox(height: 5),
+                        Text(description,
+                            style: GoogleFonts.poppins(
+                                fontSize: 16, color: Colors.black87)),
+                        SizedBox(height: 10),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      JobSeekerApply(jobId: jobId)));
+                            },
+                            child: Container(
+                              width: 266,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Color(0xFF130160),
+                              ),
+                              child: Center(
+                                child: Text("Apply",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              );
+            },
           );
         });
   }

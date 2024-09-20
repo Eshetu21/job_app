@@ -38,6 +38,7 @@ class _ResetPasswordState extends State<ResetPassword> {
     }
     if (!hasError) {
       _userAuthenticationController.passwordResetLoading.value = true;
+      await Future.delayed(Duration(seconds: 5));
       bool sucess = await _userAuthenticationController.resetpassword(
           email: widget.email, newPassword: _newPasswordController.text);
       _userAuthenticationController.passwordResetLoading.value = false;
@@ -47,7 +48,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 4,
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFF130160),
           textColor: Colors.white,
           fontSize: 16.0,
         );
@@ -72,6 +73,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                     _userAuthenticationController.passwordResetError["message"];
                 return Column(
                   children: [
+                    Text("Change password",
+                        style: GoogleFonts.poppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0D0140))),
                     SizedBox(height: 25),
                     Text(
                         "Set a password that you can easily remember. Make sure to use a combination of letters, numbers, and symbols for added security",
@@ -177,27 +183,32 @@ class _ResetPasswordState extends State<ResetPassword> {
                 );
               }),
               SizedBox(height: 25),
-              GestureDetector(
-                onTap: () async {
-                  validatePassword();
-                },
-                child: Container(
-                  width: 266,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Color(0xFFD6CDFE)),
-                  child:
-                      _userAuthenticationController.passwordResetLoading.value
-                          ? Center(child: CircularProgressIndicator())
-                          : Center(
-                              child: Text("Confirm",
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF130160))),
-                            ),
-                ),
-              ),
+              Obx(() {
+                return GestureDetector(
+                  onTap: () async {
+                    validatePassword();
+                  },
+                  child: Container(
+                    width: 266,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color(0xFF130160)),
+                    child:
+                        _userAuthenticationController.passwordResetLoading.value
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ))
+                            : Center(
+                                child: Text("Confirm",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white)),
+                              ),
+                  ),
+                );
+              }),
             ],
           ),
         ),

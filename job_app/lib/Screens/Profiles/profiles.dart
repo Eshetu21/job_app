@@ -85,7 +85,7 @@ class _ProfilesState extends State<Profiles> {
                                     leading: Image.asset(
                                         "assets/icons/job_seeker.png",
                                         width: 23,
-                                        color: Color(0xFFFF9228).withOpacity(0.4)),
+                                        color: Color(0xFFFF9228)),
                                     title: Text(
                                         _profileController.profiles['jobseeker']
                                                 ['user']['firstname'] +
@@ -109,7 +109,7 @@ class _ProfilesState extends State<Profiles> {
                                   ListTile(
                                     leading: Image.asset("assets/icons/private.png",
                                         width: 28,
-                                        color: Color(0xFFFF9228).withOpacity(0.4)),
+                                        color: Color(0xFFFF9228)),
                                     title: Text(_profileController
                                                 .profiles['privateclient']['user']
                                             ['firstname'] +
@@ -132,7 +132,7 @@ class _ProfilesState extends State<Profiles> {
                                   ListTile(
                                     leading: Image.asset("assets/icons/company.png",
                                         width: 28,
-                                        color: Color(0xFFFF9228).withOpacity(0.4)),
+                                        color: Color(0xFFFF9228)),
                                     title: Text(_profileController
                                         .profiles["company"]["company_name"]),
                                     subtitle: Text("Company"),
@@ -180,7 +180,7 @@ class _ProfilesState extends State<Profiles> {
                                               "assets/icons/private.png",
                                               width: 28,
                                               color: Color(0xFFFF9228)
-                                                  .withOpacity(0.4)),
+                                                  ),
                                           title: Text("Private Client"),
                                           subtitle: Text("Add account"),
                                           trailing: Radio(
@@ -202,7 +202,7 @@ class _ProfilesState extends State<Profiles> {
                                               "assets/icons/company.png",
                                               width: 28,
                                               color: Color(0xFFFF9228)
-                                                  .withOpacity(0.4)),
+                                                  ),
                                           title: Text("Company"),
                                           subtitle: Text("Add account"),
                                           trailing: Radio(
@@ -283,7 +283,7 @@ class _ProfilesState extends State<Profiles> {
                                   height: 50,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: Color(0xFF130160).withOpacity(0.7),
+                                    color: Color(0xFF130160),
                                   ),
                                   child: Center(
                                     child: Text("Continue",

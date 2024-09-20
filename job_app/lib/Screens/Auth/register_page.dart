@@ -8,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
-import 'package:job_app/Screens/Auth/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -26,9 +25,10 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
+    _userAuthenticationController.clearRegErrorMsg();
     loadDatas();
   }
-
+  
   Future<void> loadDatas() async {
     final cities = await rootBundle.loadString("assets/json/cities.json");
     var ci = json.decode(cities);
@@ -47,7 +47,6 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   final UserAuthenticationController _userAuthenticationController =
       Get.put(UserAuthenticationController());
-
   void validateAndRegister() async {
     bool hasError = false;
     if (_firstnameController.text.trim().isEmpty) {
@@ -61,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
     if (_emailController.text.trim().isEmpty) {
       hasError = true;
-      _userAuthenticationController.regError["email"] = "*email required";
+      _userAuthenticationController.regError["email1"] = "*email required";
     }
     if (_passwordController.text.isEmpty) {
       hasError = true;
@@ -92,8 +91,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
       _userAuthenticationController.regLoading.value = false;
       if (registrationSuccess) {
-        Fluttertoast.showToast(
-          msg: "Sucessfully registered, please login",
+         Fluttertoast.showToast(
+          msg: "Sucessfully registerd",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 4,
@@ -101,7 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        Get.offAll(LoginPage());
         print("Registration Sucess");
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -169,21 +167,42 @@ class _RegisterPageState extends State<RegisterPage> {
             Obx(() {
               String? errorText =
                   _userAuthenticationController.regError["email"];
-              return TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                    hintText: errorText == null ? "Email" : errorText,
-                    hintStyle: TextStyle(
-                        color:
-                            errorText == null ? Color(0xFF0D0140) : Colors.red,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        fontSize: errorText == null ? 16 : 12),
-                    contentPadding: EdgeInsets.all(16),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(18))),
+              String? errorText1 =
+                  _userAuthenticationController.regError["email1"];
+              return Column(
+                children: [
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                        hintText: errorText1 == null ? "Email" : errorText,
+                        hintStyle: TextStyle(
+                            color: errorText == null
+                                ? Color(0xFF0D0140)
+                                : Colors.red,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: errorText == null ? 16 : 12),
+                        contentPadding: EdgeInsets.all(16),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18))),
+                  ),
+                  errorText != null
+                      ? Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Text(
+                                _userAuthenticationController.regError["email"],
+                                style: GoogleFonts.poppins(
+                                    color: Colors.red, fontSize: 12)),
+                          ),
+                        )
+                      : Container()
+                ],
               );
             }),
-            SizedBox(height: 8),
+            SizedBox(
+              height: 8,
+            ),
             Obx(() {
               String? errorText =
                   _userAuthenticationController.regError["address"];

@@ -19,47 +19,47 @@ class JobSeekerController extends Controller
 {
     public function createjobseeker(Request $request)
     {
-       
-       
-            try {
-                $user = $request->user();
-                if ($user->jobseeker) {
-                    return response()->json([
-                        "success"=>false,
-                        "message" => "JobSeeker already exists"
-                    ], 400);
-                }
-        
-              
-                    $jobseeker = JobSeeker::create([
-                        "user_id" => $user->id,
-                    ]);
-        
-                    return response()->json([
-                        "success"=>true,
-                        "message" => "Succesfully created",
-                        "jobseeker" => $jobseeker
-                    ], 201);
-            } catch (ValidationException $e) {
+
+
+        try {
+            $user = $request->user();
+            if ($user->jobseeker) {
                 return response()->json([
                     "success" => false,
-                    "message" => $e->errors(),
-    
-    
-                ], 400);
-            } catch (Exception $e) {
-                return response()->json([
-                    "success" => false,
-                    "message" => $e->getMessage(),
+                    "message" => "JobSeeker already exists"
                 ], 400);
             }
+
+
+            $jobseeker = JobSeeker::create([
+                "user_id" => $user->id,
+            ]);
+
+            return response()->json([
+                "success" => true,
+                "message" => "Succesfully created",
+                "jobseeker" => $jobseeker
+            ], 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->errors(),
+
+
+            ], 400);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+            ], 400);
+        }
     }
 
     public function delete(Request $request)
     {
 
         $user =   $request->user();
-     
+
         if (!$user->jobseeker) {
             return response()->json([
                 "success" => false,
@@ -68,7 +68,7 @@ class JobSeekerController extends Controller
         }
 
         try {
-         
+
             $user->jobseeker->delete();
         } catch (ValidationException $e) {
             return response()->json([
@@ -94,33 +94,33 @@ class JobSeekerController extends Controller
 
     public function showjobseeker(Request $request)
     {
-       try {
-        $user = $request->user();
-        $jobseeker = JobSeeker::with('user')->where('user_id', $user->id)->first();
-        if (!$jobseeker) {
+        try {
+            $user = $request->user();
+            $jobseeker = JobSeeker::with('user')->where('user_id', $user->id)->first();
+            if (!$jobseeker) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "not found"
+                ]);
+            }
             return response()->json([
-                "success"=>false,
-                "message" => "not found"
-            ]);
+                "success" => true,
+                "jobseeker" => $jobseeker
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->errors(),
+
+
+            ], 400);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
         }
-        return response()->json([
-            "success"=>true,
-            "jobseeker" => $jobseeker
-        ], 200);
-       } catch (ValidationException $e) {
-        return response()->json([
-            "success" => false,
-            "message" => $e->errors(),
-
-
-        ], 400);
-    } catch (Exception $e) {
-        return response()->json([
-            "success" => false,
-            "message" => $e->getMessage(),
-
-        ], 400);
-    }
     }
     public function updatejobseeker(Request $request)
     {
@@ -130,7 +130,7 @@ class JobSeekerController extends Controller
 
             if (!$jobseeker) {
                 return response()->json([
-                    "success"=>false,
+                    "success" => false,
                     "message" => "JobSeeker not found"
                 ], 404);
             }
@@ -139,7 +139,7 @@ class JobSeekerController extends Controller
                 'sub_category' => 'string|nullable',
                 'phone_number' => 'string|nullable',
                 'about_me' => 'string|nullable',
-           
+
             ]);
 
             // $updateData= [];
@@ -161,10 +161,10 @@ class JobSeekerController extends Controller
             //     'phone_number' => $validatedData['phone_number'] ?? $jobseeker->phone_number,
             //     'about_me' => $validatedData['about_me'] ?? $jobseeker->about_me,
             // ]);
-             $jobseeker->update($validatedData);
+            $jobseeker->update($validatedData);
 
             return response()->json([
-                "success"=>true,
+                "success" => true,
                 "message" => "Successfully updated",
                 "jobseeker" => $jobseeker,
                 "user" => $user
@@ -222,7 +222,7 @@ class JobSeekerController extends Controller
     //             "user" => $user
     //         ], 200);
     //     } 
-        
+
     //     catch (ValidationException $e) {
     //         return response()->json([
     //             "success" => false,
@@ -252,7 +252,7 @@ class JobSeekerController extends Controller
                 ], 400);
             }
 
-            $job = Job::find($jobid)->load(['privateclient','company']);
+            $job = Job::find($jobid)->load(['privateclient', 'company']);
             if (!$job) {
                 return response()->json([
                     "success" => false,
@@ -260,7 +260,7 @@ class JobSeekerController extends Controller
 
                 ], 401);
             }
-            if ($user->privateclient) {             
+            if ($user->privateclient) {
                 if ($user->privateclient->id == $job->private_client_id) {
                     return response()->json([
                         "success" => false,
@@ -276,56 +276,54 @@ class JobSeekerController extends Controller
                         "message" => "You can not apply to your own job",
 
                     ], 401);
-                 
                 }
             }
             $application = Application::where(["job_id" => $jobid, "user_id" => $user->id])->first();
-           
-     
+
+
             if ($application) {
                 return response()->json([
                     "success" => false,
-                    "message" => "You already applied to this Job",
+                    "message" => "You have already applied to this Job",
 
                 ], 401);
             }
-           
-      
-            $request->validate([
-                    'cover_letter' => 'required|mimes:pdf,doc|max:2048',
-                        'cv' => 'required|mimes:pdf,doc|max:2048'
-            ]);
-           
 
-              
-                    $cv = $request->file('cv');
-                 
-                    $originalfilenamecv = $cv->getClientOriginalName();
-                    $filename = time()."-".$user->id."-".$job->id. $originalfilenamecv;
-                    $cv->move(public_path('uploads/application/cv'), $filename);
-                    $cv =  'uploads/application/cv/'.$filename;
-              
-                    $cover_letter = $request->file('cover_letter');
-              
-                    $originalfilenamecl = $cover_letter->getClientOriginalName();
-                    $filename = time()."-".$user->id."-".$job->id. $originalfilenamecl;
-                    $cover_letter->move(public_path('uploads/application/cover_letter'), $filename);
-                    $cover_letter =  'uploads/application/cover_letter/'.$filename;
+
+            $request->validate([
+                'cover_letter' => 'required|mimes:pdf,doc|max:2048',
+                'cv' => 'required|mimes:pdf,doc|max:2048'
+            ]);
+
+
+
+            $cv = $request->file('cv');
+
+            $originalfilenamecv = $cv->getClientOriginalName();
+            $filename = time() . "-" . $user->id . "-" . $job->id . $originalfilenamecv;
+            $cv->move(public_path('uploads/application/cv'), $filename);
+            $cv =  'uploads/application/cv/' . $filename;
+
+            $cover_letter = $request->file('cover_letter');
+
+            $originalfilenamecl = $cover_letter->getClientOriginalName();
+            $filename = time() . "-" . $user->id . "-" . $job->id . $originalfilenamecl;
+            $cover_letter->move(public_path('uploads/application/cover_letter'), $filename);
+            $cover_letter =  'uploads/application/cover_letter/' . $filename;
             $application = Application::create([
                 'job_id' => $jobid,
                 'user_id' => $user->id,
                 'cover_letter' => $cover_letter,
                 'cv' => $cv
             ]);
-       
-if($job->company){
-    $username =  $user->firstname. " ".  $user->lastname;
-    Mail::to($job->company->user->email)->send(new ApplicationNotify($username,$job->company->company_name,$job->title));
-}
-else if($job->privateclient){
-    $username =  $user->firstname. " ".  $user->lastname;
-    Mail::to($job->privateclient->user->email)->send(new ApplicationNotify($username,"Private Client",$job->title));
-}
+
+            if ($job->company) {
+                $username =  $user->firstname . " " .  $user->lastname;
+                Mail::to($job->company->user->email)->send(new ApplicationNotify($username, $job->company->company_name, $job->title));
+            } else if ($job->privateclient) {
+                $username =  $user->firstname . " " .  $user->lastname;
+                Mail::to($job->privateclient->user->email)->send(new ApplicationNotify($username, "Private Client", $job->title));
+            }
 
             if ($application) {
                 return response()->json([
@@ -345,7 +343,7 @@ else if($job->privateclient){
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage(),
-                'line'=>$e->getLine()
+                'line' => $e->getLine()
 
             ], 400);
         }
@@ -363,8 +361,8 @@ else if($job->privateclient){
             }
 
             $application = Application::where(["user_id" => $user->id])
-            ->with('job') 
-            ->get();
+                ->with('job')
+                ->get();
             if (!$application || $application->count() == 0) {
                 return response()->json([
                     "success" => false,
@@ -372,7 +370,7 @@ else if($job->privateclient){
 
                 ], 401);
             }
-            $application->transform(function ($app){
+            $application->transform(function ($app) {
                 $app->cv = url($app->cv);
                 $app->cover_letter = url($app->cover_letter);
                 return $app;
@@ -430,7 +428,7 @@ else if($job->privateclient){
             ], 500);
         }
     }
- public function getapplication(Request $request, $appid)
+    public function getapplication(Request $request, $appid)
     {
         try {
             $user = $request->user();
@@ -449,7 +447,7 @@ else if($job->privateclient){
                     "message" => "No application found"
                 ], 404);
             }
-            $application->transform(function ($app){
+            $application->transform(function ($app) {
                 $app->cv = url($app->cv);
                 $app->cover_letter = url($app->cover_letter);
                 return $app;
