@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\AcceptedMail;
 use App\Mail\RejectedMail;
+use App\Models\Application;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\JobSeeker;
@@ -557,6 +558,65 @@ class CompanyController extends Controller
                 "success" => false,
                 "message" => $e->getMessage(),
                 "line" => $e->getLine()
+
+            ], 400);
+        }
+    }
+    public function getApps(Request $request)
+    {
+
+        try {
+            $user =   $request->user();
+          
+            $company = Company::with('jobs.applications')->find($user->company->id);
+
+          
+            if (!$company) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "company not registerd"
+                ], 400);
+            }
+    
+            $allApplications = [];
+    
+       
+            foreach ($company->jobs as $job) {
+                foreach ($job->applications as $application) {
+                    $allApplications[] = [
+                        'application_id' => $application->id,
+                        'job_title' => $job->title,
+                        'jobseeker' => $application->jobseeker,
+                        'status' => $application->status,
+                        'cover_letter' => $application->cover_letter,
+                        'cv' => $application->cv,
+                        'statement' => $application->statement,
+                        'job' => $application->job,
+                        'created_at' => $application->created_at,
+                        'updated_at' => $application->updated_at
+                    ];
+                }
+            }
+    
+       
+            return response()->json($allApplications);
+            return response()->json([
+                "success" => true,
+
+                "applications" => $allApplications
+
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->errors(),
+
+
+            ], 400);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
 
             ], 400);
         }

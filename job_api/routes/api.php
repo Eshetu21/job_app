@@ -52,13 +52,8 @@ Route::middleware("auth:sanctum")->group(
         Route::get('user', [UserController::class, "getuser"]);
         // change password
         Route::post('changepassword', [UserController::class, "changepassword"]);
-<<<<<<< HEAD
-
-         Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:10,1');       
-=======
         Route::post('sendpincode', [UserController::class, "sendpin"])->middleware('throttle:30,1');
         Route::post('checkpincode', [UserController::class, "checkpincode"]);
->>>>>>> 34799b298a277994b12a2a9691bc606262c14263
         // admin 
         // --------------------------------------------------------------------------------------------------------
         Route::prefix('admin')->middleware('isadmin')->group(function () {
@@ -120,6 +115,7 @@ Route::middleware("auth:sanctum")->group(
                     Route::put('reject/{jobid}/{appid}', [PrivateClientController::class, "rejectApplication"]);
                     Route::put('accept/{jobid}/{appid}', [PrivateClientController::class, "acceptApplication"]);
                     Route::get('get/{jobid}/{appid}', [PrivateClientController::class, "getAppById"]);
+                    Route::get('get', [PrivateClientController::class, "getAppsP"]);
                     Route::get('get/{jobid}', [PrivateClientController::class, "getAllApp"]);
                 });
             });        //Company
@@ -140,6 +136,7 @@ Route::middleware("auth:sanctum")->group(
                     Route::put('reject/{jobid}/{appid}', [CompanyController::class, "rejectApplication"]);
                     Route::put('accept/{jobid}/{appid}', [CompanyController::class, "acceptApplication"]);
                     Route::get('get/{jobid}/{appid}', [CompanyController::class, "getAppById"]);
+                    Route::get('get', [CompanyController::class, "getApps"]);
                     Route::get('get/{jobid}', [CompanyController::class, "getAllApp"]);
                 });
             });

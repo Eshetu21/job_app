@@ -626,6 +626,66 @@ class PrivateClientController extends Controller
             ], 400);
         }
     }
+
+    public function getAppsP(Request $request)
+    {
+
+        try {
+            $user =   $request->user();
+          
+            $privateclient = Privateclient::with('jobs.applications')->find($user->privateclient->id);
+
+          
+            if (!$privateclient) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "privateclient not registerd"
+                ], 400);
+            }
+    
+            $allApplications = [];
+    
+       
+            foreach ($privateclient->jobs as $job) {
+                foreach ($job->applications as $application) {
+                    $allApplications[] = [
+                        'application_id' => $application->id,
+                        'job_title' => $job->title,
+                        'jobseeker' => $application->jobseeker,
+                        'status' => $application->status,
+                        'cover_letter' => $application->cover_letter,
+                        'cv' => $application->cv,
+                        'statement' => $application->statement,
+                        'job' => $application->job,
+                        'created_at' => $application->created_at,
+                        'updated_at' => $application->updated_at
+                    ];
+                }
+            }
+    
+       
+            return response()->json($allApplications);
+            return response()->json([
+                "success" => true,
+
+                "applications" => $allApplications
+
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->errors(),
+
+
+            ], 400);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage(),
+
+            ], 400);
+        }
+    }
     public function getAppById(Request $request, $jobid, $appid)
     {
         try {
