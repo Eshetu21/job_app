@@ -86,7 +86,7 @@ class UserAuthenticationController extends GetxController {
           print(" backend $regError");
         });
         regLoading.value = false;
-        print("${response.body}");
+        print(response.body);
         await Future.delayed(Duration(seconds: 2));
         regLoading.value = false;
         return false;
@@ -147,13 +147,10 @@ class UserAuthenticationController extends GetxController {
     }
   }
 
-  void logout() {
+  void logout() async {
     logLoading.value = false;
-    box.remove('token');
-    _profileController.clearProfile();
-    _profileController.profiles.clear();
-    token.value = '';
-    userId.value = '';
+    await box.erase();
+    await Get.deleteAll();
     Get.offAll(() => LoginPage());
   }
 

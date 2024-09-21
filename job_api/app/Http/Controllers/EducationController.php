@@ -39,7 +39,7 @@ class EducationController extends Controller
             $validatedData = $request->validated();
             $validatedData["job_seeker_id"] = $jobseekerId;
             $education = Education::firstOrCreate($validatedData);
-                return response()->json(
+            return response()->json(
                 [
                     "message" => "Education added sucessfully",
                     "education" => $education
@@ -104,6 +104,6 @@ class EducationController extends Controller
         $education->delete();
         return response()->json([
             "message" => "deleted sucessfully"
-        ],200);
+        ], 200);
     }
 }

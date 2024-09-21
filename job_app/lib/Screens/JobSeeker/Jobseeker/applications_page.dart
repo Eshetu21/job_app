@@ -96,7 +96,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
                 }
                 return Container(
                   padding: EdgeInsets.only(top: 20),
-                  height: 150,
+                  height: MediaQuery.of(context).size.height*0.7,
                   color: Colors.transparent,
                   child: ListView.separated(
                       itemBuilder: (context, index) {
