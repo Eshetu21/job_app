@@ -15,7 +15,9 @@ class PrivateProfile extends StatefulWidget {
 
 class _PrivateProfileState extends State<PrivateProfile> {
   final ProfileController _profileController = Get.put(ProfileController());
-  final PrivateclientController _privateclientController = Get.put(PrivateclientController());
+  final PrivateclientController _privateclientController =
+      Get.put(PrivateclientController());
+
   @override
   void initState() {
     super.initState();
@@ -111,39 +113,52 @@ class _PrivateProfileState extends State<PrivateProfile> {
                                 ],
                               ),
                             ]),
-                            Container(
-                              margin: EdgeInsets.only(top:30),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(_privateclientController.privatejobs.length.toString(),
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 18)),
-                                      Text("Jobs Posted",
-                                          style:
-                                              GoogleFonts.poppins(fontSize: 18))
-                                    ],
-                                  ),
-                                 Container(
-                                  padding: EdgeInsets.all(1),
-                                  height: 50,
-                                  decoration: BoxDecoration(color: Colors.grey),
-                                 ),
-                                  Column(
-                                    children: [
-                                      Text("0",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 18)),
-                                      Text("Candidates hired",
-                                          style:
-                                              GoogleFonts.poppins(fontSize: 18))
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                            Obx(() {
+                              var filteredApplication = _privateclientController
+                                  .privateApplications
+                                  .where((application) =>
+                                      application["status"] == "Accepted");
+                              return Container(
+                                margin: EdgeInsets.only(top: 30),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                            _privateclientController
+                                                .privatejobs.length
+                                                .toString(),
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18)),
+                                        Text("Jobs Posted",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18))
+                                      ],
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(1),
+                                      height: 50,
+                                      decoration:
+                                          BoxDecoration(color: Colors.grey),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                            filteredApplication.length
+                                                .toString(),
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18)),
+                                        Text("Candidates hired",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18))
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                           ],
                         ),
                       ),

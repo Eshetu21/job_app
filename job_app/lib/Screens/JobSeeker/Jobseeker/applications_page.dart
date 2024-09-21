@@ -67,10 +67,6 @@ class _ApplicationPageState extends State<ApplicationPage> {
                   strokeWidth: 2,
                   strokeAlign: -6,
                 ));
-              } else if (_applicationController.myApplications.isEmpty) {
-                return Center(
-                    child: Text("No applications found",
-                        style: GoogleFonts.poppins()));
               } else {
                 List filteredApplication = [];
                 if (selected == 0) {
@@ -89,14 +85,24 @@ class _ApplicationPageState extends State<ApplicationPage> {
                           application["status"] == "Rejected")
                       .toList();
                 }
-                if (filteredApplication.isEmpty) {
+                if (selected == 0 && filteredApplication.isEmpty) {
                   return Center(
                       child: Text("No applications found",
                           style: GoogleFonts.poppins()));
                 }
+                if (selected == 1 && filteredApplication.isEmpty) {
+                  return Center(
+                      child: Text("No pending applications found",
+                          style: GoogleFonts.poppins()));
+                }
+                if (selected == 2 && filteredApplication.isEmpty) {
+                  return Center(
+                      child: Text("No reviewed applications found",
+                          style: GoogleFonts.poppins()));
+                }
                 return Container(
                   padding: EdgeInsets.only(top: 20),
-                  height: MediaQuery.of(context).size.height*0.7,
+                  height: MediaQuery.of(context).size.height * 0.7,
                   color: Colors.transparent,
                   child: ListView.separated(
                       itemBuilder: (context, index) {

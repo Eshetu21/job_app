@@ -91,11 +91,11 @@ class _FetchLanguageState extends State<FetchLanguage> {
                     alignment: Alignment.centerLeft,
                     child: Wrap(
                         spacing: 8,
-                        children: selectedLanguages.map((skill) {
+                        children: selectedLanguages.map((language) {
                           return Chip(
                             backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
                             labelPadding: EdgeInsets.symmetric(horizontal: 0),
-                            label: Text(skill,
+                            label: Text(language,
                                 style: GoogleFonts.poppins(
                                     color: Colors.white, fontSize: 12)),
                             deleteIcon: Icon(Icons.close, size: 16),

@@ -11,7 +11,17 @@ class CompanyController extends GetxController {
   RxMap<String, dynamic> company = <String, dynamic>{}.obs;
   RxList<dynamic> companyJobs = <dynamic>[].obs;
   RxBool sucessfullyAdded = false.obs;
-  final companyCreateError ={}.obs;
+  final companyCreateError = {}.obs;
+  RxList companyApplications = RxList<dynamic>();
+  RxList companyApplicationsJobSeeker = RxList<dynamic>();
+  RxList companyApplicationsJob = RxList<dynamic>();
+  final companyGetJobseeker = {}.obs;
+  final getJobseekerEducation = [].obs;
+  final getJobseekerExperience = [].obs;
+  final getJobseekerSkill = [].obs;
+  final getJobseekerLanguage = [].obs;
+  final acceptLoading = false.obs;
+  final acceptError = {}.obs;
   CompanyController() {
     token = box.read("token");
   }
@@ -47,7 +57,12 @@ class CompanyController extends GetxController {
       } else {
         print("Failed to create company");
         var responsebody = await http.Response.fromStream(response);
-        print(responsebody.body);
+        companyCreateError.clear();
+        var responseData = json.decode(responsebody.body);
+        responseData['message'].forEach((key, value) {
+          companyCreateError[key] = value[0];
+          print(" backend $companyCreateError");
+        });
       }
     } catch ($e) {
       print($e);
@@ -81,6 +96,32 @@ class CompanyController extends GetxController {
     } else {
       print("Failed to fetch company jobs");
       print(response.statusCode);
+    }
+  }
+
+  Future<void> getCompanyApplications() async {
+    try {
+      var response = await http.get(Uri.parse("${url}c/app/get"), headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      });
+      if (response.statusCode == 200) {
+        // print("Successfully fetched applications");
+        var responseData = json.decode(response.body);
+        companyApplications.value = responseData["applications"];
+        /* privateApplicationsJobSeeker.clear();
+        privateApplicationsJob.clear(); */
+        for (var application in companyApplications) {
+          companyApplicationsJobSeeker.add(application["jobseeker"]);
+          companyApplicationsJob.add(application["job"]);
+        }
+        /*  print("Privateclient applications: $privateApplications");
+        print("Privateclient jobseekers: $privateApplicationsJobSeeker");
+        print("Privateclient jobs: $privateApplicationsJob"); */
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

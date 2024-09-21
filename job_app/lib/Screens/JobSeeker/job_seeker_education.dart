@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -102,6 +103,31 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                             eduEnd: _edndate.text.trim(),
                             eduDescription: _description.text.trim());
                       }
+                      if (!widget.isediting) {
+                        bool sucess =
+                            await _educationController.createeducation(
+                                jobseekerid: jobseeker,
+                                institution: _institutionController.text.trim(),
+                                field: _field.text.trim(),
+                                eduLevel: _levelofeducation.text.trim(),
+                                eduStart: _startDate.text.trim(),
+                                eduEnd: _edndate.text.trim(),
+                                eduDescription: _description.text.trim());
+                        if (sucess) {
+                          Fluttertoast.showToast(
+                              msg: "Sucessfully added education",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIosWeb: 4,
+                              backgroundColor: Color(0xFF130160),
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => JobSeekerExperience()));
+                        }
+                      }
                       if (widget.isediting) {
                         await _educationController.createeducation(
                             jobseekerid: jobseeker,
@@ -121,18 +147,24 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                         borderRadius: BorderRadius.circular(20),
                         color: Color(0xFF130160),
                       ),
-                      child: Center(
-                        child: Text("SAVE",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                      ),
+                      child: Obx(() {
+                        bool loading =
+                            _educationController.createEducationLoading.value;
+                        return Center(
+                          child: loading
+                              ? CircularProgressIndicator(color: Colors.white)
+                              : Text("SAVE",
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                        );
+                      }),
                     ),
                   ),
                 ),
                 if (widget.isediting)
                   Obx(() {
-                    if (_educationController.updatedSucsessfully.value ==
+                    if (_educationController.createEducationLoading.value ==
                         true) {
                       Future.delayed(Duration.zero, () {
                         sucessfullyUpdated(context);

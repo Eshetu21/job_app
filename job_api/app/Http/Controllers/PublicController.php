@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Mail\ForgetPasswordReset;
@@ -20,18 +21,18 @@ class PublicController extends Controller
     public function forgetpassword(Request $request)
     {
         try {
-        $request->validate([
-            'email' => 'required|email'
-        ]);
+            $request->validate([
+                'email' => 'required|email'
+            ]);
 
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return response()->json([
-                "success" => false,
-                "message" => "We couldn't find your account"
-            ], 400);
-        }
-       
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "We couldn't find your account"
+                ], 400);
+            }
+
 
             $pin = rand(100000, 999999);
             $pincode_expire = Carbon::now()->addMinutes(5)->timestamp;
@@ -55,7 +56,7 @@ class PublicController extends Controller
     public function changepassword(Request $request)
     {
         try {
-            $request->validate(["newpassword" => 'required|string|min:6',"email"=>"required|email"]);
+            $request->validate(["newpassword" => 'required|string|min:6', "email" => "required|email"]);
             $user = User::where('email', $request->email)->first();
             if (!$user) {
                 return response()->json([
@@ -63,7 +64,7 @@ class PublicController extends Controller
                     "message" => "User doesn't exists"
                 ], 400);
             }
-           
+
             if (!$user->resetpin_verified) {
                 return response()->json(["success" => false, "message" => "First verify Otp"], 401);
             }
@@ -137,7 +138,7 @@ class PublicController extends Controller
     }
     public function getPrivateclient($privateclient_id)
     {
-$privateclient = Privateclient::findorfail($privateclient_id);
+        $privateclient = Privateclient::findorfail($privateclient_id);
         if (!$privateclient) {
             return response()->json([
                 "success" => false,
@@ -180,9 +181,10 @@ $privateclient = Privateclient::findorfail($privateclient_id);
                 "message" => "jobseeker doesn't exists"
             ], 400);
         }
+        $jobseeker->load(['educations', 'experiences', 'skills', 'languages']);
         return response()->json([
             "success" => true,
-            "jobseeker" => $jobseeker
+            "jobseeker" => $jobseeker,
         ], 200);
     }
     public function getUser($user_id)
@@ -221,7 +223,7 @@ $privateclient = Privateclient::findorfail($privateclient_id);
 
             $job = Job::findorfail($id);
 
-return response()->json(["success" => true, "jobs" => $job], 200);
+            return response()->json(["success" => true, "jobs" => $job], 200);
         } catch (ModelNotFoundException $m) {
             return response()->json(["success" => false, "message" => "Job not found"], 404);
         } catch (Exception $e) {

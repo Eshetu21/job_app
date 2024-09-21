@@ -668,7 +668,6 @@ class PrivateClientController extends Controller
         
             return response()->json([
                 "success" => true,
-
                 "applications" => $allApplications
 
             ], 200);

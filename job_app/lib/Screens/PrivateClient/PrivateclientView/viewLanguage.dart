@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/language_controller.dart';
-import 'package:job_app/Screens/JobSeeker/Jobseeker/job_seeker_language.dart';
+import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 
 class ViewLanguage extends StatefulWidget {
-  const ViewLanguage({super.key});
+  final Map applicant;
+  const ViewLanguage({super.key, required this.applicant});
 
   @override
   State<ViewLanguage> createState() => _ViewLanguageState();
 }
 
 class _ViewLanguageState extends State<ViewLanguage> {
-  final Languagecontroller _languageController = Get.put(Languagecontroller());
+  final PrivateclientController _privateclientController =
+      Get.put(PrivateclientController());
   List<String> selectedLanguages = [];
   @override
   void initState() {
@@ -23,16 +25,16 @@ class _ViewLanguageState extends State<ViewLanguage> {
   }
 
   Future<void> fetchLanguages() async {
-    await _languageController.showlanguages();
+    await _privateclientController.getJobSeeker(
+        jobSeekerId: widget.applicant["jobseeker"]["id"]);
     if (mounted) {
       setState(() {
-        var fetchedLanguages = _languageController.languages;
+        var fetchedLanguages = _privateclientController.languages;
         if (fetchedLanguages.isNotEmpty) {
           var selectedString = fetchedLanguages.toString();
           if (selectedString.length > 6) {
             var selectedSub =
                 selectedString.substring(3, selectedString.length - 3);
-            print("selectedSub $selectedSub");
             List<String> LanguageList =
                 selectedSub.split('","').map((skill) => skill.trim()).toList();
             selectedLanguages.addAll(LanguageList);
@@ -40,9 +42,6 @@ class _ViewLanguageState extends State<ViewLanguage> {
             print("string too short");
           }
         }
-        print("fetchedLanguages $fetchedLanguages");
-        print("selectedLanguages $selectedLanguages");
-        print(_languageController.languages);
       });
     }
   }
@@ -55,7 +54,7 @@ class _ViewLanguageState extends State<ViewLanguage> {
         Text("Languages",
             style:
                 GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold)),
-        _languageController.languages.isEmpty
+        _privateclientController.languages.isEmpty
             ? Center(
                 child: Container(
                 height: 100,
@@ -71,7 +70,8 @@ class _ViewLanguageState extends State<ViewLanguage> {
                 ),
               ))
             : FutureBuilder(
-                future: _languageController.showlanguages(),
+                future: _privateclientController.getJobSeeker(
+                    jobSeekerId: widget.applicant["jobseeker"]["id"]),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
@@ -80,11 +80,11 @@ class _ViewLanguageState extends State<ViewLanguage> {
                     alignment: Alignment.centerLeft,
                     child: Wrap(
                         spacing: 3,
-                        children: selectedLanguages.map((skill) {
+                        children: selectedLanguages.map((language) {
                           return Chip(
                             backgroundColor: Color(0xFFFF9228).withOpacity(0.7),
                             labelPadding: EdgeInsets.symmetric(horizontal: 0),
-                            label: Text(skill,
+                            label: Text(language,
                                 style: GoogleFonts.poppins(
                                     color: Colors.white, fontSize: 12)),
                             deleteIcon: Icon(Icons.close, size: 16),

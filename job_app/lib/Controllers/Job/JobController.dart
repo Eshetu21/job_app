@@ -14,7 +14,7 @@ class Jobcontroller extends GetxController {
   Jobcontroller() {
     token = box.read('token');
   }
-  Future<void> createPrivateJob({
+  Future<bool> createPrivateJob({
     required String title,
     required String city,
     required String type,
@@ -34,6 +34,7 @@ class Jobcontroller extends GetxController {
       "description": description
     };
     try {
+      sucess.value = false;
       var encodedData = data.entries
           .map((e) =>
               '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
@@ -49,14 +50,18 @@ class Jobcontroller extends GetxController {
         sucess.value = true;
         print("Successfully posted a job");
         print(response.body);
-      }
+        return true;
+      } else
+        (print(response.body));
+      return false;
     } catch ($e) {
       print("Failed");
       print($e.toString());
+      return false;
     }
   }
 
-  Future<void> createCompanyJob({
+  Future<bool> createCompanyJob({
     required String title,
     required String city,
     required String type,
@@ -76,6 +81,7 @@ class Jobcontroller extends GetxController {
       "description": description
     };
     try {
+      sucess.value = false;
       var encodedData = data.entries
           .map((e) =>
               '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
@@ -91,10 +97,16 @@ class Jobcontroller extends GetxController {
         sucess.value = true;
         print("Successfully posted a job");
         print(response.body);
+        return true;
+      } else {
+        (print(response.body));
+        return false;
       }
     } catch ($e) {
       print("Failed");
+      sucess.value = true;
       print($e.toString());
+      return false;
     }
   }
 

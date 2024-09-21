@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -124,9 +125,8 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                             start: _startController.text.trim(),
                             end: _endController.text.trim(),
                             description: _descriptionController.text.trim());
-                      }
-                     else {
-                        await _experienceController.addexperience(
+                      } else {
+                        bool sucess = await _experienceController.addexperience(
                             jobseekerid: jobseeker,
                             title: _titleController.text.trim(),
                             company: _companyController.text.trim(),
@@ -134,6 +134,9 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                             start: _startController.text.trim(),
                             end: _endController.text.trim(),
                             description: _descriptionController.text.trim());
+                        if (sucess) {
+                          sucessfullyUpdated(context);
+                        }
                       }
                     },
                     child: Container(
@@ -144,12 +147,20 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                         borderRadius: BorderRadius.circular(20),
                         color: Color(0xFF130160),
                       ),
-                      child: Center(
-                        child: Text("SAVE",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                      ),
+                      child: Obx(() {
+                        bool loading =
+                            _experienceController.createdExperience.value;
+                        return Center(
+                          child: loading
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text("SAVE",
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                        );
+                      }),
                     ),
                   ),
                 ),
@@ -158,9 +169,7 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                   Obx(() {
                     if (_experienceController.updatedSucsessfully.value ==
                         true) {
-                      Future.delayed(Duration.zero, () {
-                        sucessfullyUpdated(context);
-                      });
+                      Future.delayed(Duration.zero);
                     }
                     return SizedBox.shrink();
                   }),

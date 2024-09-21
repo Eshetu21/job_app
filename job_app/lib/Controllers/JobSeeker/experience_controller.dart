@@ -7,6 +7,7 @@ import 'package:job_app/Constants/constants.dart';
 class ExperienceController extends GetxController {
   RxList<dynamic> experienceDetails = [].obs;
   RxBool updatedSucsessfully = false.obs;
+  final createdExperience = false.obs;
   final box = GetStorage();
   late final String? token;
 
@@ -14,7 +15,7 @@ class ExperienceController extends GetxController {
     token = box.read("token");
   }
 
-  Future<void> addexperience(
+  Future<bool> addexperience(
       {required int jobseekerid,
       required String title,
       required String company,
@@ -22,34 +23,44 @@ class ExperienceController extends GetxController {
       required String start,
       required String end,
       required String description}) async {
-    var data = {
+    try {
+      createdExperience.value = true;
+      var data = {
         "exp_position_title": title,
         "exp_company_name": company,
         "exp_job_type": type,
         "exp_start_date": start,
         "exp_end_date": end,
         "exp_description": description
-    };
-    var encodedData = data.entries
-        .map((e) =>
-            "${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}")
-        .join('&');
-    var response =
-        await http.post(Uri.parse("${url}addexperience/$jobseekerid"),
-            headers: {
-              "Accept": "application/json",
-              "Authorization": "Bearer $token",
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: encodedData);
-    if (response.statusCode == 201) {
-      updatedSucsessfully.value = true;
-      print("Sucssfully added");
-      print(encodedData);
-    }
-    else{
-      print("failed");
-      print(response.statusCode);
+      };
+      var encodedData = data.entries
+          .map((e) =>
+              "${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}")
+          .join('&');
+      var response =
+          await http.post(Uri.parse("${url}addexperience/$jobseekerid"),
+              headers: {
+                "Accept": "application/json",
+                "Authorization": "Bearer $token",
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: encodedData);
+      if (response.statusCode == 201) {
+        await Future.delayed(Duration(seconds: 2));
+        createdExperience.value = false;
+        print("Sucssfully added");
+        print(encodedData);
+        return true;
+      } else {
+        createdExperience.value = false;
+        print("failed");
+        print(response.statusCode);
+        return false;
+      }
+    } catch ($e) {
+      createdExperience.value = false;
+      print($e.toString());
+      return false;
     }
   }
 

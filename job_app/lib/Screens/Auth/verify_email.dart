@@ -80,7 +80,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
           fontSize: 16.0,
         );
         await _profileController.fetchProfiles();
-        navigateBasedOnProfile();
+        Future.delayed(Duration(seconds: 1), () {
+          navigateBasedOnProfile();
+        });
       }
     }
   }

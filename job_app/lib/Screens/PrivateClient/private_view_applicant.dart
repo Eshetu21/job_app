@@ -117,7 +117,7 @@ class _PrivateViewApplicantState extends State<PrivateViewApplicant> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => PrivateViewProfile(
-                                          jobseeker: widget.application)));
+                                          applicant: widget.application)));
                             },
                             child: Text(
                               "View profile",
@@ -179,7 +179,7 @@ class _PrivateViewApplicantState extends State<PrivateViewApplicant> {
                           child: TextButton(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => PrivateAccept()));
+                                    builder: (context) => PrivateAccept(application: widget.application)));
                               },
                               child: Text("Accept",
                                   style: GoogleFonts.poppins(

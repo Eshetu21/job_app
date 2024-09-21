@@ -168,14 +168,20 @@ class _AddJobState extends State<AddJob> {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Color(0xFF130160).withOpacity(0.7),
+                          color: Color(0xFF130160),
                         ),
-                        child: Center(
-                          child: Text("POST",
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                        ),
+                        child: Obx(() {
+                          return Center(
+                            child: _jobcontroller.sucess.value
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text("POST",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white)),
+                          );
+                        }),
                       ),
                     ),
                   ),

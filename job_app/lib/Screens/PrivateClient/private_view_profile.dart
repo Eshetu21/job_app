@@ -1,6 +1,8 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Screens/PrivateClient/PrivateclientView/viewEducation.dart';
 import 'package:job_app/Screens/PrivateClient/PrivateclientView/viewExperience.dart';
 import 'package:job_app/Screens/PrivateClient/PrivateclientView/viewLanguage.dart';
@@ -8,16 +10,20 @@ import 'package:job_app/Screens/PrivateClient/PrivateclientView/viewProfile.dart
 import 'package:job_app/Screens/PrivateClient/PrivateclientView/viewSkill.dart';
 
 class PrivateViewProfile extends StatefulWidget {
-  final Map jobseeker;
-  const PrivateViewProfile({super.key, required this.jobseeker});
+  final Map applicant;
+  const PrivateViewProfile({super.key, required this.applicant});
 
   @override
   State<PrivateViewProfile> createState() => _PrivateViewProfileState();
 }
 
 class _PrivateViewProfileState extends State<PrivateViewProfile> {
+  PrivateclientController _privateclientController =
+      Get.put(PrivateclientController());
   @override
   Widget build(BuildContext context) {
+    _privateclientController.getJobSeeker(
+        jobSeekerId: widget.applicant["jobseeker"]["id"]);
     return Scaffold(
         body: SafeArea(
             child: SingleChildScrollView(
@@ -26,27 +32,37 @@ class _PrivateViewProfileState extends State<PrivateViewProfile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Padding(padding: EdgeInsets.all(15), child: ViewProfile()),
+            Padding(
+                padding: EdgeInsets.all(15),
+                child: ViewProfile(applicant: widget.applicant)),
             Card(
               margin: EdgeInsets.symmetric(vertical: 10),
               child: Padding(
                 padding: EdgeInsets.all(15),
-                child: ViewEducation(),
+                child: ViewEducation(
+                  applicant: widget.applicant,
+                ),
               ),
             ),
             Card(
               margin: EdgeInsets.symmetric(vertical: 10),
-              child:
-                  Padding(padding: EdgeInsets.all(15), child: ViewExperience()),
+              child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: ViewExperience(applicant: widget.applicant)),
             ),
             Card(
               margin: EdgeInsets.symmetric(vertical: 10),
-              child: Padding(padding: EdgeInsets.all(15), child: ViewSkill()),
+              child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: ViewSkill(applicant: widget.applicant)),
             ),
             Card(
               margin: EdgeInsets.symmetric(vertical: 10),
-              child:
-                  Padding(padding: EdgeInsets.all(15), child: ViewLanguage()),
+              child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: ViewLanguage(
+                    applicant: widget.applicant
+                  )),
             ),
           ],
         ),

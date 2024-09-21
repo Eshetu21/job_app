@@ -103,41 +103,52 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                 ],
                               ),
                             ]),
-                            Container(
-                              margin: EdgeInsets.only(top: 30),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(_companyController.companyJobs.length.toString(),
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 18)),
-                                      Text("Jobs Posted",
-                                          style:
-                                              GoogleFonts.poppins(fontSize: 18))
-                                    ],
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(1),
-                                    height: 50,
-                                    decoration:
-                                        BoxDecoration(color: Colors.grey),
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("0",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 18)),
-                                      Text("Candidates hired",
-                                          style:
-                                              GoogleFonts.poppins(fontSize: 18))
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                              Obx(() {
+                              var filteredApplication = _companyController
+                                  .companyApplications
+                                  .where((application) =>
+                                      application["status"] == "Accepted");
+                              return Container(
+                                margin: EdgeInsets.only(top: 30),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                            _companyController
+                                                .companyJobs.length
+                                                .toString(),
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18)),
+                                        Text("Jobs Posted",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18))
+                                      ],
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(1),
+                                      height: 50,
+                                      decoration:
+                                          BoxDecoration(color: Colors.grey),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text(
+                                            filteredApplication.length
+                                                .toString(),
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18)),
+                                        Text("Candidates hired",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18))
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                           ],
                         ),
                       ),

@@ -72,6 +72,9 @@ class _ExplorePageState extends State<ExplorePage> {
                       return (job["title"] ?? "")
                               .toLowerCase()
                               .contains(searchQuery) ||
+                          (job["sector"] ?? "")
+                              .toLowerCase()
+                              .contains(searchQuery) ||
                           (job["type"] ?? "")
                               .toLowerCase()
                               .contains(searchQuery) ||
@@ -116,7 +119,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     poster,
                                     jobs["title"],
                                     jobs["type"],
-                                    jobs["salary"]?? "Negotiable",
+                                    jobs["salary"] ?? "Negotiable",
                                     jobs["city"],
                                     jobs["description"] ?? "No Description",
                                     companyLogo,

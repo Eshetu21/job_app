@@ -15,11 +15,11 @@ class PrivateApplications extends StatefulWidget {
 }
 
 class _PrivateApplicationsState extends State<PrivateApplications> {
- String formatRelativeTime(String dateTimeString) {
-  DateTime utcDateTime = DateTime.parse(dateTimeString);
-  DateTime localDateTime = utcDateTime.toLocal(); 
-  return timeago.format(localDateTime); 
-}
+  String formatRelativeTime(String dateTimeString) {
+    DateTime utcDateTime = DateTime.parse(dateTimeString);
+    DateTime localDateTime = utcDateTime.toLocal();
+    return timeago.format(localDateTime);
+  }
 
   var selected = 0;
   List tabList = <String>["Pending", "Accepted", "Rejected"];
@@ -76,34 +76,46 @@ class _PrivateApplicationsState extends State<PrivateApplications> {
                   strokeWidth: 2,
                   strokeAlign: -6,
                 ));
-              } else if (_privateclientController.privateApplications.isEmpty) {
-                return Center(
-                    child: Text("No applications found",
-                        style: GoogleFonts.poppins()));
-              } else {
+              }else {
                 List filteredApplication = [];
                 if (selected == 0) {
                   filteredApplication =
                       _privateclientController.privateApplications;
                 }
-                if (selected == 1) {
+                if (selected == 0) {
                   filteredApplication = _privateclientController
-                      .privateApplicationsJob
+                      .privateApplications
                       .where(
                           (application) => application["status"] == "Pending")
                       .toList();
                 }
-                if (selected == 2) {
+                if (selected == 1) {
                   filteredApplication = _privateclientController
-                      .privateApplicationsJob
-                      .where((application) =>
-                          application["status"] == "Accepted" ||
-                          application["status"] == "Rejected")
+                      .privateApplications
+                      .where(
+                          (application) => application["status"] == "Accepted")
                       .toList();
                 }
-                if (filteredApplication.isEmpty) {
+                if (selected == 2) {
+                  filteredApplication = _privateclientController
+                      .privateApplications
+                      .where(
+                          (application) => application["status"] == "Rejected")
+                      .toList();
+                }
+                if (selected == 0 && filteredApplication.isEmpty) {
                   return Center(
-                      child: Text("No applications found",
+                      child: Text("No pending applications found",
+                          style: GoogleFonts.poppins()));
+                }
+                if (selected == 1 && filteredApplication.isEmpty) {
+                  return Center(
+                      child: Text("No accepted applications found",
+                          style: GoogleFonts.poppins()));
+                }
+                if (selected == 2 && filteredApplication.isEmpty) {
+                  return Center(
+                      child: Text("No rejected applications found",
                           style: GoogleFonts.poppins()));
                 }
                 return Expanded(

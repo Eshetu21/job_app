@@ -35,7 +35,7 @@ class _FetchSkillState extends State<FetchSkill> {
               selectedSub.split('","').map((skill) => skill.trim()).toList();
           selectedSkills.addAll(skillList);
         }
-        print("selectedSkills $selectedSkills");
+        //  print("selectedSkills $selectedSkills");
       });
     }
   }
@@ -74,12 +74,12 @@ class _FetchSkillState extends State<FetchSkill> {
                 ),
               ))
             : FutureBuilder(
-              future: _skillController.showskills(),
-              builder: (context,snapshot) {
-                if(snapshot.connectionState==ConnectionState.waiting){
-                  return Center(child: CircularProgressIndicator());
-                }
-                return Container(
+                future: _skillController.showskills(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return Container(
                     alignment: Alignment.centerLeft,
                     child: Wrap(
                         spacing: 8,
@@ -94,8 +94,7 @@ class _FetchSkillState extends State<FetchSkill> {
                           );
                         }).toList()),
                   );
-              }
-            ),
+                }),
       ],
     );
   }

@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 class EducationController extends GetxController {
   RxList<dynamic> educationDetails = [].obs;
   late final RxBool updatedSucsessfully = false.obs;
+  final createEducationLoading = false.obs;
   final box = GetStorage();
   late final String? token;
 
@@ -15,7 +16,7 @@ class EducationController extends GetxController {
     token = box.read("token");
   }
 
-  Future<void> createeducation(
+  Future<bool> createeducation(
       {required int jobseekerid,
       required String institution,
       required String field,
@@ -24,6 +25,7 @@ class EducationController extends GetxController {
       required String eduEnd,
       required String eduDescription}) async {
     try {
+      createEducationLoading.value = true;
       var data = {
         "school_name": institution,
         "field": field,
@@ -45,13 +47,21 @@ class EducationController extends GetxController {
               },
               body: encodedData);
       if (response.statusCode == 201) {
-        updatedSucsessfully.value=true;
+        await Future.delayed(Duration(seconds: 2));
+        createEducationLoading.value = false;
         print("Education created");
         print(encodedData);
+        return true;
+      } else {
+        createEducationLoading.value = false;
+        print(response.body);
+        return false;
       }
     } catch ($e) {
       print("Failed");
       print($e.toString());
+      createEducationLoading.value = false;
+      return false;
     }
   }
 

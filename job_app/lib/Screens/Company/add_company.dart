@@ -99,18 +99,18 @@ class _AddCompanyState extends State<AddCompany> {
                 buildTextFormField("Address", _address),
                 SizedBox(height: 8),
                 buildTextFormField("Description", _description),
-               /*  Obx(
+                Obx(
                   (){
                     return SizedBox(
                       child: _companyController.companyCreateError.isNotEmpty
                           ? Text(
-                              _companyController.companyCreateError["message"],
+                              _companyController.companyCreateError["company_logo"],
                               style: GoogleFonts.poppins(color: Colors.red),
                             )
                           : Container(),
                     );
                   }
-                ), */
+                ), 
                 Center(
                   child: GestureDetector(
                     onTap: () {
@@ -127,7 +127,7 @@ class _AddCompanyState extends State<AddCompany> {
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Color(0xFF130160).withOpacity(0.7),
+                        color: Color(0xFF130160),
                       ),
                       child: Center(
                         child: Text("Add Company",

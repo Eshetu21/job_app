@@ -37,16 +37,15 @@ class _JobSeekerLanguageState extends State<JobSeekerLanguage> {
       var fetchedLanguages = _languagecontroller.languages;
       if (fetchedLanguages.isNotEmpty) {
         var selectedString = fetchedLanguages.toString();
-       if(selectedString.length>6){
+        if (selectedString.length > 6) {
           var selectedSub =
               selectedString.substring(3, selectedString.length - 3);
-              print("selectedSub $selectedSub");
           List<String> LanguageList =
               selectedSub.split('","').map((skill) => skill.trim()).toList();
-          selectedLanguages.addAll(LanguageList);}
-          else{
-            print("string too short");
-          }
+          selectedLanguages.addAll(LanguageList);
+        } else {
+          print("string too short");
+        }
       }
     });
   }
@@ -134,7 +133,6 @@ class _JobSeekerLanguageState extends State<JobSeekerLanguage> {
                     int jobseekerId = box.read("jobseekerId");
                     _languagecontroller.updatelanguages(
                         jobseekerId: jobseekerId, Languages: selectedLanguages);
-                    print(jsonEncode(selectedLanguages));
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 20),
@@ -142,7 +140,7 @@ class _JobSeekerLanguageState extends State<JobSeekerLanguage> {
                     height: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Color(0xFF130160).withOpacity(0.7),
+                      color: Color(0xFF130160),
                     ),
                     child: Center(
                       child: Text("SAVE",
