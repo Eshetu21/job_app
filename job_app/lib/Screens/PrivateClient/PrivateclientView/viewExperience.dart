@@ -36,7 +36,7 @@ class _ViewExperienceState extends State<ViewExperience> {
                 return Column(
                   children: [
                     Center(
-                        child: Container(
+                        child: SizedBox(
                       height: 100,
                       child: Column(
                         children: [

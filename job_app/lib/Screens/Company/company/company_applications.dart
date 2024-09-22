@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/Company/company_controller.dart';
+import 'package:job_app/Screens/Company/CompanyView/company_view_applicant.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CompanyApplications extends StatefulWidget {
@@ -77,9 +78,6 @@ class _CompanyApplicationsState extends State<CompanyApplications> {
               } else {
                 List filteredApplication = [];
                 if (selected == 0) {
-                  filteredApplication = _companyController.companyApplications;
-                }
-                if (selected == 0) {
                   filteredApplication = _companyController.companyApplications
                       .where(
                           (application) => application["status"] == "Pending")
@@ -97,21 +95,23 @@ class _CompanyApplicationsState extends State<CompanyApplications> {
                           (application) => application["status"] == "Rejected")
                       .toList();
                 }
-                if (selected == 0 && filteredApplication.isEmpty) {
+
+                if (filteredApplication.isEmpty) {
+                  String noResultsText;
+                  switch (selected) {
+                    case 1:
+                      noResultsText = "No accepted applications found";
+                      break;
+                    case 2:
+                      noResultsText = "No rejected applications found";
+                      break;
+                    default:
+                      noResultsText = "No pending applications found";
+                  }
                   return Center(
-                      child: Text("No pending applications found",
-                          style: GoogleFonts.poppins()));
+                      child: Text(noResultsText, style: GoogleFonts.poppins()));
                 }
-                if (selected == 1 && filteredApplication.isEmpty) {
-                  return Center(
-                      child: Text("No accepted applications found",
-                          style: GoogleFonts.poppins()));
-                }
-                if (selected == 2 && filteredApplication.isEmpty) {
-                  return Center(
-                      child: Text("No rejected applications found",
-                          style: GoogleFonts.poppins()));
-                }
+
                 return Expanded(
                   child: Container(
                     padding: EdgeInsets.only(top: 20),
@@ -121,7 +121,14 @@ class _CompanyApplicationsState extends State<CompanyApplications> {
                         itemBuilder: (context, index) {
                           var applications = filteredApplication[index];
                           return GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CompanyViewApplicant(
+                                              application: applications)));
+                            },
                             child: Card(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
@@ -189,7 +196,7 @@ class _CompanyApplicationsState extends State<CompanyApplications> {
                         separatorBuilder: (_, index) {
                           return SizedBox(height: 10);
                         },
-                        itemCount: _companyController.company.length),
+                        itemCount: filteredApplication.length),
                   ),
                 );
               }

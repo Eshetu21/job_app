@@ -47,7 +47,7 @@ class EducationController extends GetxController {
               },
               body: encodedData);
       if (response.statusCode == 201) {
-        await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 2));
         createEducationLoading.value = false;
         print("Education created");
         print(encodedData);

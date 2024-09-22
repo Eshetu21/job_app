@@ -76,47 +76,41 @@ class _PrivateApplicationsState extends State<PrivateApplications> {
                   strokeWidth: 2,
                   strokeAlign: -6,
                 ));
-              }else {
+              } else {
                 List filteredApplication = [];
                 if (selected == 0) {
-                  filteredApplication =
-                      _privateclientController.privateApplications;
-                }
-                if (selected == 0) {
-                  filteredApplication = _privateclientController
-                      .privateApplications
+                  filteredApplication = _privateclientController.privateApplications
                       .where(
                           (application) => application["status"] == "Pending")
                       .toList();
                 }
                 if (selected == 1) {
-                  filteredApplication = _privateclientController
-                      .privateApplications
+                  filteredApplication = _privateclientController.privateApplications
                       .where(
                           (application) => application["status"] == "Accepted")
                       .toList();
                 }
                 if (selected == 2) {
-                  filteredApplication = _privateclientController
-                      .privateApplications
+                  filteredApplication = _privateclientController.privateApplications
                       .where(
                           (application) => application["status"] == "Rejected")
                       .toList();
                 }
-                if (selected == 0 && filteredApplication.isEmpty) {
+
+                if (filteredApplication.isEmpty) {
+                  String noResultsText;
+                  switch (selected) {
+                    case 1:
+                      noResultsText = "No accepted applications found";
+                      break;
+                    case 2:
+                      noResultsText = "No rejected applications found";
+                      break;
+                    default:
+                      noResultsText = "No pending applications found";
+                  }
                   return Center(
-                      child: Text("No pending applications found",
-                          style: GoogleFonts.poppins()));
-                }
-                if (selected == 1 && filteredApplication.isEmpty) {
-                  return Center(
-                      child: Text("No accepted applications found",
-                          style: GoogleFonts.poppins()));
-                }
-                if (selected == 2 && filteredApplication.isEmpty) {
-                  return Center(
-                      child: Text("No rejected applications found",
-                          style: GoogleFonts.poppins()));
+                      child: Text(noResultsText, style: GoogleFonts.poppins()));
                 }
                 return Expanded(
                   child: Container(
@@ -202,8 +196,7 @@ class _PrivateApplicationsState extends State<PrivateApplications> {
                         separatorBuilder: (_, index) {
                           return SizedBox(height: 10);
                         },
-                        itemCount: _privateclientController
-                            .privateApplications.length),
+                        itemCount: filteredApplication.length),
                   ),
                 );
               }

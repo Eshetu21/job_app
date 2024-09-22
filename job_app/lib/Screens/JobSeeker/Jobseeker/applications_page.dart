@@ -59,122 +59,127 @@ class _ApplicationPageState extends State<ApplicationPage> {
               itemCount: tabList.length),
         ),
         FutureBuilder(
-            future: _applicationController.getApplication(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                    child: CircularProgressIndicator(
+          future: _applicationController.getApplication(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(
                   strokeWidth: 2,
                   strokeAlign: -6,
-                ));
-              } else {
-                List filteredApplication = [];
+                ),
+              );
+            } else {
+              List filteredApplication = [];
+              if (selected == 0) {
+                filteredApplication = _applicationController.myApplications;
+              }
+              if (selected == 1) {
+                filteredApplication = _applicationController.myApplications
+                    .where((application) => application["status"] == "Pending")
+                    .toList();
+              }
+              if (selected == 2) {
+                filteredApplication = _applicationController.myApplications
+                    .where((application) =>
+                        application["status"] == "Accepted" ||
+                        application["status"] == "Rejected")
+                    .toList();
+              }
+              if (filteredApplication.isEmpty) {
+                String message;
                 if (selected == 0) {
-                  filteredApplication = _applicationController.myApplications;
+                  message = "No applications found";
+                } else if (selected == 1) {
+                  message = "No pending applications found";
+                } else {
+                  message = "No reviewed applications found";
                 }
-                if (selected == 1) {
-                  filteredApplication = _applicationController.myApplications
-                      .where(
-                          (application) => application["status"] == "Pending")
-                      .toList();
-                }
-                if (selected == 2) {
-                  filteredApplication = _applicationController.myApplications
-                      .where((application) =>
-                          application["status"] == "Accepted" ||
-                          application["status"] == "Rejected")
-                      .toList();
-                }
-                if (selected == 0 && filteredApplication.isEmpty) {
-                  return Center(
-                      child: Text("No applications found",
-                          style: GoogleFonts.poppins()));
-                }
-                if (selected == 1 && filteredApplication.isEmpty) {
-                  return Center(
-                      child: Text("No pending applications found",
-                          style: GoogleFonts.poppins()));
-                }
-                if (selected == 2 && filteredApplication.isEmpty) {
-                  return Center(
-                      child: Text("No reviewed applications found",
-                          style: GoogleFonts.poppins()));
-                }
-                return Container(
-                  padding: EdgeInsets.only(top: 20),
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  color: Colors.transparent,
-                  child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        var applications = filteredApplication[index];
-
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                return Center(
+                  child: Text(message, style: GoogleFonts.poppins()),
+                );
+              }
+              return Container(
+                padding: EdgeInsets.only(top: 20),
+                height: MediaQuery.of(context).size.height * 0.7,
+                color: Colors.transparent,
+                child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    var applications = filteredApplication[index];
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      applications["job"]["title"] ??
-                                          "Not Provided",
-                                      style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.pending,
-                                            color: Colors.orange, size: 15),
-                                        SizedBox(width: 5),
-                                        Text(applications["status"],
-                                            style: GoogleFonts.poppins()),
-                                      ],
-                                    ),
-                                  ],
+                                Text(
+                                  applications["job"]["title"] ??
+                                      "Not Provided",
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
                                 ),
-                                SizedBox(height: 10),
                                 Row(
                                   children: [
-                                    Icon(Icons.business_center, size: 16),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      applications["job"]["sector"] ??
-                                          "Not Provided",
-                                      style: GoogleFonts.poppins(),
+                                    Icon(
+                                      applications["status"] == "Pending"
+                                          ? Icons.pending
+                                          : Icons.check_circle,
+                                      color: applications["status"] == "Pending"
+                                          ? Colors.orange
+                                          : Colors.green,
+                                      size: 15,
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 6),
-                                Row(
-                                  children: [
-                                    Icon(Icons.location_on, size: 16),
                                     SizedBox(width: 5),
-                                    Text(
-                                      applications["job"]["city"] ??
-                                          "Not Provided",
-                                      style: GoogleFonts.poppins(),
-                                    ),
+                                    Text(applications["status"],
+                                        style: GoogleFonts.poppins()),
                                   ],
                                 ),
                               ],
                             ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (_, index) {
-                        return SizedBox(height: 10);
-                      },
-                      itemCount: _applicationController.myApplications.length),
-                );
-              }
-            }),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Icon(Icons.business_center, size: 16),
+                                SizedBox(width: 5),
+                                Text(
+                                  applications["job"]["sector"] ??
+                                      "Not Provided",
+                                  style: GoogleFonts.poppins(),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 6),
+                            Row(
+                              children: [
+                                Icon(Icons.location_on, size: 16),
+                                SizedBox(width: 5),
+                                Text(
+                                  applications["job"]["city"] ?? "Not Provided",
+                                  style: GoogleFonts.poppins(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (_, index) {
+                    return SizedBox(height: 10);
+                  },
+                  itemCount: filteredApplication.length,
+                ),
+              );
+            }
+          },
+        ),
       ],
     );
   }

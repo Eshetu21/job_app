@@ -4,30 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
+import 'package:job_app/Controllers/Company/company_controller.dart';
 
-class PrivateAccept extends StatefulWidget {
+class CompanyAccept extends StatefulWidget {
   final Map application;
-  const PrivateAccept({super.key, required this.application});
+  const CompanyAccept({super.key, required this.application});
 
   @override
-  State<PrivateAccept> createState() => _PrivateAcceptState();
+  State<CompanyAccept> createState() => _CompanyAcceptState();
 }
 
-class _PrivateAcceptState extends State<PrivateAccept> {
-  final PrivateclientController _privateclientController =
-      Get.put(PrivateclientController());
+class _CompanyAcceptState extends State<CompanyAccept> {
+  final CompanyController _companyController =
+      Get.put(CompanyController());
   final TextEditingController _statementController = TextEditingController();
   void validateAndSubmit() async {
     bool hasError = false;
     if (_statementController.text.trim().isEmpty) {
       hasError = true;
-      _privateclientController.acceptError["empty"] = "statement is required";
+      _companyController.acceptError["empty"] = "statement is required";
     }
     if (!hasError) {
       int appId = widget.application["application_id"];
       int jobId = widget.application["job"]["id"];
-      bool verifyAcceptance = await _privateclientController.acceptApplication(
+      bool verifyAcceptance = await _companyController.companyAcceptApplication(
           jobId: jobId, appId: appId, statement: _statementController.text);
       if (verifyAcceptance) {
         Fluttertoast.showToast(
@@ -45,7 +45,7 @@ class _PrivateAcceptState extends State<PrivateAccept> {
 
   @override
   void dispose() {
-    _privateclientController.acceptError.clear();
+    _companyController.acceptError.clear();
     super.dispose();
   }
 
@@ -57,8 +57,8 @@ class _PrivateAcceptState extends State<PrivateAccept> {
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         child: Obx(() {
-          String? emptyError = _privateclientController.acceptError["empty"];
-          String? Error = _privateclientController.acceptError["message"];
+          String? emptyError = _companyController.acceptError["empty"];
+          String? Error = _companyController.acceptError["message"];
           return Column(
             children: [
               Text(
@@ -92,7 +92,7 @@ class _PrivateAcceptState extends State<PrivateAccept> {
               Obx(() {
                 return GestureDetector(
                   onTap: () {
-                    _privateclientController.acceptError.clear();
+                    _companyController.acceptError.clear();
                     validateAndSubmit();
                   },
                   child: Container(
@@ -103,7 +103,7 @@ class _PrivateAcceptState extends State<PrivateAccept> {
                       color: Color(0xFF130160),
                     ),
                     child: Center(
-                        child: _privateclientController.acceptLoading.value
+                        child: _companyController.acceptLoading.value
                             ? Center(
                                 child: CircularProgressIndicator(
                                 color: Colors.white,

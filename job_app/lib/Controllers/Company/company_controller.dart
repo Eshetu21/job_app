@@ -22,6 +22,8 @@ class CompanyController extends GetxController {
   final getJobseekerLanguage = [].obs;
   final acceptLoading = false.obs;
   final acceptError = {}.obs;
+  final rejectLoading = false.obs;
+  final rejectError = {}.obs;
   CompanyController() {
     token = box.read("token");
   }
@@ -78,7 +80,6 @@ class CompanyController extends GetxController {
       print(response.body);
       company.value = json.decode(response.body)["company"];
       print("Sucessfully fetched company");
-      print(company);
     } else {
       print("failed to fetch");
     }
@@ -92,7 +93,6 @@ class CompanyController extends GetxController {
     if (response.statusCode == 200) {
       companyJobs.value = json.decode(response.body)["jobs"];
       print("Sucessfully fetched company jobs");
-      print(companyJobs);
     } else {
       print("Failed to fetch company jobs");
       print(response.statusCode);
@@ -107,7 +107,7 @@ class CompanyController extends GetxController {
         "Authorization": "Bearer $token"
       });
       if (response.statusCode == 200) {
-        // print("Successfully fetched applications");
+        print("Successfully fetched applications");
         var responseData = json.decode(response.body);
         companyApplications.value = responseData["applications"];
         /* privateApplicationsJobSeeker.clear();
@@ -116,12 +116,79 @@ class CompanyController extends GetxController {
           companyApplicationsJobSeeker.add(application["jobseeker"]);
           companyApplicationsJob.add(application["job"]);
         }
-        /*  print("Privateclient applications: $privateApplications");
+        /*print("Privateclient applications: $privateApplications");
         print("Privateclient jobseekers: $privateApplicationsJobSeeker");
         print("Privateclient jobs: $privateApplicationsJob"); */
       }
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<bool> companyAcceptApplication(
+      {required int jobId,
+      required int appId,
+      required String statement}) async {
+    try {
+      acceptLoading.value = true;
+      var data = json.encode({"statement": statement});
+      var response =
+          await http.put(Uri.parse("${url}c/app/accept/$jobId/$appId"),
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer $token"
+              },
+              body: data);
+      if (response.statusCode == 200) {
+        print("sucessfully accepted");
+        acceptLoading.value = false;
+        return true;
+      } else {
+        print(response.body);
+        var jsonResponse = json.decode(response.body);
+        String errorMessage = jsonResponse['message'];
+        acceptError["message"] = errorMessage;
+        acceptLoading.value = false;
+        return false;
+      }
+    } catch ($e) {
+      print($e.toString());
+      acceptLoading.value = false;
+      return false;
+    }
+  }
+  Future<bool> companyRejectApplication(
+      {required int jobId,
+      required int appId,
+      required String statement}) async {
+    try {
+      rejectLoading.value = true;
+      var data = json.encode({"statement": statement});
+      var response =
+          await http.put(Uri.parse("${url}c/app/reject/$jobId/$appId"),
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer $token"
+              },
+              body: data);
+      if (response.statusCode == 200) {
+        print("sucessfully rejected");
+        rejectLoading.value = false;
+        return true;
+      } else {
+        print(response.body);
+        var jsonResponse = json.decode(response.body);
+        String errorMessage = jsonResponse['message'];
+        rejectError["message"] = errorMessage;
+        rejectLoading.value = false;
+        return false;
+      }
+    } catch ($e) {
+      print($e.toString());
+      rejectLoading.value = false;
+      return false;
     }
   }
 }

@@ -2,20 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Screens/PrivateClient/PrivateclientRespond/private_accept.dart';
-import 'package:job_app/Screens/PrivateClient/PrivateclientRespond/private_reject.dart';
+import 'package:job_app/Screens/Company/company/CompanyRepond/company_accept.dart';
+import 'package:job_app/Screens/Company/company/CompanyRepond/company_reject.dart';
 import 'package:job_app/Screens/PrivateClient/private_view_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class PrivateViewApplicant extends StatefulWidget {
+class CompanyViewApplicant extends StatefulWidget {
   final Map application;
-  const PrivateViewApplicant({super.key, required this.application});
+  const CompanyViewApplicant({super.key, required this.application});
 
   @override
-  State<PrivateViewApplicant> createState() => _PrivateViewApplicantState();
+  State<CompanyViewApplicant> createState() => _CompanyViewApplicantState();
 }
 
-class _PrivateViewApplicantState extends State<PrivateViewApplicant> {
+class _CompanyViewApplicantState extends State<CompanyViewApplicant> {
   Future<void> openPdf(String url) async {
     Uri pdfUri = Uri.parse(url);
     if (await canLaunchUrl(pdfUri)) {
@@ -180,7 +180,7 @@ class _PrivateViewApplicantState extends State<PrivateViewApplicant> {
                           child: TextButton(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => PrivateAccept(
+                                    builder: (context) => CompanyAccept(
                                         application: widget.application)));
                               },
                               child: Text("Accept",
@@ -194,7 +194,7 @@ class _PrivateViewApplicantState extends State<PrivateViewApplicant> {
                           child: TextButton(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => PrivateReject(
+                                    builder: (context) => CompanyReject(
                                         application: widget.application)));
                               },
                               child: Text("Reject",

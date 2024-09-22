@@ -22,6 +22,8 @@ class PrivateclientController extends GetxController {
   final getJobseekerLanguage = [].obs;
   final acceptLoading = false.obs;
   final acceptError = {}.obs;
+  final rejectLoading = false.obs;
+  final rejectError = {}.obs;
   PrivateclientController() {
     token = box.read("token");
   }
@@ -116,6 +118,39 @@ class PrivateclientController extends GetxController {
     } catch ($e) {
       print($e.toString());
       acceptLoading.value = false;
+      return false;
+    }
+  }
+  Future<bool> rejectApplication(
+      {required int jobId,
+      required int appId,
+      required String statement}) async {
+    try {
+      rejectLoading.value = true;
+      var data = json.encode({"statement": statement});
+      var response =
+          await http.put(Uri.parse("${url}pc/app/reject/$jobId/$appId"),
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer $token"
+              },
+              body: data);
+      if (response.statusCode == 200) {
+        print("sucessfully accepted");
+        rejectLoading.value = false;
+        return true;
+      } else {
+        print(response.body);
+        var jsonResponse = json.decode(response.body);
+        String errorMessage = jsonResponse['message'];
+        rejectError["message"] = errorMessage;
+        rejectLoading.value = false;
+        return false;
+      }
+    } catch ($e) {
+      print($e.toString());
+      rejectLoading.value = false;
       return false;
     }
   }

@@ -51,8 +51,9 @@ class Jobcontroller extends GetxController {
         print("Successfully posted a job");
         print(response.body);
         return true;
-      } else
+      } else {
         (print(response.body));
+      }
       return false;
     } catch ($e) {
       print("Failed");

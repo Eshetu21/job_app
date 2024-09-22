@@ -6,15 +6,15 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 
-class PrivateAccept extends StatefulWidget {
+class CompanyReject extends StatefulWidget {
   final Map application;
-  const PrivateAccept({super.key, required this.application});
+  const CompanyReject({super.key, required this.application});
 
   @override
-  State<PrivateAccept> createState() => _PrivateAcceptState();
+  State<CompanyReject> createState() => _CompanyRejectState();
 }
 
-class _PrivateAcceptState extends State<PrivateAccept> {
+class _CompanyRejectState extends State<CompanyReject> {
   final PrivateclientController _privateclientController =
       Get.put(PrivateclientController());
   final TextEditingController _statementController = TextEditingController();
@@ -22,16 +22,16 @@ class _PrivateAcceptState extends State<PrivateAccept> {
     bool hasError = false;
     if (_statementController.text.trim().isEmpty) {
       hasError = true;
-      _privateclientController.acceptError["empty"] = "statement is required";
+      _privateclientController.rejectError["empty"] = "statement is required";
     }
     if (!hasError) {
       int appId = widget.application["application_id"];
       int jobId = widget.application["job"]["id"];
-      bool verifyAcceptance = await _privateclientController.acceptApplication(
+      bool verifyRejection = await _privateclientController.rejectApplication(
           jobId: jobId, appId: appId, statement: _statementController.text);
-      if (verifyAcceptance) {
+      if (verifyRejection) {
         Fluttertoast.showToast(
-            msg: "Sucessfully Accepted",
+            msg: "Rejected",
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.TOP,
             timeInSecForIosWeb: 4,
@@ -45,7 +45,7 @@ class _PrivateAcceptState extends State<PrivateAccept> {
 
   @override
   void dispose() {
-    _privateclientController.acceptError.clear();
+    _privateclientController.rejectError.clear();
     super.dispose();
   }
 
@@ -57,12 +57,12 @@ class _PrivateAcceptState extends State<PrivateAccept> {
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         child: Obx(() {
-          String? emptyError = _privateclientController.acceptError["empty"];
-          String? Error = _privateclientController.acceptError["message"];
+          String? emptyError = _privateclientController.rejectError["empty"];
+          String? Error = _privateclientController.rejectError["message"];
           return Column(
             children: [
               Text(
-                  "Write a response indicating that the job posting has been accepted.",
+                  "Write a reason indicating that the job posting has been rejected.",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       color: Color(0xFF524B6B), fontWeight: FontWeight.bold)),
@@ -92,7 +92,7 @@ class _PrivateAcceptState extends State<PrivateAccept> {
               Obx(() {
                 return GestureDetector(
                   onTap: () {
-                    _privateclientController.acceptError.clear();
+                    _privateclientController.rejectError.clear();
                     validateAndSubmit();
                   },
                   child: Container(
@@ -103,7 +103,7 @@ class _PrivateAcceptState extends State<PrivateAccept> {
                       color: Color(0xFF130160),
                     ),
                     child: Center(
-                        child: _privateclientController.acceptLoading.value
+                        child: _privateclientController.rejectLoading.value
                             ? Center(
                                 child: CircularProgressIndicator(
                                 color: Colors.white,

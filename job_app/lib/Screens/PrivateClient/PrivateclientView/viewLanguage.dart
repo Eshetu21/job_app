@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:job_app/Controllers/JobSeeker/language_controller.dart';
 import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 
 class ViewLanguage extends StatefulWidget {
