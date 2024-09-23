@@ -70,7 +70,10 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                                     children: [
                                       if (_profileController.isloading.value)
                                         Center(
-                                            child: CircularProgressIndicator())
+                                            child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          strokeAlign: -5,
+                                        ))
                                       else ...[
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -79,7 +82,9 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                                               alignment: Alignment.topLeft,
                                               child: Text("My Accounts",
                                                   style: GoogleFonts.poppins(
-                                                      fontSize: 22,fontWeight: FontWeight.bold))),
+                                                      fontSize: 22,
+                                                      fontWeight:
+                                                          FontWeight.bold))),
                                         ),
                                         if (_profileController
                                                 .profiles["jobseeker"] !=
@@ -176,9 +181,13 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                                                     "assets/icons/company.png",
                                                     width: 28,
                                                     color: Color(0xFFFF9228)),
-                                                title: Text(_profileController
-                                                        .profiles['company']
-                                                    ['company_name'],style: GoogleFonts.poppins(fontWeight:FontWeight.w500)),
+                                                title: Text(
+                                                    _profileController
+                                                            .profiles['company']
+                                                        ['company_name'],
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
                                                 subtitle: Text("Company"),
                                                 trailing: Radio(
                                                   value: 'company',

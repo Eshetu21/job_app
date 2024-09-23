@@ -154,7 +154,7 @@ class UserController extends Controller
 
             ], 400);
         }
-      
+
         if ((int)$pin === (int)$user->pincode) {
 
             $user->update(["pincode" => null, "pincode_expire" => Carbon::now()->format('Uu') - 1000, "email_verified" => true]);
@@ -180,7 +180,9 @@ class UserController extends Controller
         $user = User::whereemail($request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                "error" => "Invalid Credientials"
+                "errors" => [
+                    "email" => ["Invalid email or password"]
+                ]
             ], 401);
         }
 

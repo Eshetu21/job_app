@@ -61,7 +61,11 @@ class _ExplorePageState extends State<ExplorePage> {
                 future: _jobcontroller.getJobs(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      strokeAlign: -5,
+                    ));
                   }
                   if (_jobcontroller.alljobs.isEmpty) {
                     return Center(

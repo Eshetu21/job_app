@@ -214,7 +214,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         child: Center(
                           child: _userAuthenticationController
                                   .otpVerifyLoading.value
-                              ? CircularProgressIndicator()
+                              ? CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  strokeAlign: -5,
+                                  color: Colors.white,
+                                )
                               : Text("Verify",
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,

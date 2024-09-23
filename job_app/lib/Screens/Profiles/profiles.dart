@@ -33,133 +33,77 @@ class _ProfilesState extends State<Profiles> {
     return Scaffold(
       body: SafeArea(
           child: FutureBuilder(
-            future: _profileController.fetchProfiles(),
-            builder: (context, snapshot) {
-              return Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Obx(() {
-              return Center(
-                  child: _profileController.isloading.value
-                      ? CircularProgressIndicator()
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              future: _profileController.fetchProfiles(),
+              builder: (context, snapshot) {
+                return Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Obx(() {
+                    return Center(
+                        child: _profileController.isloading.value
+                            ? CircularProgressIndicator(
+                                strokeWidth: 2,
+                                strokeAlign: -5,
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("My Accounts",
-                                      style: GoogleFonts.poppins(
-                                          color: Color(0xFF0D0140),
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w600)),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _userAuthenticationController.logout();
-                                    },
+                                  Container(
+                                    margin: EdgeInsets.all(15),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Icon(
-                                          Icons.logout_outlined,
-                                          color: Color(0xFF130160),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
+                                        Text("My Accounts",
+                                            style: GoogleFonts.poppins(
+                                                color: Color(0xFF0D0140),
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.w600)),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _userAuthenticationController
+                                                .logout();
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.logout_outlined,
+                                                color: Color(0xFF130160),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                child: Text("LOG OUT",
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Color(0xFF130160))),
+                                              ),
+                                            ],
                                           ),
-                                          child: Text("LOG OUT",
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0xFF130160))),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            if (_profileController.profiles['jobseeker'] != null)
-                              _profileContainer(
-                                  ListTile(
-                                    leading: Image.asset(
-                                        "assets/icons/job_seeker.png",
-                                        width: 23,
-                                        color: Color(0xFFFF9228)),
-                                    title: Text(
-                                        _profileController.profiles['jobseeker']
-                                                ['user']['firstname'] +
-                                            " " +
-                                            _profileController.profiles['jobseeker']
-                                                ['user']['lastname']),
-                                    subtitle: Text("Job Seeker"),
-                                    trailing: Radio(
-                                        value: 'jobseeker',
-                                        groupValue: selectedProfile,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedProfile = value.toString();
-                                          });
-                                        }),
-                                  ),
-                                  "jobseeker"),
-                            if (_profileController.profiles['privateclient'] !=
-                                null)
-                              _profileContainer(
-                                  ListTile(
-                                    leading: Image.asset("assets/icons/private.png",
-                                        width: 28,
-                                        color: Color(0xFFFF9228)),
-                                    title: Text(_profileController
-                                                .profiles['privateclient']['user']
-                                            ['firstname'] +
-                                        " " +
-                                        _profileController.profiles['privateclient']
-                                            ['user']['lastname']),
-                                    subtitle: Text("Private Client"),
-                                    trailing: Radio(
-                                        value: 'private',
-                                        groupValue: selectedProfile,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedProfile = value.toString();
-                                          });
-                                        }),
-                                  ),
-                                  "privateclient"),
-                            if (_profileController.profiles['company'] != null)
-                              _profileContainer(
-                                  ListTile(
-                                    leading: Image.asset("assets/icons/company.png",
-                                        width: 28,
-                                        color: Color(0xFFFF9228)),
-                                    title: Text(_profileController
-                                        .profiles["company"]["company_name"]),
-                                    subtitle: Text("Company"),
-                                    trailing: Radio(
-                                        value: 'company',
-                                        groupValue: selectedProfile,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedProfile = value.toString();
-                                          });
-                                        }),
-                                  ),
-                                  "company"),
-                            if (showAddAcount)
-                              Column(
-                                children: [
-                                  if (_profileController.profiles['jobseeker'] ==
+                                  if (_profileController
+                                          .profiles['jobseeker'] !=
                                       null)
                                     _profileContainer(
                                         ListTile(
                                           leading: Image.asset(
                                               "assets/icons/job_seeker.png",
                                               width: 23,
-                                              color: Color(0xFFFF9228)
-                                                  .withOpacity(0.4)),
-                                          title: Text("Job Seeker"),
-                                          subtitle: Text("Add account"),
+                                              color: Color(0xFFFF9228)),
+                                          title: Text(_profileController
+                                                      .profiles['jobseeker']
+                                                  ['user']['firstname'] +
+                                              " " +
+                                              _profileController
+                                                      .profiles['jobseeker']
+                                                  ['user']['lastname']),
+                                          subtitle: Text("Job Seeker"),
                                           trailing: Radio(
                                               value: 'jobseeker',
                                               groupValue: selectedProfile,
@@ -172,17 +116,22 @@ class _ProfilesState extends State<Profiles> {
                                         ),
                                         "jobseeker"),
                                   if (_profileController
-                                          .profiles['privateclient'] ==
+                                          .profiles['privateclient'] !=
                                       null)
                                     _profileContainer(
                                         ListTile(
                                           leading: Image.asset(
                                               "assets/icons/private.png",
                                               width: 28,
-                                              color: Color(0xFFFF9228)
-                                                  ),
-                                          title: Text("Private Client"),
-                                          subtitle: Text("Add account"),
+                                              color: Color(0xFFFF9228)),
+                                          title: Text(_profileController
+                                                      .profiles['privateclient']
+                                                  ['user']['firstname'] +
+                                              " " +
+                                              _profileController
+                                                      .profiles['privateclient']
+                                                  ['user']['lastname']),
+                                          subtitle: Text("Private Client"),
                                           trailing: Radio(
                                               value: 'private',
                                               groupValue: selectedProfile,
@@ -194,17 +143,18 @@ class _ProfilesState extends State<Profiles> {
                                               }),
                                         ),
                                         "privateclient"),
-                                  if (_profileController.profiles['company'] ==
+                                  if (_profileController.profiles['company'] !=
                                       null)
                                     _profileContainer(
                                         ListTile(
                                           leading: Image.asset(
                                               "assets/icons/company.png",
                                               width: 28,
-                                              color: Color(0xFFFF9228)
-                                                  ),
-                                          title: Text("Company"),
-                                          subtitle: Text("Add account"),
+                                              color: Color(0xFFFF9228)),
+                                          title: Text(_profileController
+                                                  .profiles["company"]
+                                              ["company_name"]),
+                                          subtitle: Text("Company"),
                                           trailing: Radio(
                                               value: 'company',
                                               groupValue: selectedProfile,
@@ -216,90 +166,170 @@ class _ProfilesState extends State<Profiles> {
                                               }),
                                         ),
                                         "company"),
-                                ],
-                              ),
-                            if (_profileController.profiles['jobseeker'] == null ||
-                                _profileController.profiles['privateclient'] ==
-                                    null ||
-                                _profileController.profiles['company'] == null)
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    showAddAcount = !showAddAcount;
-                                  });
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.all(20),
-                                  child: Center(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 80, vertical: 10),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          color: Colors.grey.withOpacity(0.2)),
-                                      child: Text(
-                                          showAddAcount
-                                              ? "My Accounts"
-                                              : "Add Account",
-                                          style: GoogleFonts.poppins(
-                                              color: Color(0xFF130160),
-                                              fontWeight: FontWeight.w500)),
+                                  if (showAddAcount)
+                                    Column(
+                                      children: [
+                                        if (_profileController
+                                                .profiles['jobseeker'] ==
+                                            null)
+                                          _profileContainer(
+                                              ListTile(
+                                                leading: Image.asset(
+                                                    "assets/icons/job_seeker.png",
+                                                    width: 23,
+                                                    color: Color(0xFFFF9228)
+                                                        .withOpacity(0.4)),
+                                                title: Text("Job Seeker"),
+                                                subtitle: Text("Add account"),
+                                                trailing: Radio(
+                                                    value: 'jobseeker',
+                                                    groupValue: selectedProfile,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedProfile =
+                                                            value.toString();
+                                                      });
+                                                    }),
+                                              ),
+                                              "jobseeker"),
+                                        if (_profileController
+                                                .profiles['privateclient'] ==
+                                            null)
+                                          _profileContainer(
+                                              ListTile(
+                                                leading: Image.asset(
+                                                    "assets/icons/private.png",
+                                                    width: 28,
+                                                    color: Color(0xFFFF9228)),
+                                                title: Text("Private Client"),
+                                                subtitle: Text("Add account"),
+                                                trailing: Radio(
+                                                    value: 'private',
+                                                    groupValue: selectedProfile,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedProfile =
+                                                            value.toString();
+                                                      });
+                                                    }),
+                                              ),
+                                              "privateclient"),
+                                        if (_profileController
+                                                .profiles['company'] ==
+                                            null)
+                                          _profileContainer(
+                                              ListTile(
+                                                leading: Image.asset(
+                                                    "assets/icons/company.png",
+                                                    width: 28,
+                                                    color: Color(0xFFFF9228)),
+                                                title: Text("Company"),
+                                                subtitle: Text("Add account"),
+                                                trailing: Radio(
+                                                    value: 'company',
+                                                    groupValue: selectedProfile,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        selectedProfile =
+                                                            value.toString();
+                                                      });
+                                                    }),
+                                              ),
+                                              "company"),
+                                      ],
                                     ),
-                                  ),
-                                ),
-                              ),
-                            Spacer(),
-                            GestureDetector(
-                              onTap: () async {
-                                if (selectedProfile == 'jobseeker') {
-                                  Get.off(JobSeekerHomepage());
-                                }
-                                if (selectedProfile == "private") {
                                   if (_profileController
-                                          .profiles['privateclient'] ==
-                                      null) {
-                                    await _privateclientController
-                                        .createprivateclient();
-              
-                                    Get.off(PrivateClientHomepage());
-                                  } else {
-                                    Get.off(PrivateClientHomepage());
-                                  }
-                                }
-                                if (selectedProfile == "company") {
-                                  if (_profileController.profiles["company"] ==
-                                      null) {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => AddCompany()));
-                                  } else {
-                                    Get.offAll(CompanyHomepage());
-                                  }
-                                }
-                              },
-                              child: Center(
-                                child: Container(
-                                  margin: EdgeInsets.only(bottom: 40),
-                                  width: 266,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Color(0xFF130160),
-                                  ),
-                                  child: Center(
-                                    child: Text("Continue",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white)),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ));
-                      }),
-                    );
-            }
-          )),
+                                              .profiles['jobseeker'] ==
+                                          null ||
+                                      _profileController
+                                              .profiles['privateclient'] ==
+                                          null ||
+                                      _profileController.profiles['company'] ==
+                                          null)
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          showAddAcount = !showAddAcount;
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.all(20),
+                                        child: Center(
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 80, vertical: 10),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                color: Colors.grey
+                                                    .withOpacity(0.2)),
+                                            child: Text(
+                                                showAddAcount
+                                                    ? "My Accounts"
+                                                    : "Add Account",
+                                                style: GoogleFonts.poppins(
+                                                    color: Color(0xFF130160),
+                                                    fontWeight:
+                                                        FontWeight.w500)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  Spacer(),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      if (selectedProfile == 'jobseeker') {
+                                        Get.off(JobSeekerHomepage());
+                                      }
+                                      if (selectedProfile == "private") {
+                                        if (_profileController
+                                                .profiles['privateclient'] ==
+                                            null) {
+                                          await _privateclientController
+                                              .createprivateclient();
+
+                                          Get.off(PrivateClientHomepage());
+                                        } else {
+                                          Get.off(PrivateClientHomepage());
+                                        }
+                                      }
+                                      if (selectedProfile == "company") {
+                                        if (_profileController
+                                                .profiles["company"] ==
+                                            null) {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AddCompany()));
+                                        } else {
+                                          Get.offAll(CompanyHomepage());
+                                        }
+                                      }
+                                    },
+                                    child: Center(
+                                      child: Container(
+                                        margin: EdgeInsets.only(bottom: 40),
+                                        width: 266,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: Color(0xFF130160),
+                                        ),
+                                        child: Center(
+                                          child: Text("Continue",
+                                              style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white)),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ));
+                  }),
+                );
+              })),
     );
   }
 

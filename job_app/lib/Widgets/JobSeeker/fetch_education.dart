@@ -29,7 +29,11 @@ class _FetchEducationState extends State<FetchEducation> {
         future: _educationController.showeducation(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              strokeWidth: 2,
+              strokeAlign: -5,
+            ));
           }
           if (_educationController.educationDetails.isEmpty) {
             return Column(

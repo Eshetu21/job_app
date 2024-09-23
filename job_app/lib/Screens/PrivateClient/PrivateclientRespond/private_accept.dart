@@ -106,6 +106,8 @@ class _PrivateAcceptState extends State<PrivateAccept> {
                         child: _privateclientController.acceptLoading.value
                             ? Center(
                                 child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                strokeAlign: -5,
                                 color: Colors.white,
                               ))
                             : Text("Submit",

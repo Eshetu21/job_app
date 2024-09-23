@@ -28,14 +28,19 @@ class _FetchExperienceState extends State<FetchExperience> {
         future: _experienceController.showexperience(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              strokeWidth: 2,
+              strokeAlign: -5,
+            ));
           }
           if (_experienceController.experienceDetails.isEmpty) {
             return Column(
               children: [
                 Row(
                   children: [
-                    Text("Experience", style: GoogleFonts.poppins(fontSize: 18)),
+                    Text("Experience",
+                        style: GoogleFonts.poppins(fontSize: 18)),
                     Spacer(),
                     GestureDetector(
                       onTap: () {

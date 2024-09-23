@@ -74,24 +74,27 @@ class _PrivateApplicationsState extends State<PrivateApplications> {
                 return Center(
                     child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  strokeAlign: -6,
+                  strokeAlign: -5,
                 ));
               } else {
                 List filteredApplication = [];
                 if (selected == 0) {
-                  filteredApplication = _privateclientController.privateApplications
+                  filteredApplication = _privateclientController
+                      .privateApplications
                       .where(
                           (application) => application["status"] == "Pending")
                       .toList();
                 }
                 if (selected == 1) {
-                  filteredApplication = _privateclientController.privateApplications
+                  filteredApplication = _privateclientController
+                      .privateApplications
                       .where(
                           (application) => application["status"] == "Accepted")
                       .toList();
                 }
                 if (selected == 2) {
-                  filteredApplication = _privateclientController.privateApplications
+                  filteredApplication = _privateclientController
+                      .privateApplications
                       .where(
                           (application) => application["status"] == "Rejected")
                       .toList();
@@ -120,6 +123,7 @@ class _PrivateApplicationsState extends State<PrivateApplications> {
                     child: ListView.separated(
                         itemBuilder: (context, index) {
                           var applications = filteredApplication[index];
+                          print(applications);
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(

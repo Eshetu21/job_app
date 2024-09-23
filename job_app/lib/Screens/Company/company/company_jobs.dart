@@ -19,13 +19,18 @@ class _CompanyJobsState extends State<CompanyJobs> {
     super.initState();
     _companyController.fetchCompanyJob();
   }
+
   @override
   Widget build(BuildContext context) {
-    return  FutureBuilder(
-        future:_companyController.fetchCompanyJob(),
+    return FutureBuilder(
+        future: _companyController.fetchCompanyJob(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              strokeWidth: 2,
+              strokeAlign: -5,
+            ));
           }
           if (_companyController.companyJobs.isEmpty) {
             return Center(
@@ -58,9 +63,9 @@ class _CompanyJobsState extends State<CompanyJobs> {
                                     ),
                                   ),
                                   Spacer(),
-                                  Icon(Icons.timer,color: Colors.red,size: 20),
-                                  Text(
-                                      "${jobs["deadline"] ?? "Not Provided"}",
+                                  Icon(Icons.timer,
+                                      color: Colors.red, size: 20),
+                                  Text("${jobs["deadline"] ?? "Not Provided"}",
                                       style: GoogleFonts.poppins()),
                                 ],
                               ),

@@ -322,7 +322,10 @@ class _JobSeekerHomepageState extends State<JobSeekerHomepage> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return CircularProgressIndicator();
+                            return CircularProgressIndicator(
+                              strokeWidth: 2,
+                              strokeAlign: -5,
+                            );
                           } else if (snapshot.hasError) {
                             return Text("Error ${snapshot.error}");
                           } else if (snapshot.hasData) {

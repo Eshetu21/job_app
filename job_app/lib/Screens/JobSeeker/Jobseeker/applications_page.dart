@@ -63,11 +63,10 @@ class _ApplicationPageState extends State<ApplicationPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  strokeAlign: -6,
-                ),
-              );
+                  child: CircularProgressIndicator(
+                strokeWidth: 2,
+                strokeAlign: -5,
+              ));
             } else {
               List filteredApplication = [];
               if (selected == 0) {

@@ -168,7 +168,9 @@ class _JobSeekerApplyState extends State<JobSeekerApply> {
                         ),
                         child: Center(
                           child: _applyController.applyLoading.value
-                              ? CircularProgressIndicator(color: Colors.white)
+                              ?  CircularProgressIndicator(strokeWidth: 2,strokeAlign: -5,
+                                  color: Colors.white,
+                                )
                               : Text("Apply",
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,

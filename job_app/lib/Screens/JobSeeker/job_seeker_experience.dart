@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/experience_controller.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
-import 'package:job_app/Screens/JobSeeker/job_seeker_pic.dart';
+import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
 import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
 
 class JobSeekerExperience extends StatefulWidget {
@@ -152,7 +152,8 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                         return Center(
                           child: loading
                               ? CircularProgressIndicator(
-                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                  strokeAlign: -5,
                                 )
                               : Text("SAVE",
                                   style: GoogleFonts.poppins(
@@ -177,7 +178,7 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                     child: GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => JobSeekerPicture()));
+                            builder: (context) => JobSeekerHomepage()));
                       },
                       child: Container(
                         margin: EdgeInsets.only(bottom: 80),

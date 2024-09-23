@@ -23,22 +23,25 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _userAuthenticationController.logError.clear();
     _passwordController.clear();
+    _userAuthenticationController.logLoading.value = false;
   }
+
   bool _passVisible = false;
-  bool _isChecked = false;
 
   void validateAndLogin() {
     _userAuthenticationController.clearLogErrorMsg();
     bool hasError = false;
     if (_emailController.text.trim().isEmpty) {
       hasError = true;
-      _userAuthenticationController.logError["email"] = "*email is required";
+      _userAuthenticationController.logError["email1"] = "email is required";
     }
+
     if (_passwordController.text.isEmpty) {
       hasError = true;
       _userAuthenticationController.logError["password"] =
-          "*password is required";
+          "password is required";
     }
 
     if (!hasError) {
@@ -68,91 +71,96 @@ class _LoginPageState extends State<LoginPage> {
                     style: GoogleFonts.poppins(color: Color(0xFF524B6B))),
                 SizedBox(height: 50),
                 Obx(() {
-                  String? errorText =
-                      _userAuthenticationController.logError["email"];
-                  return TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      hintText: errorText == null ? "Email" : errorText,
-                      hintStyle: TextStyle(
-                          color: errorText == null
-                              ? Color(0xFF0D0140)
-                              : Colors.red,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontSize: errorText == null ? 16 : 12),
-                      prefixIcon: Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                    ),
-                  );
-                }),
-                SizedBox(height: 15),
-                Obx(() {
-                  String? errorText =
-                      _userAuthenticationController.logError["password"];
-                  return TextFormField(
-                    controller: _passwordController,
-                    obscureText: !_passVisible,
-                    decoration: InputDecoration(
-                      hintText: errorText == null ? "Password" : errorText,
-                      hintStyle: TextStyle(
-                          color: errorText == null
-                              ? Color(0xFF0D0140)
-                              : Colors.red,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontSize: errorText == null ? 16 : 12),
-                      prefixIcon: Icon(Icons.lock_outline),
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _passVisible = !_passVisible;
-                          });
-                        },
-                        child: Icon(
-                          _passVisible
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: Color(0xFF60778C),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          hintText: _userAuthenticationController
+                                      .logError["email1"] ==
+                                  null
+                              ? "Email"
+                              : _userAuthenticationController
+                                  .logError["email1"],
+                          hintStyle: TextStyle(
+                              color: _userAuthenticationController
+                                          .logError["email1"] ==
+                                      null
+                                  ? Color(0xFF0D0140)
+                                  : Colors.red,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              fontSize: _userAuthenticationController
+                                          .logError["email1"] ==
+                                      null
+                                  ? 16
+                                  : 12),
+                          prefixIcon: Icon(Icons.email_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
                         ),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                    ),
+                    ],
                   );
                 }),
                 SizedBox(height: 15),
                 Obx(() {
-                  if (_userAuthenticationController.logError['general'] !=
-                      null) {
-                    return Text(
-                      _userAuthenticationController.logError['general']!,
-                      style: GoogleFonts.poppins(color: Colors.red),
-                    );
-                  }
-                  return Container();
+                  String? passwordError =
+                      _userAuthenticationController.logError["password"];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: !_passVisible,
+                        decoration: InputDecoration(
+                          hintText: passwordError == null
+                              ? "Password"
+                              : passwordError,
+                          hintStyle: TextStyle(
+                              color: passwordError == null
+                                  ? Color(0xFF0D0140)
+                                  : Colors.red,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                              fontSize: passwordError == null ? 16 : 12),
+                          prefixIcon: Icon(Icons.lock_outline),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _passVisible = !_passVisible;
+                              });
+                            },
+                            child: Icon(
+                              _passVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: Color(0xFF60778C),
+                            ),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                      ),
+                      if (_userAuthenticationController.logError["email"] !=
+                          null)
+                        Center(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(top: 10.0, right: 8.0),
+                            child: Text(
+                              _userAuthenticationController.logError["email"]!,
+                              style: TextStyle(color: Colors.red, fontSize: 12),
+                            ),
+                          ),
+                        )
+                    ],
+                  );
                 }),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Transform.scale(
-                      scale: 0.7,
-                      child: Checkbox(
-                        value: _isChecked,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _isChecked = !_isChecked;
-                          });
-                        },
-                        checkColor: Color(0xFF0D0140),
-                        activeColor: Color(0xFFE6E1FF),
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                    ),
-                    Text("Remember me",
-                        style: GoogleFonts.poppins(
-                            fontSize: 12, color: Color(0xFFAAA6B9))),
-                    Spacer(),
                     TextButton(
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -164,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (content) => ForgotPassword()));
-                                _passwordController.clear();
+                        _passwordController.clear();
                       },
                       child: Text(
                         "Forgot password?",
@@ -176,7 +184,10 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 25),
                 Obx(() {
                   return _userAuthenticationController.logLoading.value
-                      ? const CircularProgressIndicator()
+                      ? const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          strokeAlign: -5,
+                        )
                       : GestureDetector(
                           onTap: validateAndLogin,
                           child: Container(

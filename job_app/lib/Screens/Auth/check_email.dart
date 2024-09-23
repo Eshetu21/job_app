@@ -113,7 +113,9 @@ class _CheckEmailState extends State<CheckEmail> {
                               color: Color(0xFFD6CDFE)),
                           child: _userAuthenticationController
                                   .otpVerifyLoading.value
-                              ? Center(child: CircularProgressIndicator())
+                              ? Center(child:  CircularProgressIndicator(strokeWidth: 2,strokeAlign: -5,
+                                  color: Colors.white,
+                                ))
                               : Center(
                                   child: Text("Verify",
                                       style: GoogleFonts.poppins(

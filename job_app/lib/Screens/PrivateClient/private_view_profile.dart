@@ -22,6 +22,7 @@ class _PrivateViewProfileState extends State<PrivateViewProfile> {
       Get.put(PrivateclientController());
   @override
   Widget build(BuildContext context) {
+    print("jobseeker id: ${widget.applicant["jobseeker"]["id"]}");
     _privateclientController.getJobSeeker(
         jobSeekerId: widget.applicant["jobseeker"]["id"]);
     return Scaffold(

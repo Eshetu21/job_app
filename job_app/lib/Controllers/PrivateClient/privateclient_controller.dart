@@ -164,15 +164,15 @@ class PrivateclientController extends GetxController {
         "Authorization": "Bearer $token"
       });
       if (response.statusCode == 200) {
-        var responseData = json.decode(response.body);
+        /* var responseData = json.decode(response.body);
         privateGetJobseeker.value = responseData;
-        // print("private jobseeker $privateGetJobseeker");
+       //  print("private jobseeker $privateGetJobseeker");
         getJobseekerEducation.value =
             privateGetJobseeker["jobseeker"]["educations"];
-        //  print("jobseeker Education $getJobseekerEducation");
+       //  print("jobseeker Education $getJobseekerEducation");
         getJobseekerExperience.value =
             privateGetJobseeker["jobseeker"]["experiences"] ?? [];
-        //  print("jobseeker Experience $getJobseekerExperience");
+        // print("jobseeker Experience $getJobseekerExperience");
         final List<dynamic> skillObjects =
             privateGetJobseeker["jobseeker"]["skills"];
         skills.value = skillObjects.map((skillObjects) {
@@ -182,7 +182,7 @@ class PrivateclientController extends GetxController {
             privateGetJobseeker["jobseeker"]["languages"];
         languages.value = languageObjects.map((languageObjects) {
           return languageObjects["languages"];
-        }).toList();
+        }).toList(); */
       } else {
         print("failed ${response.body}");
       }

@@ -75,7 +75,6 @@ class UserAuthenticationController extends GetxController {
         regError.value = errors.map((key, value) {
           return MapEntry(key, (value as List<dynamic>).join(' '));
         });
-        await Future.delayed(Duration(seconds: 2));
         regLoading.value = false;
         return false;
       } else {
@@ -83,11 +82,15 @@ class UserAuthenticationController extends GetxController {
         regError.clear();
         responseData['errors'].forEach((key, value) {
           regError[key] = value[0];
+          var passwordError = json.decode(response.body)["errors"]["password"];
+          if (passwordError is List) {
+            regError["password"] = passwordError.join(', ');
+          } else {
+            regError["password"] = passwordError;
+          }
           print(" backend $regError");
         });
-        regLoading.value = false;
-        print(response.body);
-        await Future.delayed(Duration(seconds: 2));
+
         regLoading.value = false;
         return false;
       }
@@ -135,11 +138,23 @@ class UserAuthenticationController extends GetxController {
         print(token);
         print('Login successful');
         print(userId);
-      } else if (response.statusCode == 401) {
+      } else {
         logError.clear();
-        logError["general"] = "Invalid credentials";
+        var emailError = json.decode(response.body)["errors"]["email"];
+        var passwordError = json.decode(response.body)["errors"]["password"];
+        print(emailError);
+        print(passwordError);
+        if (emailError is List) {
+          logError["email"] = emailError.join(', ');
+        } else {
+          logError["email"] = emailError;
+          if (passwordError is List) {
+            logError["password"] = passwordError.join(', ');
+          } else {
+            logError["password"] = passwordError;
+          }
+        }
         logLoading.value = false;
-        print('Invalid credentials');
       }
     } catch (e) {
       logLoading.value = false;

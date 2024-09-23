@@ -32,7 +32,11 @@ class _PrivateProfileState extends State<PrivateProfile> {
                 future: _profileController.fetchProfiles(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      strokeAlign: -5,
+                    ));
                   }
                   if (snapshot.hasError) {
                     return Center(child: Text("Error"));

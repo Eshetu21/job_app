@@ -34,7 +34,11 @@ class _PrivateJobsState extends State<PrivateJobs> {
         future: _privateclientController.getPrivateJobs(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              strokeWidth: 2,
+              strokeAlign: -5,
+            ));
           }
           if (_privateclientController.privatejobs.isEmpty) {
             return Center(
@@ -78,8 +82,7 @@ class _PrivateJobsState extends State<PrivateJobs> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(Icons.timer,
-                                              color: Colors.red, size: 20),
+                                          Text("Deadline: ",style: GoogleFonts.poppins(fontWeight: FontWeight.w500)),
                                           Text(
                                               "${jobs["deadline"] ?? "Not Provided"}",
                                               style: GoogleFonts.poppins()),

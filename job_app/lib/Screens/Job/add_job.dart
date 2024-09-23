@@ -174,7 +174,8 @@ class _AddJobState extends State<AddJob> {
                           return Center(
                             child: _jobcontroller.sucess.value
                                 ? CircularProgressIndicator(
-                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                    strokeAlign: -5,
                                   )
                                 : Text("POST",
                                     style: GoogleFonts.poppins(

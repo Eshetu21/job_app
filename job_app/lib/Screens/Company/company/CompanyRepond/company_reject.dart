@@ -105,9 +105,9 @@ class _CompanyRejectState extends State<CompanyReject> {
                     child: Center(
                         child: _privateclientController.rejectLoading.value
                             ? Center(
-                                child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ))
+                                child:  CircularProgressIndicator(strokeWidth: 2,strokeAlign: -5,
+                                  color: Colors.white,
+                                ))
                             : Text("Submit",
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,

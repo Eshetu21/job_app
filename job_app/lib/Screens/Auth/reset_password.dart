@@ -198,6 +198,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                         _userAuthenticationController.passwordResetLoading.value
                             ? Center(
                                 child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                strokeAlign: -5,
                                 color: Colors.white,
                               ))
                             : Center(

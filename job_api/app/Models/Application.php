@@ -11,7 +11,7 @@ class Application extends Model
 
     protected $fillable = [
         'job_id',
-        'user_id',
+        'jobseeker_id',
         'status',
         'statement',
         'cover_letter',
@@ -22,7 +22,7 @@ class Application extends Model
         return $this->belongsTo(Job::class);
     }
     public function jobseeker(){
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class,'jobseeker_id');
     }
     
 }

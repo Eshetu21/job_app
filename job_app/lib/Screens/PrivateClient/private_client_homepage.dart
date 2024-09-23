@@ -71,7 +71,10 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                     children: [
                                       if (_profileController.isloading.value)
                                         Center(
-                                            child: CircularProgressIndicator())
+                                            child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          strokeAlign: -5,
+                                        ))
                                       else ...[
                                         Padding(
                                           padding: const EdgeInsets.only(

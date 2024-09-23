@@ -60,6 +60,7 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
     }
 
     if (!hasError) {
+      _userAuthenticationController.verifyEmailError.clear();
       int otpcode;
       _userAuthenticationController.otpVerifyLoading.value = true;
       otpcode = int.parse(_otpController.text.trim());
@@ -72,6 +73,12 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
         navigateBasedOnProfile();
       }
     }
+  }
+
+  @override
+  void initState() {
+    _userAuthenticationController.verifyEmailError.clear();
+    super.initState();
   }
 
   @override
@@ -100,9 +107,13 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                 Column(
                   children: [
                     Text(
-                      textAlign:TextAlign.center,
-                      "You need to verify your email in order to use the app. We have sent a code to your email",
-                        style: GoogleFonts.poppins(color: Color(0xFF524B6B))),Text(widget.email,style: GoogleFonts.poppins(fontWeight: FontWeight.bold),),
+                        textAlign: TextAlign.center,
+                        "You need to verify your email in order to use the app. We have sent a code to your email",
+                        style: GoogleFonts.poppins(color: Color(0xFF524B6B))),
+                    Text(
+                      widget.email,
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -189,7 +200,7 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                         child: Center(
                           child: _userAuthenticationController
                                   .otpVerifyLoading.value
-                              ? CircularProgressIndicator(
+                              ? CircularProgressIndicator(strokeWidth: 2,strokeAlign: -5,
                                   color: Colors.white,
                                 )
                               : Text("Verify",
@@ -210,37 +221,47 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                                     color: Color(0xFF524B6B)),
                               ),
                               TextButton(
-                                  onPressed: () async {
-                                    if (!isCountdownActive) {
-                                      startCountdown();
-                                      bool sendPinSucess =
-                                          await _userAuthenticationController
-                                              .sendpin();
-                                      if (sendPinSucess) {
-                                        Fluttertoast.showToast(
-                                          msg:
-                                              "Check your email, we have sent a code",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.TOP,
-                                          timeInSecForIosWeb: 4,
-                                          backgroundColor: Color(0xFF130160),
-                                          textColor: Colors.white,
-                                          fontSize: 16.0,
-                                        );
-                                      }
+                                onPressed: () async {
+                                  _userAuthenticationController.verifyOTPError
+                                      .clear();
+                                  _otpController.clear();
+                                  setState(() {});
+
+                                  if (!isCountdownActive) {
+                                    startCountdown();
+
+                                    bool sendPinSuccess =
+                                        await _userAuthenticationController
+                                            .sendpin();
+                                    if (sendPinSuccess) {
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            "Check your email, we have sent a code",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.TOP,
+                                        timeInSecForIosWeb: 4,
+                                        backgroundColor: Color(0xFF130160),
+                                        textColor: Colors.white,
+                                        fontSize: 16.0,
+                                      );
                                     }
-                                  },
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    splashFactory: NoSplash.splashFactory,
+                                  }
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  splashFactory: NoSplash.splashFactory,
+                                ),
+                                child: Text(
+                                  verifyText,
+                                  style: GoogleFonts.poppins(
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: Color(0xFFFF9228),
+                                    color: Color(0xFFFF9228),
                                   ),
-                                  child: Text(verifyText,
-                                      style: GoogleFonts.poppins(
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: Color(0xFFFF9228),
-                                          color: Color(0xFFFF9228)))),
+                                ),
+                              )
                             ],
                           )
                         : SizedBox(height: 8),

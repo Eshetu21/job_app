@@ -77,7 +77,11 @@ class _FetchSkillState extends State<FetchSkill> {
                 future: _skillController.showskills(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      strokeAlign: -5,
+                    ));
                   }
                   return Container(
                     alignment: Alignment.centerLeft,

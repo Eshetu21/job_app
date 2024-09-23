@@ -28,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _userAuthenticationController.clearRegErrorMsg();
     loadDatas();
   }
-  
+
   Future<void> loadDatas() async {
     final cities = await rootBundle.loadString("assets/json/cities.json");
     var ci = json.decode(cities);
@@ -51,24 +51,24 @@ class _RegisterPageState extends State<RegisterPage> {
     bool hasError = false;
     if (_firstnameController.text.trim().isEmpty) {
       hasError = true;
-      _userAuthenticationController.regError["firstname"] =
-          "*firstname required";
+      _userAuthenticationController.regError["firstname1"] =
+          "firstname required";
     }
     if (_lastnameController.text.trim().isEmpty) {
       hasError = true;
-      _userAuthenticationController.regError["lastname"] = "*lastname required";
+      _userAuthenticationController.regError["lastname1"] = "lastname required";
     }
     if (_emailController.text.trim().isEmpty) {
       hasError = true;
-      _userAuthenticationController.regError["email1"] = "*email required";
+      _userAuthenticationController.regError["email1"] = "email required";
     }
     if (_passwordController.text.isEmpty) {
       hasError = true;
-      _userAuthenticationController.regError["password"] = "*password required";
+      _userAuthenticationController.regError["password1"] = "password required";
     }
     if (_addressController.text.trim().isEmpty) {
       hasError = true;
-      _userAuthenticationController.regError["address"] = "*address required";
+      _userAuthenticationController.regError["address1"] = "address required";
     }
     /* if (_confirmPasswordController.text.trim().isEmpty) {
       hasError = true;
@@ -82,31 +82,13 @@ class _RegisterPageState extends State<RegisterPage> {
       hasError = true;
     } */
     if (!hasError) {
-      bool registrationSuccess = await _userAuthenticationController.register(
+      await _userAuthenticationController.register(
           firstname: _firstnameController.text.trim(),
           lastname: _lastnameController.text.trim(),
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
           address: _addressController.text.trim());
-
       _userAuthenticationController.regLoading.value = false;
-      if (registrationSuccess) {
-         Fluttertoast.showToast(
-          msg: "Sucessfully registerd",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 4,
-          backgroundColor: Color(0xFF130160),
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-        print("Registration Sucess");
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Registration failed. Please try again."),
-          backgroundColor: Colors.red,
-        ));
-      }
     }
   }
 
@@ -128,9 +110,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(color: Color(0xFF524B6B))),
             SizedBox(height: 20),
+            Row(),
             Obx(() {
               String? errorText =
-                  _userAuthenticationController.regError["firstname"];
+                  _userAuthenticationController.regError["firstname1"];
               return TextFormField(
                 controller: _firstnameController,
                 decoration: InputDecoration(
@@ -148,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(height: 8),
             Obx(() {
               String? errorText =
-                  _userAuthenticationController.regError["lastname"];
+                  _userAuthenticationController.regError["lastname1"];
               return TextFormField(
                 controller: _lastnameController,
                 decoration: InputDecoration(
@@ -174,13 +157,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                        hintText: errorText1 == null ? "Email" : errorText,
+                        hintText: errorText1 == null ? "Email" : errorText1,
                         hintStyle: TextStyle(
-                            color: errorText == null
+                            color: errorText1 == null
                                 ? Color(0xFF0D0140)
                                 : Colors.red,
                             fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontSize: errorText == null ? 16 : 12),
+                            fontSize: errorText1 == null ? 16 : 12),
                         contentPadding: EdgeInsets.all(16),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(18))),
@@ -204,11 +187,16 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 8,
             ),
             Obx(() {
-              String? errorText =
-                  _userAuthenticationController.regError["address"];
+              String? errorTextad =
+                  _userAuthenticationController.regError["address1"];
               return DropdownButtonFormField(
                   decoration: InputDecoration(
-                      labelText: "City",
+                      hintText: errorTextad == null ? "City" : errorTextad,
+                      hintStyle: GoogleFonts.poppins(
+                          color: errorTextad == null
+                              ? Color(0xFF0D0140)
+                              : Colors.red,
+                          fontSize: errorTextad == null ? 16 : 12),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20))),
                   items: city
@@ -259,33 +247,53 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(height: 8),
             Obx(() {
               String? errorText =
+                  _userAuthenticationController.regError["password1"];
+              String? errorText1 =
                   _userAuthenticationController.regError["password"];
-              return TextFormField(
-                controller: _passwordController,
-                obscureText: !_passVisible,
-                decoration: InputDecoration(
-                    hintText: errorText == null ? "Password" : errorText,
-                    hintStyle: TextStyle(
-                        color:
-                            errorText == null ? Color(0xFF0D0140) : Colors.red,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        fontSize: errorText == null ? 16 : 12),
-                    contentPadding: EdgeInsets.all(16),
-                    suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _passVisible = !_passVisible;
-                          });
-                        },
-                        child: _passVisible
-                            ? Icon(
-                                Icons.visibility_outlined,
-                                color: Color(0xFF60778C),
-                              )
-                            : Icon(Icons.visibility_off_outlined,
-                                color: Color(0xFF60778C))),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(18))),
+              return Column(
+                children: [
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: !_passVisible,
+                    decoration: InputDecoration(
+                        hintText: errorText == null ? "Password" : errorText,
+                        hintStyle: TextStyle(
+                            color: errorText == null
+                                ? Color(0xFF0D0140)
+                                : Colors.red,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: errorText == null ? 16 : 12),
+                        contentPadding: EdgeInsets.all(16),
+                        suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _passVisible = !_passVisible;
+                              });
+                            },
+                            child: _passVisible
+                                ? Icon(
+                                    Icons.visibility_outlined,
+                                    color: Color(0xFF60778C),
+                                  )
+                                : Icon(Icons.visibility_off_outlined,
+                                    color: Color(0xFF60778C))),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18))),
+                  ),
+                  errorText1 != null
+                      ? Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Text(
+                                _userAuthenticationController
+                                    .regError["password"],
+                                style: GoogleFonts.poppins(
+                                    color: Colors.red, fontSize: 12)),
+                          ),
+                        )
+                      : Container()
+                ],
               );
             }),
             SizedBox(height: 8),
@@ -343,7 +351,10 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(height: 25),
             Obx(() {
               return _userAuthenticationController.regLoading.value
-                  ? CircularProgressIndicator()
+                  ? CircularProgressIndicator(
+                      strokeWidth: 2,
+                      strokeAlign: -5,
+                    )
                   : GestureDetector(
                       onTap: () {
                         validateAndRegister();

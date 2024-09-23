@@ -114,8 +114,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         child: Obx(() {
                           return _authenticationController.otpLoading.value
                               ? Center(
-                                  child: CircularProgressIndicator(
-                                      color: Colors.white))
+                                  child:  CircularProgressIndicator(strokeWidth: 2,strokeAlign: -5,
+                                  color: Colors.white,
+                                ))
                               : Center(
                                   child: Text("RESET PASSWORD",
                                       style: GoogleFonts.poppins(
@@ -123,25 +124,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                           color: Colors.white)),
                                 );
                         }),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        width: 266,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Color(0xFFD6CDFE)),
-                        child: Center(
-                          child: Text("BACK TO LOGIN",
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF130160))),
-                        ),
                       ),
                     ),
                   ],

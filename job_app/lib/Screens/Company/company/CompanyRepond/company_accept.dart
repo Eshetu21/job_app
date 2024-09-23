@@ -105,9 +105,9 @@ class _CompanyAcceptState extends State<CompanyAccept> {
                     child: Center(
                         child: _companyController.acceptLoading.value
                             ? Center(
-                                child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ))
+                                child: CircularProgressIndicator(strokeWidth: 2,strokeAlign: -5,
+                                  color: Colors.white,
+                                ))
                             : Text("Submit",
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,

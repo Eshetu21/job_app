@@ -73,7 +73,7 @@ class _CompanyApplicationsState extends State<CompanyApplications> {
                 return Center(
                     child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  strokeAlign: -6,
+                  strokeAlign: -5,
                 ));
               } else {
                 List filteredApplication = [];

@@ -152,7 +152,10 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                             _educationController.createEducationLoading.value;
                         return Center(
                           child: loading
-                              ? CircularProgressIndicator(color: Colors.white)
+                              ? CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  strokeAlign: -5,
+                                )
                               : Text("SAVE",
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,

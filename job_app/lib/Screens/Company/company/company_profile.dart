@@ -27,7 +27,11 @@ class _CompanyProfileState extends State<CompanyProfile> {
                 future: _companyController.fetchCompany(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      strokeAlign: -5,
+                    ));
                   }
                   if (snapshot.hasError) {
                     return Center(child: Text("Error"));
@@ -103,7 +107,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                 ],
                               ),
                             ]),
-                              Obx(() {
+                            Obx(() {
                               var filteredApplication = _companyController
                                   .companyApplications
                                   .where((application) =>
