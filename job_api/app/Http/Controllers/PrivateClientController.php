@@ -652,7 +652,8 @@ class PrivateClientController extends Controller
                     $allApplications[] = [
                         'application_id' => $application->id,
                         'job_title' => $job->title,
-                        'jobseeker' => $application->jobseeker->jobseeker,
+                        'jobseeker' => $application->jobseeker,
+                        'user' => $application->jobseeker->user,
                         'status' => $application->status,
                         'cover_letter' => url($application->cover_letter),
                         'cv' => url($application->cv),
