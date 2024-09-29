@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
 import 'package:job_app/Controllers/PrivateClient/privateclient_controller.dart';
 import 'package:job_app/Controllers/User/UserController.dart';
 import 'package:job_app/Controllers/Profile/ProfileController.dart';
@@ -10,6 +11,8 @@ import 'package:job_app/Screens/Company/add_company.dart';
 import 'package:job_app/Screens/Company/company_homepage.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
 import 'package:job_app/Screens/PrivateClient/private_client_homepage.dart';
+
+import '../JobSeeker/job_seeker_create.dart';
 
 class Profiles extends StatefulWidget {
   const Profiles({super.key});
@@ -24,6 +27,8 @@ class _ProfilesState extends State<Profiles> {
       Get.put(UserAuthenticationController());
   final PrivateclientController _privateclientController =
       Get.put(PrivateclientController());
+  final JobSeekerController _jobSeekerController =
+      Get.put(JobSeekerController());
   String selectedProfile = '';
   bool showAddAcount = false;
 
@@ -177,8 +182,7 @@ class _ProfilesState extends State<Profiles> {
                                                 leading: Image.asset(
                                                     "assets/icons/job_seeker.png",
                                                     width: 23,
-                                                    color: Color(0xFFFF9228)
-                                                        .withOpacity(0.4)),
+                                                    color: Color(0xFFFF9228)),
                                                 title: Text("Job Seeker"),
                                                 subtitle: Text("Add account"),
                                                 trailing: Radio(
@@ -279,7 +283,18 @@ class _ProfilesState extends State<Profiles> {
                                   GestureDetector(
                                     onTap: () async {
                                       if (selectedProfile == 'jobseeker') {
-                                        Get.off(JobSeekerHomepage());
+                                        if (_profileController
+                                                .profiles["jobseeker"] ==
+                                            null) {
+                                         await _jobSeekerController
+                                              .createjobseeker();
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      JobSeekerCreate()));
+                                        } else {
+                                          Get.off(JobSeekerHomepage());
+                                        }
                                       }
                                       if (selectedProfile == "private") {
                                         if (_profileController

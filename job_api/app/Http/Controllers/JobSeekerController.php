@@ -114,7 +114,7 @@ class JobSeekerController extends Controller
     {
         try {
             $user = $request->user();
-            $jobseeker = JobSeeker::with('user')->where('user_id', $user->id)->first();
+            $jobseeker = JobSeeker::with('user')->where('id', $user->jobseeker->id)->first();
             if (!$jobseeker) {
                 return response()->json([
                     "success" => false,
@@ -330,19 +330,19 @@ class JobSeekerController extends Controller
             $cv = $request->file('cv');
 
             $originalfilenamecv = $cv->getClientOriginalName();
-            $filename = time() . "-" . $user->id . "-" . $job->id . $originalfilenamecv;
+            $filename = time() . "-" . $user->jobseeker->id . "-" . $job->id . $originalfilenamecv;
             $cv->move(public_path('uploads/application/cv'), $filename);
             $cv =  'uploads/application/cv/' . $filename;
 
             $cover_letter = $request->file('cover_letter');
 
             $originalfilenamecl = $cover_letter->getClientOriginalName();
-            $filename = time() . "-" . $user->id . "-" . $job->id . $originalfilenamecl;
+            $filename = time() . "-" . $user->jobseeker->id . "-" . $job->id . $originalfilenamecl;
             $cover_letter->move(public_path('uploads/application/cover_letter'), $filename);
             $cover_letter =  'uploads/application/cover_letter/' . $filename;
             $application = Application::create([
                 'job_id' => $jobid,
-                'user_id' => $user->id,
+                'jobseeker_id' => $user->jobseeker->id,
                 'cover_letter' => $cover_letter,
                 'cv' => $cv
             ]);
@@ -397,7 +397,7 @@ class JobSeekerController extends Controller
                 ], 400);
             }
 
-            $application = Application::where(["user_id" => $user->id])
+            $application = Application::where(["jobseeker_id" => $user->jobseeker->id])
                 ->with('job')
                 ->get();
             if (!$application || $application->count() == 0) {
@@ -443,7 +443,7 @@ class JobSeekerController extends Controller
                     "message" => "Jobseeker not registered"
                 ], 400);
             }
-            $application = Application::where('user_id', $user->id)
+            $application = Application::where('jobseeker_id', $user->jobseeker->id)
                 ->where('id', $appid)
                 ->first();
             if (!$application) {
@@ -487,7 +487,7 @@ class JobSeekerController extends Controller
                     "message" => "Jobseeker not registered"
                 ], 400);
             }
-            $application = Application::where('user_id', $user->id)
+            $application = Application::where('jobseeker_id', $user->jobseeker->id)
                 ->where('id', $appid)
                 ->first();
             if (!$application) {

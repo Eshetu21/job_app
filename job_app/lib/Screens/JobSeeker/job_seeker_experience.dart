@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/experience_controller.dart';
+import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_homepage.dart';
 import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
@@ -21,6 +23,8 @@ class JobSeekerExperience extends StatefulWidget {
 }
 
 class _JobSeekerExperienceState extends State<JobSeekerExperience> {
+  final JobSeekerController _jobseekerController =
+      Get.put(JobSeekerController());
   final ExperienceController _experienceController =
       Get.put(ExperienceController());
   final TextEditingController _titleController = TextEditingController();
@@ -32,6 +36,7 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
   @override
   void initState() {
     super.initState();
+    _jobseekerController.getJobSeeker();
     if (widget.isediting && widget.experience != null) {
       _titleController.text = widget.experience?["exp_position_title"] ?? '';
       _companyController.text = widget.experience?["exp_company_name"] ?? '';
@@ -133,8 +138,20 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                             start: _startController.text.trim(),
                             end: _endController.text.trim(),
                             description: _descriptionController.text.trim());
+
                         if (sucess) {
-                          sucessfullyUpdated(context);
+                          Fluttertoast.showToast(
+                              msg: "Sucessfully added experience",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIosWeb: 4,
+                              backgroundColor: Color(0xFF130160),
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => JobSeekerHomepage()));
                         }
                       }
                     },
@@ -152,6 +169,7 @@ class _JobSeekerExperienceState extends State<JobSeekerExperience> {
                         return Center(
                           child: loading
                               ? CircularProgressIndicator(
+                                  color: Colors.white,
                                   strokeWidth: 2,
                                   strokeAlign: -5,
                                 )

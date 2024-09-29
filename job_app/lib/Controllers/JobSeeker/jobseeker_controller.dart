@@ -14,7 +14,6 @@ class JobSeekerController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    createjobseeker();
     getJobSeeker();
   }
 
@@ -25,11 +24,16 @@ class JobSeekerController extends GetxController {
   Future<void> createjobseeker() async {
     final response = await http.post(
       Uri.parse("${url}js/create"),
-      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token"
+      },
     );
     if (response.statusCode == 201) {
-      print("sucessfully created jobseeker profile");
+      print("sucessfully created jobseeker profileeeeeeeeeeeee");
     } else {
+      print(response.statusCode);
+      print(response.body);
       print("failed to created");
     }
   }
@@ -45,7 +49,7 @@ class JobSeekerController extends GetxController {
       box.write("jobseekerId", jobseekerId);
       return responseData;
     } else {
-      throw Exception("Failed to get jobseeker data");
+      return {"error": "Failed to retrieve job seeker data"};
     }
   }
 
@@ -59,8 +63,7 @@ class JobSeekerController extends GetxController {
   }
 
   Future updatejobseeker(
-      {
-      required String category,
+      {required String category,
       required String subCategory,
       String? cv,
       String? aboutMe,

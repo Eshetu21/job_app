@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:job_app/Controllers/JobSeeker/education_controller.dart';
+import 'package:job_app/Controllers/JobSeeker/jobseeker_controller.dart';
 import 'package:job_app/Screens/JobSeeker/Jobseeker/jobseeker_profile.dart';
 import 'package:job_app/Screens/JobSeeker/job_seeker_experience.dart';
 import 'package:job_app/Widgets/JobSeeker/build_text_form.dart';
@@ -21,6 +22,8 @@ class JobSeekerCreateSecond extends StatefulWidget {
 }
 
 class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
+  final JobSeekerController _jobseekerController =
+      Get.put(JobSeekerController());
   final EducationController _educationController =
       Get.put(EducationController());
   final TextEditingController _institutionController = TextEditingController();
@@ -34,6 +37,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
   @override
   void initState() {
     super.initState();
+    _jobseekerController.getJobSeeker();
     if (widget.isediting && widget.education != null) {
       _institutionController.text = widget.education?["school_name"] ?? '';
       _levelofeducation.text = widget.education?["education_level"] ?? '';
@@ -153,6 +157,7 @@ class _JobSeekerCreateSecondState extends State<JobSeekerCreateSecond> {
                         return Center(
                           child: loading
                               ? CircularProgressIndicator(
+                                  color: Colors.white,
                                   strokeWidth: 2,
                                   strokeAlign: -5,
                                 )

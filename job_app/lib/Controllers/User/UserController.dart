@@ -126,7 +126,7 @@ class UserAuthenticationController extends GetxController {
         logError.clear();
         if (json.decode(response.body)["message"]["email_verified"] == 1) {
           await _profileController.fetchProfiles();
-          navigateBasedOnProfile();
+          await navigateBasedOnProfile();
           logLoading.value = false;
         }
         if (json.decode(response.body)["message"]["email_verified"] == 0) {

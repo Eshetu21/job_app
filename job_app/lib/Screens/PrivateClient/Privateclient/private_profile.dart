@@ -70,13 +70,13 @@ class _PrivateProfileState extends State<PrivateProfile> {
                                       children: [
                                         Text(
                                             _profileController
-                                                    .profiles["jobseeker"]
+                                                    .profiles["privateclient"]
                                                 ["user"]["firstname"][0],
                                             style: GoogleFonts.poppins(
                                                 fontSize: 50)),
                                         Text(
                                             _profileController
-                                                    .profiles["jobseeker"]
+                                                    .profiles["privateclient"]
                                                 ["user"]["lastname"][0],
                                             style: GoogleFonts.poppins(
                                                 fontSize: 50)),
@@ -87,11 +87,11 @@ class _PrivateProfileState extends State<PrivateProfile> {
                                       ? Text("loading...")
                                       : Text(
                                           _profileController
-                                                      .profiles["jobseeker"]
+                                                      .profiles["privateclient"]
                                                   ["user"]["firstname"] +
                                               " " +
                                               _profileController
-                                                      .profiles["jobseeker"]
+                                                      .profiles["privateclient"]
                                                   ["user"]["lastname"],
                                           style: GoogleFonts.poppins(
                                               fontSize: 22)),
@@ -100,12 +100,13 @@ class _PrivateProfileState extends State<PrivateProfile> {
                                     children: [
                                       Icon(Icons.location_on_outlined,
                                           size: 18),
-                                      _profileController.profiles["jobseeker"]
+                                      _profileController
+                                                      .profiles["privateclient"]
                                                   ["user"]["address"] !=
                                               null
                                           ? Text(
                                               _profileController
-                                                      .profiles["jobseeker"]
+                                                      .profiles["privateclient"]
                                                   ["user"]["address"],
                                               style: GoogleFonts.poppins(
                                                   fontSize: 22),

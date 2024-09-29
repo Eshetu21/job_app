@@ -70,7 +70,7 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
       _userAuthenticationController.otpVerifyLoading.value = false;
       if (verifiedOTP) {
         await _profileController.fetchProfiles();
-        navigateBasedOnProfile();
+        await navigateBasedOnProfile();
       }
     }
   }
@@ -200,7 +200,9 @@ class _RegisterVerifyEmailState extends State<RegisterVerifyEmail> {
                         child: Center(
                           child: _userAuthenticationController
                                   .otpVerifyLoading.value
-                              ? CircularProgressIndicator(strokeWidth: 2,strokeAlign: -5,
+                              ? CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  strokeAlign: -5,
                                   color: Colors.white,
                                 )
                               : Text("Verify",

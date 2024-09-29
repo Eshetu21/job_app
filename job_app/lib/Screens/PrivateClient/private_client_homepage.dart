@@ -141,13 +141,13 @@ class _PrivateClientHomepageState extends State<PrivateClientHomepage> {
                                                 ),
                                                 title: Text(
                                                     _profileController.profiles[
-                                                                    'jobseeker']
+                                                                    'privateclient']
                                                                 ['user']
                                                             ['firstname'] +
                                                         " " +
                                                         _profileController
                                                                     .profiles[
-                                                                'jobseeker'][
+                                                                'privateclient'][
                                                             'user']['lastname'],
                                                     style: GoogleFonts.poppins(
                                                         fontWeight:
