@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Storage;
 
 class JobSeekerController extends Controller
 {
+     /**
+     * get all applicaton
+     * @response {
+     * "name": "eyob bm"}
+     */
+
     public function createjobseeker(Request $request)
     {
 
@@ -55,6 +61,12 @@ class JobSeekerController extends Controller
         }
     }
 
+     /**
+     * get all applicaton
+     * @response {
+     * "name": "eyob bm"}
+     */
+
     public function delete(Request $request)
     {
 
@@ -91,6 +103,12 @@ class JobSeekerController extends Controller
         ], 200);
     }
 
+     /**
+     * get all applicaton
+     * @response {
+     * "name": "eyob bm"}
+     */
+
 
     public function showjobseeker(Request $request)
     {
@@ -122,6 +140,12 @@ class JobSeekerController extends Controller
             ], 400);
         }
     }
+     /**
+     * get all applicaton
+     * @response {
+     * "name": "eyob bm"}
+     */
+
     public function updatejobseeker(Request $request)
     {
         try {
@@ -241,6 +265,12 @@ class JobSeekerController extends Controller
 
 
     // app
+     /**
+     * get all applicaton
+     * @response {
+     * "name": "eyob bm"}
+     */
+
     public function applyJob(Request $request, $jobid)
     {
         try {
@@ -278,7 +308,7 @@ class JobSeekerController extends Controller
                     ], 401);
                 }
             }
-            $application = Application::where(["job_id" => $jobid, "user_id" => $user->id])->first();
+            $application = Application::where(["job_id" => $jobid, "jobseeker_id" => $user->jobseeker->id])->first();
 
 
             if ($application) {
@@ -346,8 +376,15 @@ class JobSeekerController extends Controller
                 'line' => $e->getLine()
 
             ], 400);
+            
         }
     }
+    /**
+     * get all applicaton
+     * @response {
+     * "name": "eyob bm"}
+     */
+
     public function getApplications(Request $request)
     {
         try {
@@ -389,6 +426,12 @@ class JobSeekerController extends Controller
         }
     }
 
+     /**
+     * get all applicaton
+     * @response {
+     * "name": "eyob bm"}
+     */
+
 
     public function deleteApplication(Request $request, $appid)
     {
@@ -428,6 +471,12 @@ class JobSeekerController extends Controller
             ], 500);
         }
     }
+     /**
+     * get all applicaton
+     * @response {
+     * "name": "eyob bm"}
+     */
+
     public function getapplication(Request $request, $appid)
     {
         try {

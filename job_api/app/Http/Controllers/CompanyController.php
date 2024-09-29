@@ -193,7 +193,7 @@ class CompanyController extends Controller
             ], 400);
         }
     }
-    public function companycreatejob(Request $request)
+    public function companyCreateJob(Request $request)
     {
         try {
             $user = $request->user();
