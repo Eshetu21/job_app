@@ -34,6 +34,7 @@ class ApplyController extends GetxController {
       if (response.statusCode == 200) {
         applyLoading.value=false;
         print("Sucessfully applied");
+        print(responseData);
         return true;
       } else {
         var errorMessage = json.decode(responseData.body);

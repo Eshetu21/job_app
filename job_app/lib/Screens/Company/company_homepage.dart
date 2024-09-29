@@ -140,13 +140,13 @@ class _CompanyHomepageState extends State<CompanyHomepage> {
                                                     color: Color(0xFFFF9228)),
                                                 title: Text(
                                                     _profileController.profiles[
-                                                                    'jobseeker']
+                                                                    'privateclient']
                                                                 ['user']
                                                             ['firstname'] +
                                                         " " +
-                                                        _profileController
-                                                                    .profiles[
-                                                                'jobseeker'][
+                                                        _profileController.profiles[
+                                                                'privateclient']
+                                                            [
                                                             'user']['lastname'],
                                                     style: GoogleFonts.poppins(
                                                         fontWeight:

@@ -22,7 +22,6 @@ class _PrivateViewProfileState extends State<PrivateViewProfile> {
       Get.put(PrivateclientController());
   @override
   Widget build(BuildContext context) {
-    print("jobseeker id: ${widget.applicant["jobseeker"]["id"]}");
     _privateclientController.getJobSeeker(
         jobSeekerId: widget.applicant["jobseeker"]["id"]);
     return Scaffold(
@@ -61,9 +60,7 @@ class _PrivateViewProfileState extends State<PrivateViewProfile> {
               margin: EdgeInsets.symmetric(vertical: 10),
               child: Padding(
                   padding: EdgeInsets.all(15),
-                  child: ViewLanguage(
-                    applicant: widget.applicant
-                  )),
+                  child: ViewLanguage(applicant: widget.applicant)),
             ),
           ],
         ),

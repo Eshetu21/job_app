@@ -5,7 +5,7 @@ import 'package:job_app/Screens/Profiles/profiles.dart';
 
 final ProfileController _profileController = Get.put(ProfileController());
 
-void navigateBasedOnProfile() {
+Future<void> navigateBasedOnProfile() async {
   bool hasJobSeekerProfile = _profileController.profiles['jobseeker'] != null;
   bool hasPrivateClientProfile =
       _profileController.profiles['privateclient'] != null;

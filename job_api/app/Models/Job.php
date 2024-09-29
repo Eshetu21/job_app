@@ -17,8 +17,7 @@ class Job extends Model
         'sector',
         'city',
         'gender',
-        'salary',
-          
+        'salary',  
         'deadline',
         'description'
     ];
