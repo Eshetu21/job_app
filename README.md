@@ -11,7 +11,7 @@ The Job Portal App connects job seekers with employers, providing an efficient p
 
 Frontend: Flutter (Dart) <br/>
 State management with GetX. <br/>
-MySQL for local database management.<br/>
+MySQL for database management.<br/>
 Postman for API testing.<br/>
 Backend: Laravel (PHP)<br/>
 RESTful APIs for seamless communication.<br/>
